@@ -1,0 +1,62 @@
+name: Build and Release UWP App
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Configurer MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Installer le SDK Windows UWP
+        run: |
+          choco install visualstudio2022buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.UniversalBuildTools"
+
+      - name: Restaurer les dépendances NuGet
+        run: nuget restore MonProjetUWP.sln
+
+      - name: Compiler l'application en mode Release
+        run: msbuild MonProjetUWP.sln /p:Configuration=Release /p:Platform=x86
+
+      - name: Packager l'application (MSIX)
+        run: |
+          mkdir package
+          copy MonProjetUWP\AppPackages\* package\
+      
+      - name: Télécharger l'artefact
+        uses: actions/upload-artifact@v3
+        with:
+          name: UWP-App
+          path: package/
+
+  release:
+    needs: build
+    runs-on: windows-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Télécharger l'artefact du build
+        uses: actions/download-artifact@v3
+        with:
+          name: UWP-App
+          path: package/
+
+      - name: Créer une Release GitHub
+        uses: softprops/action-gh-release@v1
+        with:
+          files: package/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
