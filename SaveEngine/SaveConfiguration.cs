@@ -5,6 +5,6 @@
         private string _name { get; set; }
         private Path _sourcePath { get; set; }
         private Path _destinationPath { get; set; }
-
+        private SaveType _saveType { get; set; }
     }
 }
