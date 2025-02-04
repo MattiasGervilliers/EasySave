@@ -1,0 +1,6 @@
+C:\Users\watgy\Documents\CESI\S5\Genie Logiciel\EasySave\SaveEngine\obj\Debug\BackupEngine.csproj.AssemblyReference.cache
+C:\Users\watgy\Documents\CESI\S5\Genie Logiciel\EasySave\SaveEngine\obj\Debug\BackupEngine.csproj.CoreCompileInputs.cache
+C:\Users\watgy\Documents\CESI\S5\Genie Logiciel\EasySave\SaveEngine\bin\Debug\BackupEngine.dll
+C:\Users\watgy\Documents\CESI\S5\Genie Logiciel\EasySave\SaveEngine\bin\Debug\BackupEngine.pdb
+C:\Users\watgy\Documents\CESI\S5\Genie Logiciel\EasySave\SaveEngine\obj\Debug\BackupEngine.dll
+C:\Users\watgy\Documents\CESI\S5\Genie Logiciel\EasySave\SaveEngine\obj\Debug\BackupEngine.pdb
