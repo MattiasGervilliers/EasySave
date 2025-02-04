@@ -6,12 +6,12 @@ namespace BackupEngine
     /// <summary>
     /// Represents a backup configuration.
     /// </summary>
-    internal class BackupConfiguration : IJsonSerializable
+    public class BackupConfiguration : IJsonSerializable
     {
         public string Name { get; set; }
-        public Path SourcePath { get; set; }
-        public Path DestinationPath { get; set; }
-        public BackupType BackupType { get; set; }
+        private Path SourcePath { get; set; }
+        private Path DestinationPath { get; set; }
+        private BackupType BackupType { get; set; }
 
         public void FromJson(string json)
         {

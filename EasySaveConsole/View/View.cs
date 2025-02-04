@@ -21,7 +21,6 @@ namespace EasySaveConsole.View
             Console.WriteLine("3 - Lancer une configuration de sauvegarde");
             Console.WriteLine("4 - Afficher les configurations de sauvegarde");
             Console.WriteLine("Choisissez une option :  ");
-
         }
         public void ShowMenu()
         {
@@ -61,6 +60,5 @@ namespace EasySaveConsole.View
         {
             Console.WriteLine("Veullez entrer le type de la sauvegarde ");
         }
-
     }
 }
