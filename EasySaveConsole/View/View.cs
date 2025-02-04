@@ -44,20 +44,20 @@ namespace EasySaveConsole.View
             Console.WriteLine("1 - " + Langue);
             Console.WriteLine("2 - " + Langue);
         }
-        public void AfficherNom()
+        public void AfficheNom()
         {
             Console.WriteLine("Bienvenu dans le menu de création de configuration de sauvegarde");
             Console.WriteLine("Veullez entrer le nom de la configuration : ");
         }
-        public void AfficherFichierSource()
+        public void AfficheFichierSource()
         {
             Console.WriteLine("Veullez entrer le fichier source que vous souhaitez sauvegarder ");
         }
-        public void AfficherFichierCible()
+        public void AfficheFichierCible()
         {
             Console.WriteLine("Veullez entrer le fichier cible que vous souhaitez sauvegarder ");
         }
-        public void AfficherType()
+        public void AfficheType()
         {
             Console.WriteLine("Veullez entrer le type de la sauvegarde ");
         }

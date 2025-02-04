@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EasySaveConsole.Model;
 using EasySaveConsole.View;
+using BackupEngine;
 
 namespace EasySaveConsole.Controller
 {
@@ -12,6 +13,8 @@ namespace EasySaveConsole.Controller
     {
         private Vue vue;
         private Modele model;
+        private BackupConfiguration backupConfiguration;
+
 
         public JobManager()
         {
@@ -26,7 +29,8 @@ namespace EasySaveConsole.Controller
         }
         public void CreerConfiguration()
         {
-            vue.afficheCreer();
+            vue.AfficheNom();
+
             //creer une config avec nom, src file etc ...
         }
 
