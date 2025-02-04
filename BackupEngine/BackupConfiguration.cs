@@ -13,6 +13,11 @@ namespace BackupEngine
         private Path DestinationPath { get; set; }
         private BackupType BackupType { get; set; }
 
+        public void SetSourcePath(string newPath)
+        {
+            SourcePath = new Path(newPath);
+        }
+
         public void FromJson(string json)
         {
             BackupConfiguration jsonConfiguration = JsonConvert.DeserializeObject<BackupConfiguration>(json);

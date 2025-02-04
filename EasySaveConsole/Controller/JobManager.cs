@@ -28,7 +28,7 @@ namespace EasySaveConsole.Controller
                 vue.AfficheNom();
                 backupConfiguration.Name = Console.ReadLine();
                 vue.AfficheFichierSource();
-                //SourcePath = new Path(Console.ReadLine());
+                backupConfiguration.SetSourcePath(Console.ReadLine());
                 vue.AfficheFichierCible();
                 backupConfiguration.Name = Console.ReadLine();
                 vue.AfficheType();
