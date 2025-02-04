@@ -1,6 +1,6 @@
 ﻿namespace BackupEngine.Settings
 {
-    internal enum Language
+    public enum Language
     {
         French,
         English
