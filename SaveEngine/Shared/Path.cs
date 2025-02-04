@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SaveEngine
+namespace BackupEngine
 {
     internal class Path
     {

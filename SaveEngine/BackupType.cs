@@ -1,6 +1,6 @@
-﻿namespace SaveEngine
+﻿namespace BackupEngine
 {
-    enum SaveType
+    enum BackupType
     {
         Full,
         Incremental
