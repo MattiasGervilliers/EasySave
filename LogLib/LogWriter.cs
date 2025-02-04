@@ -8,15 +8,17 @@ namespace LogLib
 {
     public class LogWriter
     {
+        // Stocke le chemin du répertoire où seront sauvegardés les logs
         private string _logDirectoryPath;
 
+        // Constructeur qui initialise le chemin du répertoire et s'assure qu'il existe
         public LogWriter(string logDirectoryPath)
         {
             _logDirectoryPath = logDirectoryPath;
             EnsureDirectoryExists();
         }
 
-        // Vérifie si le répertoire existe, sinon le crée
+        // Vérifie si le répertoire des logs existe, sinon il le crée
         private void EnsureDirectoryExists()
         {
             if (!Directory.Exists(_logDirectoryPath))
@@ -25,35 +27,42 @@ namespace LogLib
             }
         }
 
-        // Écrit un log dans un fichier JSON
+        // Écrit un log dans un fichier JSON journalier
         public void WriteLog(Log log)
         {
+            // Génère un nom de fichier basé sur la date du jour (ex: log_20240204.json)
             string logFilePath = Path.Combine(_logDirectoryPath, $"log_{DateTime.Now:yyyyMMdd}.json");
 
-            List<Log> logs = new List<Log>();
+            // Initialise une liste pour stocker les logs
+            List<object> logs = new List<object>();
 
-            // Lire les logs existants s'il y en a
+            // Vérifie si le fichier de log du jour existe déjà
             if (File.Exists(logFilePath))
             {
+                // Lit le contenu existant du fichier
                 string existingJson = File.ReadAllText(logFilePath);
-                logs = JsonSerializer.Deserialize<List<Log>>(existingJson, GetJsonOptions()) ?? new List<Log>();
+
+                // Désérialise le fichier JSON en une liste d'objets (si possible)
+                logs = JsonSerializer.Deserialize<List<object>>(existingJson, GetJsonOptions()) ?? new List<object>();
             }
 
-            // Ajouter le nouveau log
+            // Ajoute le nouveau log à la liste
             logs.Add(log);
 
-            // Sérialiser et sauvegarder
+            // Sérialise la liste mise à jour en JSON
             string json = JsonSerializer.Serialize(logs, GetJsonOptions());
+
+            // Écrit le JSON dans le fichier, écrasant l'ancien contenu
             File.WriteAllText(logFilePath, json);
         }
 
-        // Convertit les enums en texte JSON
+        // Configure les options de sérialisation JSON
         private JsonSerializerOptions GetJsonOptions()
         {
             return new JsonSerializerOptions
             {
-                WriteIndented = true,
-                Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
+                WriteIndented = true, // Indente le JSON pour le rendre lisible
+                Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) } // Convertit les enums en format camelCase
             };
         }
     }
