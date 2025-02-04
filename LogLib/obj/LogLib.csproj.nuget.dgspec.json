@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Nino\\source\\repos\\EasySave\\LogLib\\LogLib.csproj": {}
+    "C:\\Users\\rb153\\Desktop\\EasySave\\LogLib\\LogLib.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Nino\\source\\repos\\EasySave\\LogLib\\LogLib.csproj": {
+    "C:\\Users\\rb153\\Desktop\\EasySave\\LogLib\\LogLib.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Nino\\source\\repos\\EasySave\\LogLib\\LogLib.csproj",
+        "projectUniqueName": "C:\\Users\\rb153\\Desktop\\EasySave\\LogLib\\LogLib.csproj",
         "projectName": "LogLib",
-        "projectPath": "C:\\Users\\Nino\\source\\repos\\EasySave\\LogLib\\LogLib.csproj",
-        "packagesPath": "C:\\Users\\Nino\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Nino\\source\\repos\\EasySave\\LogLib\\obj\\",
+        "projectPath": "C:\\Users\\rb153\\Desktop\\EasySave\\LogLib\\LogLib.csproj",
+        "packagesPath": "C:\\Users\\rb153\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\rb153\\Desktop\\EasySave\\LogLib\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Nino\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\rb153\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

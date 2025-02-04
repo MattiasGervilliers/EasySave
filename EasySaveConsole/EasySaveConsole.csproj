@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SaveEngine\BackupEngine.csproj" />
+    <ProjectReference Include="..\LogLib\LogLib.csproj" />
   </ItemGroup>
 
 </Project>

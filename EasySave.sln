@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackupEngine", "SaveEngine\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasySaveConsole", "EasySaveConsole\EasySaveConsole.csproj", "{95F3005B-23EA-4D76-9347-50AF1741E5BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogLib", "LogLib\LogLib.csproj", "{890301B6-E531-4068-9FB9-82C5EF6D8ED8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{95F3005B-23EA-4D76-9347-50AF1741E5BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95F3005B-23EA-4D76-9347-50AF1741E5BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95F3005B-23EA-4D76-9347-50AF1741E5BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{890301B6-E531-4068-9FB9-82C5EF6D8ED8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{890301B6-E531-4068-9FB9-82C5EF6D8ED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{890301B6-E531-4068-9FB9-82C5EF6D8ED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{890301B6-E531-4068-9FB9-82C5EF6D8ED8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

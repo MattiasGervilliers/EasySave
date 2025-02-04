@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\watgy\\Documents\\CESI\\S5\\Genie Logiciel\\EasySave\\EasySaveConsole\\EasySaveConsole.csproj": {}
+    "C:\\Users\\Nino\\Source\\Repos\\EasySave\\EasySaveConsole\\EasySaveConsole.csproj": {}
   },
   "projects": {
-    "C:\\Users\\watgy\\Documents\\CESI\\S5\\Genie Logiciel\\EasySave\\EasySaveConsole\\EasySaveConsole.csproj": {
+    "C:\\Users\\Nino\\Source\\Repos\\EasySave\\EasySaveConsole\\EasySaveConsole.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\watgy\\Documents\\CESI\\S5\\Genie Logiciel\\EasySave\\EasySaveConsole\\EasySaveConsole.csproj",
+        "projectUniqueName": "C:\\Users\\Nino\\Source\\Repos\\EasySave\\EasySaveConsole\\EasySaveConsole.csproj",
         "projectName": "EasySaveConsole",
-        "projectPath": "C:\\Users\\watgy\\Documents\\CESI\\S5\\Genie Logiciel\\EasySave\\EasySaveConsole\\EasySaveConsole.csproj",
-        "packagesPath": "C:\\Users\\watgy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\watgy\\Documents\\CESI\\S5\\Genie Logiciel\\EasySave\\EasySaveConsole\\obj\\",
+        "projectPath": "C:\\Users\\Nino\\Source\\Repos\\EasySave\\EasySaveConsole\\EasySaveConsole.csproj",
+        "packagesPath": "C:\\Users\\Nino\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Nino\\Source\\Repos\\EasySave\\EasySaveConsole\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\watgy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Nino\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
