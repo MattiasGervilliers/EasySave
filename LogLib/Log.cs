@@ -3,19 +3,31 @@ using System.Text.Json.Serialization;
 
 namespace LogLib
 {
-    // Classe de base pour représenter un journal de log
+    /// <summary>
+    /// Classe de base pour représenter un journal de log
+    /// </summary>
     public class Log
     {
-        // Niveau de sévérité du log (ex: INFO, ERROR, DEBUG, etc.)
+        /// <summary>
+        /// Niveau de sévérité du log (ex: INFO, ERROR, DEBUG, etc.)
+        /// </summary>
         public LogLevel Level { get; set; }
 
-        // Message descriptif du log
+        /// <summary>
+        /// Message descriptif du log
+        /// </summary>
         public string Message { get; set; }
 
-        // Date et heure de création du log
+        /// <summary>
+        /// Date et heure de création du log
+        /// </summary>
         public DateTime Timestamp { get; set; }
 
-        // Constructeur de la classe Log
+        /// <summary>
+        /// Constructeur de la classe Log
+        /// </summary>
+        /// <param name="level"></param>
+        /// <param name="message"></param>
         public Log(LogLevel level, string message)
         {
             Level = level; // Définit le niveau du log
@@ -24,7 +36,9 @@ namespace LogLib
         }
     }
 
-    // Enumération définissant les différents niveaux de logs
+    /// <summary>
+    /// Enumération définissant les différents niveaux de logs
+    /// </summary>
     public enum LogLevel
     {
         TRACE,  // Détails très fins pour le debugging avancé

@@ -1,4 +1,4 @@
-﻿using LogLib; // Importation du namespace LogLib pour utiliser les classes de gestion des logs
+﻿using LogLib; 
 using System;
 
 class Program
@@ -11,7 +11,7 @@ class Program
         // Création d'un log spécifique au processus de sauvegarde (ConsoleLog)
         ConsoleLog consoleLog = new ConsoleLog(
             LogLevel.INFO, // Niveau de log : INFO (indique une information générale)
-            "Test 1", // Message associé au log
+            "Test final", // Message associé au log
             "Backup213", // Nom de la sauvegarde
             @"\\Serveur\Source\Fichier.txt", // Chemin source du fichier sauvegardé
             @"\\Serveur\Destination\Fichier.txt", // Chemin de destination du fichier sauvegardé
