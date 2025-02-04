@@ -1,49 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {
-      "LogLib/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v8.0",
-        "compile": {
-          "bin/placeholder/LogLib.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/LogLib.dll": {}
-        }
-      }
-    }
+    "net8.0": {}
   },
-  "libraries": {
-    "LogLib/1.0.0": {
-      "type": "project",
-      "path": "../LogLib/LogLib.csproj",
-      "msbuildProject": "../LogLib/LogLib.csproj"
-    }
-  },
+  "libraries": {},
   "projectFileDependencyGroups": {
-    "net8.0": [
-      "LogLib >= 1.0.0"
-    ]
+    "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\rb153\\.nuget\\packages\\": {},
+    "C:\\Users\\Nino\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rb153\\Desktop\\EasySave\\EasySaveConsole\\EasySaveConsole.csproj",
+      "projectUniqueName": "C:\\Users\\Nino\\Source\\Repos\\EasySave\\EasySaveConsole\\EasySaveConsole.csproj",
       "projectName": "EasySaveConsole",
-      "projectPath": "C:\\Users\\rb153\\Desktop\\EasySave\\EasySaveConsole\\EasySaveConsole.csproj",
-      "packagesPath": "C:\\Users\\rb153\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rb153\\Desktop\\EasySave\\EasySaveConsole\\obj\\",
+      "projectPath": "C:\\Users\\Nino\\Source\\Repos\\EasySave\\EasySaveConsole\\EasySaveConsole.csproj",
+      "packagesPath": "C:\\Users\\Nino\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Nino\\Source\\Repos\\EasySave\\EasySaveConsole\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\rb153\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Nino\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -52,17 +33,12 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {
-            "C:\\Users\\rb153\\Desktop\\EasySave\\LogLib\\LogLib.csproj": {
-              "projectPath": "C:\\Users\\rb153\\Desktop\\EasySave\\LogLib\\LogLib.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
