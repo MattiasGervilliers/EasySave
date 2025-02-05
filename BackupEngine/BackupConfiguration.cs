@@ -13,9 +13,12 @@ namespace BackupEngine
         private Path DestinationPath { get; set; }
         private BackupType BackupType { get; set; }
 
-        public void SetSourcePath(string newPath)
+        public void Update(string name, Path NewSourcePath,Path NewCiblePath,BackupType backupType)
         {
-            SourcePath = new Path(newPath);
+            this.Name = name;
+            this.SourcePath = NewSourcePath ;
+            this.DestinationPath = NewCiblePath ;
+            this.BackupType = backupType;
         }
 
         public void FromJson(string json)

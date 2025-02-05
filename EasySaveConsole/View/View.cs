@@ -58,7 +58,10 @@ namespace EasySaveConsole.View
         }
         public void AfficheType()
         {
-            Console.WriteLine("Veullez entrer le type de la sauvegarde ");
+            Console.WriteLine("Choisissez un type de sauvegarde :");
+            Console.WriteLine("1 - Full");
+            Console.WriteLine("2 - Incremental");
+            Console.Write("Votre choix (1 ou 2) : ");
         }
     }
 }
