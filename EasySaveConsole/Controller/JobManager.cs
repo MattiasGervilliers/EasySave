@@ -24,36 +24,28 @@ namespace EasySaveConsole.Controller
 
             vue.AfficheMenu();
             int choix = int.Parse(Console.ReadLine());
-            if (choix == 1)
+            switch (choix)
             {
-                vue.AfficheNom();
-                string Name = Console.ReadLine();
-                vue.AfficheFichierSource();
-                SourcePath = Console.ReadLine();
-                Chemin CheminSource = new Chemin(SourcePath);
-                vue.AfficheFichierCible();
-                CiblePath = Console.ReadLine();
-                Chemin CheminCible = new Chemin(SourcePath);
-                vue.AfficheType();
-                BackupType backupType = DemanderBackupType();
-                backupConfiguration.Update(Name, CheminSource, CheminCible, backupType);
-                //model.AddSave();
-            }
-            else if (choix == 2)
-            {
+                case 1:
+                    vue.AfficheNom();
+                    string Name = Console.ReadLine();
+                    vue.AfficheFichierSource();
+                    SourcePath = Console.ReadLine();
+                    Chemin CheminSource = new Chemin(SourcePath);
+                    vue.AfficheFichierCible();
+                    CiblePath = Console.ReadLine();
+                    Chemin CheminCible = new Chemin(SourcePath);
+                    vue.AfficheType();
+                    BackupType backupType = DemanderBackupType();
+                    backupConfiguration.Update(Name, CheminSource, CheminCible, backupType);
+                    //model.AddSave();
+                    break;
+                case 2:
 
-            }
-            else if (choix == 3)
-            {
+                    break;
+                case 3:
 
-            }
-            else if (choix == 4)
-            {
-
-            }
-            else
-            {
-                Console.WriteLine("Veuillez séléctionner une option");
+                    break;
             }
         }
         public void ChoixLangue()

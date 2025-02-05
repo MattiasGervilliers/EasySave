@@ -1,10 +1,11 @@
 ﻿using EasySaveConsole;
 using System;
 using BackupEngine;
+using EasySaveConsole.Controller;
 class Program
 {
-    void main()
+    static void Main()
     {
-        Console.WriteLine("bonjour");
+        JobManager jobManager = new JobManager();
     }
 }

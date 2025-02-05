@@ -7,14 +7,14 @@ namespace BackupEngine.Settings
     internal class Settings : IJsonSerializable
     {
         public Language Language { get; set; }
-        public Path LogPath { get; set; }
+        public Chemin LogPath { get; set; }
         public List<BackupConfiguration> Configurations { get; set; }
 
         public Settings()
         {
             Configurations = new List<BackupConfiguration>();
             Language = Language.English;
-            LogPath = new Path("logs");
+            LogPath = new Chemin("logs");
         }
 
         public void FromJson(string json)
