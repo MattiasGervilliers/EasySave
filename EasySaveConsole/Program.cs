@@ -6,6 +6,6 @@ class Program
 {
     static void Main()
     {
-        JobManager jobManager = new JobManager();
+        GeneralController jobManager = new GeneralController();
     }
 }

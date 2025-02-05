@@ -10,7 +10,7 @@ using System.Net;
 
 namespace EasySaveConsole.Controller
 {
-    internal class JobManager
+    internal class GeneralController
     {
         private Vue vue;
         private Modele model;
@@ -19,7 +19,7 @@ namespace EasySaveConsole.Controller
         private string CiblePath;
         private bool Quitter = false;
 
-        public JobManager()
+        public GeneralController()
         {
             Vue vue = new Vue();
             Modele model = new Modele();
@@ -33,18 +33,8 @@ namespace EasySaveConsole.Controller
                 switch (choixAction)
                 {
                     case 1:
-                        vue.AfficheNom();
-                        string Name = Console.ReadLine();
-                        vue.AfficheFichierSource();
-                        SourcePath = Console.ReadLine();
-                        Chemin CheminSource = new Chemin(SourcePath);
-                        vue.AfficheFichierCible();
-                        CiblePath = Console.ReadLine();
-                        Chemin CheminCible = new Chemin(SourcePath);
-                        vue.AfficheType();
-                        BackupType backupType = DemanderBackupType();
-                        backupConfiguration.Update(Name, CheminSource, CheminCible, backupType);
-                        //model.AddSave();
+                        ControllerCreer controllerCreer = new ControllerCreer();
+
                         break;
                     case 2:
                         vue.AfficheDemandeNom();
@@ -69,20 +59,6 @@ namespace EasySaveConsole.Controller
                 }
             }
         }
-        public static BackupType DemanderBackupType()
-        {
-
-            while (true)
-            {
-                string input = Console.ReadLine();
-
-                if (input == "1")
-                    return BackupType.Full;
-                else if (input == "2")
-                    return BackupType.Incremental;
-                else
-                    Console.WriteLine("Entrée invalide. Veuillez entrer 1 ou 2.");
-            }
-        }
+        
     }
 }
