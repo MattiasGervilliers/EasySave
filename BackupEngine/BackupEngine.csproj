@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackupType.cs" />
+    <Compile Include="Job\Job.cs" />
+    <Compile Include="Job\JobManager.cs" />
     <Compile Include="Settings\SettingsRepository.cs" />
     <Compile Include="Shared\JsonSerializable.cs" />
     <Compile Include="Shared\Path.cs" />
