@@ -82,5 +82,10 @@ namespace BackupEngine.Settings
             Settings.LogPath = logPath;
             SaveSettings();
         }
+
+        public Path GetLogPath()
+        {
+            return Settings.LogPath;
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace BackupEngine
 {
-    internal class Path
+    public class Path
     {
         private string _path { get; set; }
 
