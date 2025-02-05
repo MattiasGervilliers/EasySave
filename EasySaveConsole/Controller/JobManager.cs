@@ -21,10 +21,13 @@ namespace EasySaveConsole.Controller
         {
             Vue vue = new Vue();
             Modele model = new Modele();
-
+            //afficher choix langue
+            vue.AfficheChoixLangue();
+            int choixLangue = int.Parse(Console.ReadLine());
+            vue.ChangerLangue(choixLangue);
             vue.AfficheMenu();
-            int choix = int.Parse(Console.ReadLine());
-            switch (choix)
+            int choixAction = int.Parse(Console.ReadLine());
+            switch (choixAction)
             {
                 case 1:
                     vue.AfficheNom();
@@ -45,6 +48,15 @@ namespace EasySaveConsole.Controller
                     break;
                 case 3:
 
+                    break;
+                case 4:
+
+                    break;
+                case 5:
+
+                    break;
+                case 6:
+                    vue.AfficheQuitter();
                     break;
             }
         }
