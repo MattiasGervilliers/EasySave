@@ -46,6 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackupType.cs" />
+    <Compile Include="Backup\FileManager.cs" />
+    <Compile Include="Backup\FullSaveStrategy.cs" />
+    <Compile Include="Backup\IncrementalSaveStrategy.cs" />
+    <Compile Include="Backup\ISaveStrategy.cs" />
     <Compile Include="Job\Job.cs" />
     <Compile Include="Job\JobManager.cs" />
     <Compile Include="Settings\SettingsRepository.cs" />
