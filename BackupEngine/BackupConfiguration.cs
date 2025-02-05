@@ -9,11 +9,11 @@ namespace BackupEngine
     public class BackupConfiguration : IJsonSerializable
     {
         public string Name { get; set; }
-        private Path SourcePath { get; set; }
-        private Path DestinationPath { get; set; }
+        private Chemin SourcePath { get; set; }
+        private Chemin DestinationPath { get; set; }
         private BackupType BackupType { get; set; }
 
-        public void Update(string name, Path NewSourcePath,Path NewCiblePath,BackupType backupType)
+        public void Update(string name, Chemin NewSourcePath,Chemin NewCiblePath,BackupType backupType)
         {
             this.Name = name;
             this.SourcePath = NewSourcePath ;

@@ -15,6 +15,7 @@ namespace EasySaveConsole.Controller
         private Modele model;
         private BackupConfiguration backupConfiguration;
         private string SourcePath;
+        private string CiblePath;
 
         public JobManager()
         {
@@ -25,17 +26,17 @@ namespace EasySaveConsole.Controller
             int choix = int.Parse(Console.ReadLine());
             if (choix == 1)
             {
-                //création config
                 vue.AfficheNom();
-                backupConfiguration.Name = Console.ReadLine();
+                string Name = Console.ReadLine();
                 vue.AfficheFichierSource();
                 SourcePath = Console.ReadLine();
-                Path cesi = new Path(SourcePath);
+                Chemin CheminSource = new Chemin(SourcePath);
                 vue.AfficheFichierCible();
-                backupConfiguration.Name = Console.ReadLine();
+                CiblePath = Console.ReadLine();
+                Chemin CheminCible = new Chemin(SourcePath);
                 vue.AfficheType();
                 BackupType backupType = DemanderBackupType();
-                backupConfiguration.Update("",cesi,cesi,backupType);
+                backupConfiguration.Update(Name, CheminSource, CheminCible, backupType);
                 //model.AddSave();
             }
             else if (choix == 2)
@@ -80,4 +81,5 @@ namespace EasySaveConsole.Controller
                     Console.WriteLine("Entrée invalide. Veuillez entrer 1 ou 2.");
             }
         }
+    }
 }

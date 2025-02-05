@@ -2,11 +2,11 @@
 
 namespace BackupEngine
 {
-    public class Path
+    public class Chemin
     {
         private string _path { get; set; }
 
-        public Path(string path)
+        public Chemin(string path)
         {
             if (!CheckPathValidity(path))
             {
