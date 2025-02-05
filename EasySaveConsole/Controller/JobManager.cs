@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EasySaveConsole.Model;
 using EasySaveConsole.View;
 using BackupEngine;
+using System.Net;
 
 namespace EasySaveConsole.Controller
 {
@@ -16,59 +17,57 @@ namespace EasySaveConsole.Controller
         private BackupConfiguration backupConfiguration;
         private string SourcePath;
         private string CiblePath;
+        private bool Quitter = false;
 
         public JobManager()
         {
             Vue vue = new Vue();
             Modele model = new Modele();
             //afficher choix langue
-            vue.AfficheChoixLangue();
-            int choixLangue = int.Parse(Console.ReadLine());
-            vue.ChangerLangue(choixLangue);
-            vue.AfficheMenu();
-            int choixAction = int.Parse(Console.ReadLine());
-            switch (choixAction)
+
+            vue.UpdateLangue();
+            while (!Quitter)
             {
-                case 1:
-                    vue.AfficheNom();
-                    string Name = Console.ReadLine();
-                    vue.AfficheFichierSource();
-                    SourcePath = Console.ReadLine();
-                    Chemin CheminSource = new Chemin(SourcePath);
-                    vue.AfficheFichierCible();
-                    CiblePath = Console.ReadLine();
-                    Chemin CheminCible = new Chemin(SourcePath);
-                    vue.AfficheType();
-                    BackupType backupType = DemanderBackupType();
-                    backupConfiguration.Update(Name, CheminSource, CheminCible, backupType);
-                    //model.AddSave();
-                    break;
-                case 2:
+                vue.AfficheMenu();
+                int choixAction = int.Parse(Console.ReadLine());
+                switch (choixAction)
+                {
+                    case 1:
+                        vue.AfficheNom();
+                        string Name = Console.ReadLine();
+                        vue.AfficheFichierSource();
+                        SourcePath = Console.ReadLine();
+                        Chemin CheminSource = new Chemin(SourcePath);
+                        vue.AfficheFichierCible();
+                        CiblePath = Console.ReadLine();
+                        Chemin CheminCible = new Chemin(SourcePath);
+                        vue.AfficheType();
+                        BackupType backupType = DemanderBackupType();
+                        backupConfiguration.Update(Name, CheminSource, CheminCible, backupType);
+                        //model.AddSave();
+                        break;
+                    case 2:
+                        vue.AfficheDemandeNom();
+                        string NomSuppr = Console.ReadLine();
+                        //model.RemoveSave(NomSuppr);
+                        break;
+                    case 3:
+                        vue.AfficheConfigurations();
+                        break;
+                    case 4:
+                        //Lancer une config
 
-                    break;
-                case 3:
-
-                    break;
-                case 4:
-
-                    break;
-                case 5:
-
-                    break;
-                case 6:
-                    vue.AfficheQuitter();
-                    break;
+                        break;
+                    case 5:
+                        //changer de langue
+                        vue.UpdateLangue();
+                        break;
+                    case 6:
+                        vue.AfficheQuitter();
+                        Quitter = true;
+                        break;
+                }
             }
-        }
-        public void ChoixLangue()
-        {
-            vue.AfficheChoixLangue();
-        }
-        public void CreerConfiguration()
-        {
-            vue.AfficheNom();
-
-            //creer une config avec nom, src file etc ...
         }
         public static BackupType DemanderBackupType()
         {

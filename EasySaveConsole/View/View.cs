@@ -14,18 +14,23 @@ namespace EasySaveConsole.View
         public Vue() { 
             Language Langues = new Language();
         }
-        public void ChangerLangue(int choix)
+        public void UpdateLangue()
         {
+            Console.WriteLine("Voici les langues disponnibles / Choose a language :");
+            Console.WriteLine("1 - Anglais/" + Language.English);
+            Console.WriteLine("2 - Français/" + Language.French);
+            int choix = int.Parse(Console.ReadLine());
             switch (choix)
             {
 
                 case 1:
                     this.Langue = Language.English;
-                break;
+                    break;
                 case 2:
                     this.Langue = Language.French;
-                break;
+                    break;
             }
+
         }
         public void AfficheMenu()
         {
@@ -114,7 +119,22 @@ namespace EasySaveConsole.View
                 Console.Write("Your choice (1 or 2): ");
             }
         }
+        public void AfficheDemandeNom()
+        {
+            if (this.Langue == Language.French)
+            {
+                Console.WriteLine("Veuillez entrer le nom de la configuration à supprimer : ");
+            }
+            else
+            {
+                Console.WriteLine("Please enter the name of the configuration to delete: ");
+            }
+        }
 
+        public void AfficheConfigurations()
+        {
+            Console.WriteLine("LISTE DES CONFIGS");
+        }
         public void AfficheQuitter()
         {
             if (Langue == Language.French)
