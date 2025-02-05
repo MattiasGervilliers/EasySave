@@ -1,2 +1,10 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using EasySaveConsole;
+using System;
+using BackupEngine;
+class Program
+{
+    void main()
+    {
+        Console.WriteLine("bonjour");
+    }
+}

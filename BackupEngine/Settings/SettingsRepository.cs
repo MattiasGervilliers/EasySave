@@ -77,7 +77,7 @@ namespace BackupEngine.Settings
             SaveSettings();
         }
 
-        public void UpdateLogPath(Path logPath)
+        public void UpdateLogPath(Chemin logPath)
         {
             Settings.LogPath = logPath;
             SaveSettings();
