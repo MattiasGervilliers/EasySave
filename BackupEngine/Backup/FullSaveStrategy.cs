@@ -1,25 +1,47 @@
-﻿using System;
-using System.IO;
-using BackupEngine.Backup;
+﻿using BackupEngine.Log;
 
-public class FullSaveStrategy : SaveStrategy
+namespace BackupEngine.Backup
 {
-    public override void Save(string sourcePath, string destinationPath)
+    public class FullSaveStrategy(BackupConfiguration configuration) : SaveStrategy(configuration)
     {
-        if (!Directory.Exists(sourcePath))
+        public override void Save()
         {
-            throw new DirectoryNotFoundException($"Le dossier source '{sourcePath}' n'existe pas.");
-        }
+            string sourcePath = Configuration.SourcePath.GetAbsolutePath();
+            string destinationPath = Configuration.DestinationPath.GetAbsolutePath();
 
-        foreach (string file in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
-        {
-            string relativePath = file.Substring(sourcePath.Length + 1);
-            string destFile = Path.Combine(destinationPath, relativePath);
-            Directory.CreateDirectory(Path.GetDirectoryName(destFile));
-            File.Copy(file, destFile, true);
-        }
+            if (!Directory.Exists(sourcePath))
+            {
+                throw new DirectoryNotFoundException($"Le dossier source '{sourcePath}' n'existe pas.");
+            }
 
-        Console.WriteLine($"Sauvegarde complète effectuée dans : {destinationPath}");
+            foreach (string file in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
+            {
+                string relativePath = file.Substring(sourcePath.Length + 1);
+                string destFile = System.IO.Path.Combine(destinationPath, relativePath);
+                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(destFile));
+                
+                try
+                {
+                    // Time the copy took
+                    DateTime start = DateTime.Now;
+                    
+                    // Copy the file
+                    File.Copy(file, destFile, true);
+                    
+                    DateTime end = DateTime.Now;
+                    TimeSpan duration = end - start;
+
+                    TransferEvent transferEvent = new TransferEvent(Configuration, duration, new FileInfo(file));
+                    OnTransfer(transferEvent);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Erreur lors de la copie du fichier {file} : {e.Message}");
+                    OnTransfer(new TransferEvent(Configuration, new TimeSpan(-1), new FileInfo(file)));
+                }
+
+                Console.WriteLine($"Sauvegarde complète effectuée dans : {destinationPath}");
+            }
+        }
     }
-
 }

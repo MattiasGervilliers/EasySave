@@ -2,10 +2,12 @@
 
 namespace BackupEngine.Backup
 {
-    public abstract class SaveStrategy
+    public abstract class SaveStrategy(BackupConfiguration configuration)
     {
         public event EventHandler<TransferEvent> Transfer;
-        public abstract void Save(string sourcePath, string destinationPath);
+        protected readonly BackupConfiguration Configuration = configuration;
+
+        public abstract void Save();
 
         protected void OnTransfer(TransferEvent e)
         {
