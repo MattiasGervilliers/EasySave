@@ -7,6 +7,7 @@ using EasySaveConsole;
 using EasySaveConsole.View;
 using BackupEngine;
 using BackupEngine.Settings;
+using EasySaveConsole.Model;
 using System.Numerics;
 
 namespace EasySaveConsole.Controller
@@ -14,12 +15,14 @@ namespace EasySaveConsole.Controller
     internal class ControllerCreer
     {
         private ViewCreer vue;
+        private Modele model;
         private string SourcePath;
         private string CiblePath;
         private BackupConfiguration backupConfiguration;
         public ControllerCreer(Language Langue)
         {
             ViewCreer viewCreer = new ViewCreer(Langue);
+            Modele model = new Modele();
             viewCreer.AfficheNom();
             string Name = Console.ReadLine();
             viewCreer.AfficheFichierSource();
@@ -30,8 +33,8 @@ namespace EasySaveConsole.Controller
             Chemin CheminCible = new Chemin(SourcePath);
             viewCreer.AfficheType();
             BackupType backupType = DemanderBackupType(Langue);
-            //backupConfiguration.Update(Name, CheminSource, CheminCible, backupType);
-            //model.AddSave();
+            backupConfiguration.Update(Name, CheminSource, CheminCible, backupType);
+            model.AddConfig(backupConfiguration);
             Console.Clear();
         }
         public static BackupType DemanderBackupType(Language langue)

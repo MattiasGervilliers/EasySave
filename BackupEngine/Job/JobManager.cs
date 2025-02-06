@@ -12,7 +12,7 @@ namespace BackupEngine.Job
             JobsThreads = new List<Thread>();
         }
 
-        Job LaunchBackup(BackupConfiguration configuration)
+        public Job LaunchBackup(BackupConfiguration configuration)
         {
             Job job = new Job(configuration);
             Thread thread = new Thread(() => job.Run());

@@ -83,7 +83,7 @@ namespace BackupEngine.Settings
             SaveSettings();
         }
 
-        public Path GetLogPath()
+        public Chemin GetLogPath()
         {
             return Settings.LogPath;
         }

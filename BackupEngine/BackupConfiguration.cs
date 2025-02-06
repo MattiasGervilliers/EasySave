@@ -12,6 +12,18 @@ namespace BackupEngine
         private Chemin SourcePath { get; set; }
         private Chemin DestinationPath { get; set; }
         private BackupType BackupType { get; set; }
+        public BackupType GetBackupType()
+        {
+            return this.BackupType;
+        }
+        public Chemin GetSourcePath()
+        {
+            return this.SourcePath;
+        }
+        public Chemin GetDestinationPath()
+        {
+            return this.DestinationPath;
+        }
 
         public void Update(string name, Chemin NewSourcePath, Chemin NewCiblePath, BackupType backupType)
         {
