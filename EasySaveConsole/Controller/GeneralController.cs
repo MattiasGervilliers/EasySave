@@ -30,6 +30,7 @@ namespace EasySaveConsole.Controller
 
             vue.UpdateLangue();
             this.ChoixLangue();
+            Console.Clear();
             while (!Quitter)
             {
                 vue.AfficheMenu(Langue);
@@ -38,7 +39,7 @@ namespace EasySaveConsole.Controller
                 switch (choixAction)
                 {
                     case 1:
-                        ControllerCreer controllerCreer = new ControllerCreer();
+                        ControllerCreer controllerCreer = new ControllerCreer(Langue);
 
                         break;
                     case 2:
@@ -50,15 +51,16 @@ namespace EasySaveConsole.Controller
                         //Lancer une config
                         break;
                     case 4:
-                        ControllerLister controllerLister = new ControllerLister();
+                        ControllerLister controllerLister = new ControllerLister(Langue);
                         break;
                     case 5:
                         //changer de langue
                         vue.UpdateLangue();
                         this.ChoixLangue();
+                        Console.Clear();
                         break;
                     case 6:
-                        vue.AfficheQuitter();
+                        vue.AfficheQuitter(Langue);
                         Quitter = true;
                         break;
                 }

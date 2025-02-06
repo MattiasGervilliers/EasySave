@@ -11,9 +11,9 @@ namespace EasySaveConsole.View
     {
         private Language Langue;
 
-        public ViewLister()
+        public ViewLister(Language langue)
         {
-            Language Langues = new Language();
+            this.Langue = langue;
         }
 
         public void AfficheConfiguration()

@@ -10,9 +10,9 @@ namespace EasySaveConsole.View
     internal class ViewCreer
     {
         private Language Langue;
-        public ViewCreer()
+        public ViewCreer(Language langue)
         {
-            Language Langues = new Language();
+            this.Langue = langue;
         }
         public void AfficheNom()
         {

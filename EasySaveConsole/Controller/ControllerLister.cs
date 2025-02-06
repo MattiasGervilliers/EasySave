@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EasySaveConsole.View;
 using BackupEngine;
+using BackupEngine.Settings;
 
 namespace EasySaveConsole.Controller
 {
@@ -12,9 +13,9 @@ namespace EasySaveConsole.Controller
     {
         private ViewLister vue;
 
-        public ControllerLister()
+        public ControllerLister(Language Langue)
         {
-            ViewLister viewLister = new ViewLister();
+            ViewLister viewLister = new ViewLister(Langue);
             viewLister.AfficheConfiguration();
             Console.ReadLine();
             Console.Clear();

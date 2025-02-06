@@ -125,9 +125,9 @@ namespace EasySaveConsole.View
         {
             Console.WriteLine("LISTE DES CONFIGS");
         }
-        public void AfficheQuitter()
+        public void AfficheQuitter(Language langue)
         {
-            if (Langue == Language.French)
+            if (langue == Language.French)
             {
 
                 Console.WriteLine("Au revoir");

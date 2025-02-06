@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EasySaveConsole;
 using EasySaveConsole.View;
 using BackupEngine;
+using BackupEngine.Settings;
 
 namespace EasySaveConsole.Controller
 {
@@ -15,9 +16,9 @@ namespace EasySaveConsole.Controller
         private string SourcePath;
         private string CiblePath;
         private BackupConfiguration backupConfiguration;
-        public ControllerCreer()
+        public ControllerCreer(Language Langue)
         {
-            ViewCreer viewCreer = new ViewCreer();
+            ViewCreer viewCreer = new ViewCreer(Langue);
             viewCreer.AfficheNom();
             string Name = Console.ReadLine();
             viewCreer.AfficheFichierSource();
