@@ -7,32 +7,37 @@ namespace BackupEngine.Log
         /// <summary>
         /// Chemin source du fichier transféré
         /// </summary>
-        public string FileSourcePath { get; set; }
+        public string? FileSourcePath { get; set; }
 
         /// <summary>
         /// Chemin de destination du fichier transféré
         /// </summary>
-        public string FileDestinationPath { get; set; }
+        public string? FileDestinationPath { get; set; }
 
         /// <summary>
         /// Taille du fichier transféré (en octets)
         /// </summary>
-        public long FileSize { get; set; }
+        public long? FileSize { get; set; }
 
         /// <summary>
         /// Temps de transfert en millisecondes (-1 si échec)
         /// </summary>
-        public int TransferTime { get; set; }
+        public int? TransferTime { get; set; }
 
         /// <summary>
         /// Nom du backup lié au transfert
         /// </summary>
-        public string BackupName { get; set; }
+        public string? BackupName { get; set; }
 
         public FileTransferLog(string fileSourcePath, string fileDestinationPath, long fileSize, int transferTime, string backupName)
             : base(LogLevel.INFO, "")
         {
-            Message = $"Transfert du fichier {fileSourcePath} vers {fileDestinationPath} ({fileSize} octets) en {transferTime} ms";
+            FileSourcePath = fileSourcePath;
+            FileDestinationPath = fileDestinationPath;
+            FileSize = fileSize;
+            TransferTime = transferTime;
+            BackupName = backupName;
+            //Message = $"Transfert du fichier {fileSourcePath} vers {fileDestinationPath} ({fileSize} octets) en {transferTime} ms";
         }
     }
 }

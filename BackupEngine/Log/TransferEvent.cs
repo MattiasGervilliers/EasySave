@@ -3,17 +3,10 @@ using System;
 
 namespace BackupEngine.Log
 {
-    public class TransferEvent
+    public class TransferEvent(BackupConfiguration configuration, TimeSpan transferDuration, FileInfo file)
     {
-        private BackupConfiguration Configuration;
-        private TransferState State;
-        private TimeSpan TransferDuration;
-
-        public TransferEvent(BackupConfiguration configuration, TransferState state, TimeSpan transferDuration)
-        {
-            Configuration = configuration;
-            State = state;
-            TransferDuration = transferDuration;
-        }
+        public BackupConfiguration Configuration = configuration;
+        public TimeSpan TransferDuration = transferDuration;
+        public FileInfo File = file;
     }
 }
