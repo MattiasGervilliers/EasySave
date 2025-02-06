@@ -16,7 +16,9 @@ namespace EasySaveConsole.Controller
         {
             ViewSuppr vue = new ViewSuppr();
             vue.AfficheDemandeNom(Langue);
+
             NomSuppr = Console.ReadLine();
+            //while !model.suppr(NomSuppr){ vue.AfficherConfigIntrouvable(langue)}
             // Model.suppr(NomSuppr)
 
         }

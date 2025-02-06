@@ -11,7 +11,8 @@ namespace EasySaveConsole.View
     internal class Vue
     {
         private Language Langue;
-        public Vue() { 
+        public Vue()
+        {
             Language Langues = new Language();
         }
         public void UpdateLangue()
@@ -20,7 +21,7 @@ namespace EasySaveConsole.View
             Console.WriteLine("1 - Anglais/" + Language.English);
             Console.WriteLine("2 - Français/" + Language.French);
             Console.WriteLine("Votre choix / Your choice : ");
-            
+
         }
         public void AfficheMenu(Language Langue)
         {
@@ -136,6 +137,11 @@ namespace EasySaveConsole.View
             {
                 Console.WriteLine("Bye Bye");
             }
+        }
+        public void AfficherErreur()
+        {
+
+            Console.WriteLine("Réponse incorrecte / Incorrect answer");
         }
     }
 }

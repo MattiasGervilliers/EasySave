@@ -25,59 +25,68 @@ namespace EasySaveConsole.Controller
         {
             Vue vue = new Vue();
             Modele model = new Modele();
-            Language langue = new Language();
             //afficher choix langue
 
             vue.UpdateLangue();
-            this.ChoixLangue();
+            while (!this.ChoixLangue())
+            {
+                Console.Clear();
+                vue.AfficherErreur();
+                vue.UpdateLangue();
+            }
             Console.Clear();
             while (!Quitter)
             {
                 vue.AfficheMenu(Langue);
-                int choixAction = int.Parse(Console.ReadLine());
+                string choixAction = Console.ReadLine();
                 Console.Clear();
                 switch (choixAction)
                 {
-                    case 1:
+                    case "1":
                         ControllerCreer controllerCreer = new ControllerCreer(Langue);
 
                         break;
-                    case 2:
+                    case "2":
                         ControllerSuppr controllerSuppr = new ControllerSuppr(Langue);
                         string NomSuppr = Console.ReadLine();
                         //model.RemoveSave(NomSuppr);
                         break;
-                    case 3:
+                    case "3":
                         //Lancer une config
                         break;
-                    case 4:
+                    case "4":
                         ControllerLister controllerLister = new ControllerLister(Langue);
                         break;
-                    case 5:
+                    case "5":
                         //changer de langue
                         vue.UpdateLangue();
                         this.ChoixLangue();
                         Console.Clear();
                         break;
-                    case 6:
+                    case "6":
                         vue.AfficheQuitter(Langue);
                         Quitter = true;
+                        break;
+                    default:
+                        vue.AfficherErreur();
                         break;
                 }
             }
         }
-        void ChoixLangue()
+        bool ChoixLangue()
         {
-            int choix = int.Parse(Console.ReadLine());
+            string choix = Console.ReadLine();
             switch (choix)
             {
 
-                case 1:
+                case "1":
                     this.Langue = Language.English;
-                    break;
-                case 2:
+                    return true;
+                case "2":
                     this.Langue = Language.French;
-                    break;
+                    return true;
+                default:
+                    return false;
             }
         }
         

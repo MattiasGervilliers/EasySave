@@ -7,6 +7,7 @@ using EasySaveConsole;
 using EasySaveConsole.View;
 using BackupEngine;
 using BackupEngine.Settings;
+using System.Numerics;
 
 namespace EasySaveConsole.Controller
 {
@@ -28,12 +29,12 @@ namespace EasySaveConsole.Controller
             CiblePath = Console.ReadLine();
             Chemin CheminCible = new Chemin(SourcePath);
             viewCreer.AfficheType();
-            BackupType backupType = DemanderBackupType();
+            BackupType backupType = DemanderBackupType(Langue);
             //backupConfiguration.Update(Name, CheminSource, CheminCible, backupType);
             //model.AddSave();
             Console.Clear();
         }
-        public static BackupType DemanderBackupType()
+        public static BackupType DemanderBackupType(Language langue)
         {
 
             while (true)
@@ -45,7 +46,17 @@ namespace EasySaveConsole.Controller
                 else if (input == "2")
                     return BackupType.Incremental;
                 else
-                    Console.WriteLine("Entrée invalide. Veuillez entrer 1 ou 2.");
+                {
+
+                    if (langue == Language.French)
+                    {
+                        Console.WriteLine("Entrée invalide. Veuillez entrer 1 ou 2.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid entry. Please enter 1 or 2.");
+                    }
+                }
             }
         }
     }
