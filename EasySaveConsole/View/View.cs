@@ -38,7 +38,7 @@ namespace EasySaveConsole.View
             if (this.Langue == Language.French)
             {
 
-                Console.WriteLine("Bienvenu sur EasySave ! ");
+                Console.WriteLine("Bienvenue sur EasySave ! ");
                 Console.WriteLine("1 - Créer une configuration de sauvegarde");
                 Console.WriteLine("2 - Supprimer une configuration de sauvegarde");
                 Console.WriteLine("3 - Lancer une configuration de sauvegarde");
@@ -49,7 +49,7 @@ namespace EasySaveConsole.View
             }
             else
             {
-                Console.WriteLine("Welcom to EasySave ! ");
+                Console.WriteLine("Welcome to EasySave ! ");
                 Console.WriteLine("1 - Create a backup configuration");
                 Console.WriteLine("2 - Delete a backup configuration");
                 Console.WriteLine("3 - Start a backup configuration");

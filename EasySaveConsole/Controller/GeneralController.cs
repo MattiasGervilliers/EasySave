@@ -42,11 +42,10 @@ namespace EasySaveConsole.Controller
                         //model.RemoveSave(NomSuppr);
                         break;
                     case 3:
-                        vue.AfficheConfigurations();
+                        //Lancer une config
                         break;
                     case 4:
-                        //Lancer une config
-
+                        ControllerLister controllerLister = new ControllerLister();
                         break;
                     case 5:
                         //changer de langue
