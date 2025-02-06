@@ -30,11 +30,11 @@ namespace EasySaveConsole.Controller
             {
                 vue.AfficheMenu();
                 int choixAction = int.Parse(Console.ReadLine());
+                Console.Clear();
                 switch (choixAction)
                 {
                     case 1:
                         ControllerCreer controllerCreer = new ControllerCreer();
-
                         break;
                     case 2:
                         vue.AfficheDemandeNom();

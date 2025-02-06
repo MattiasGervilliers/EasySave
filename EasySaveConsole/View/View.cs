@@ -19,6 +19,7 @@ namespace EasySaveConsole.View
             Console.WriteLine("Voici les langues disponnibles / Choose a language :");
             Console.WriteLine("1 - Anglais/" + Language.English);
             Console.WriteLine("2 - Français/" + Language.French);
+            Console.WriteLine("Votre choix / Your choice : ");
             int choix = int.Parse(Console.ReadLine());
             switch (choix)
             {
@@ -30,7 +31,7 @@ namespace EasySaveConsole.View
                     this.Langue = Language.French;
                     break;
             }
-
+            Console.Clear();
         }
         public void AfficheMenu()
         {
