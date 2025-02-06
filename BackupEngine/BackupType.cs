@@ -1,6 +1,6 @@
 ﻿namespace BackupEngine
 {
-    enum BackupType
+    public enum BackupType
     {
         Full,
         Incremental
