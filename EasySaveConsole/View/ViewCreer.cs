@@ -51,7 +51,6 @@ namespace EasySaveConsole.View
                 Console.WriteLine("Please enter the target file where you want to save: ");
             }
         }
-
         public void AfficheType()
         {
             if (this.Langue == Language.French)
@@ -67,6 +66,17 @@ namespace EasySaveConsole.View
                 Console.WriteLine("1 - Full");
                 Console.WriteLine("2 - Incremental");
                 Console.Write("Your choice (1 or 2): ");
+            }
+        }
+        public void CreationFini()
+        {
+            if (this.Langue == Language.French)
+            {
+                Console.WriteLine("Création d'une configuration de sauvegarde terminée !");
+            }
+            else
+            {
+                Console.WriteLine("Creation of a backup configuration completed !");
             }
         }
     }
