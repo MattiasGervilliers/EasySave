@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BackupEngine.Backup
 {
-    public class IncrementalSaveStrategy : ISaveStrategy
+    public class IncrementalSaveStrategy : SaveStrategy
     {
-        public void Save(string sourcePath, string destinationPath)
+        public override void Save(string sourcePath, string destinationPath)
         {
             if (!Directory.Exists(sourcePath))
             {

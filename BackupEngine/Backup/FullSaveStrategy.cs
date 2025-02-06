@@ -2,9 +2,9 @@
 using System.IO;
 using BackupEngine.Backup;
 
-public class FullSaveStrategy : ISaveStrategy
+public class FullSaveStrategy : SaveStrategy
 {
-    public void Save(string sourcePath, string destinationPath)
+    public override void Save(string sourcePath, string destinationPath)
     {
         if (!Directory.Exists(sourcePath))
         {
@@ -21,4 +21,5 @@ public class FullSaveStrategy : ISaveStrategy
 
         Console.WriteLine($"Sauvegarde complète effectuée dans : {destinationPath}");
     }
+
 }

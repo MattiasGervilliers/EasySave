@@ -1,17 +1,21 @@
-﻿using System;
-using System.IO;
-using BackupEngine.Backup;
+﻿using BackupEngine.Backup;
+using BackupEngine.Log;
+using BackupEngine.Settings;
 
 public class FileManager
 {
-    private ISaveStrategy saveStrategy;
+    private SaveStrategy saveStrategy;
+    private FileTransferLogManager logManager;
+    private SettingsRepository settingsRepository;
 
-    public FileManager(ISaveStrategy saveStrategy)
+    public FileManager(SaveStrategy saveStrategy)
     {
         this.saveStrategy = saveStrategy;
+        settingsRepository = new SettingsRepository();
+        logManager = new FileTransferLogManager(settingsRepository.GetLogPath().GetAbsolutePath());
     }
 
-    public void SetSaveStrategy(ISaveStrategy newStrategy)
+    public void SetSaveStrategy(SaveStrategy newStrategy)
     {
         saveStrategy = newStrategy;
     }
@@ -29,6 +33,8 @@ public class FileManager
 
         // Créer le dossier de sauvegarde
         Directory.CreateDirectory(uniqueDestinationPath);
+
+        saveStrategy.Transfer += logManager.OnTransfer;
 
         // Lancer la sauvegarde avec le bon dossier
         saveStrategy.Save(sourcePath, uniqueDestinationPath);
