@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EasySaveConsole;
 using EasySaveConsole.View;
 using BackupEngine;
-using BackupEngine.Settings;
+using BackupEngine.SettingsRepository;
 using EasySaveConsole.Model;
 using System.Numerics;
 
@@ -38,7 +38,7 @@ namespace EasySaveConsole.Controller
             vue.AfficheType();
             BackupType backupType = DemanderBackupType(langue);
             backupConfiguration.Update(Name, CheminSource, CheminCible, backupType);
-            Console.Clear();
+            //Console.Clear();
             return this.backupConfiguration;
         }
         public static BackupType DemanderBackupType(Language langue)

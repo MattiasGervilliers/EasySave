@@ -1,4 +1,4 @@
-﻿namespace BackupEngine.Settings
+﻿namespace BackupEngine.SettingsRepository
 {
     public enum Language
     {

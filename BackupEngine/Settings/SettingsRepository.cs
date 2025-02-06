@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace BackupEngine.Settings
+namespace BackupEngine.SettingsRepository
 {
     public class SettingsRepository
     {

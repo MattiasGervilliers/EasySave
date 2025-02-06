@@ -1,4 +1,4 @@
-﻿using BackupEngine.Settings;
+﻿using BackupEngine.SettingsRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;

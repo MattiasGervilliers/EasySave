@@ -7,7 +7,7 @@ using EasySaveConsole.Model;
 using EasySaveConsole.View;
 using BackupEngine;
 using System.Net;
-using BackupEngine.Settings;
+using BackupEngine.SettingsRepository;
 
 namespace EasySaveConsole.Controller
 {
@@ -21,6 +21,8 @@ namespace EasySaveConsole.Controller
         private bool Quitter = false;
         private Language Langue;
         private ControllerCreer controllerCreer;
+        private ControllerSuppr controllerSuppr;
+        private ControllerLister ControllerLister; 
 
         public GeneralController()
         {
@@ -46,11 +48,12 @@ namespace EasySaveConsole.Controller
                     case "1":
                         controllerCreer = new ControllerCreer(Langue);
                         model.AddConfig(controllerCreer.GetConfiguration());
+                        Console.WriteLine("creation terminée");
                         break;
                     case "2":
-                        ControllerSuppr controllerSuppr = new ControllerSuppr(Langue);
+                        controllerSuppr = new ControllerSuppr(Langue);
                         string NomSuppr = Console.ReadLine();
-                        //model.RemoveSave(NomSuppr);
+                        model.DeleteConfig(controllerSuppr.GetConfigurationSuppr());
                         break;
                     case "3":
                         //Lancer une config

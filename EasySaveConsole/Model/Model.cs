@@ -7,7 +7,7 @@ using EasySaveConsole;
 using BackupEngine;
 using LogLib;
 using BackupEngine.Job;
-using BackupEngine.Settings;
+using BackupEngine.SettingsRepository;
 
 namespace EasySaveConsole.Model
 {

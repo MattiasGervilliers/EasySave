@@ -4,7 +4,7 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BackupEngine.Settings;
+using BackupEngine.SettingsRepository;
 
 namespace EasySaveConsole.View
 {

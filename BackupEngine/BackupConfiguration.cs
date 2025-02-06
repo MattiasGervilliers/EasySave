@@ -24,7 +24,10 @@ namespace BackupEngine
         {
             return this.DestinationPath;
         }
-
+        public void FindConfig(string Nom)
+        {
+            //update la config
+        }
         public void Update(string name, Chemin NewSourcePath, Chemin NewCiblePath, BackupType backupType)
         {
             this.Name = name;
