@@ -1,42 +1,44 @@
-﻿using BackupEngine.Backup;
-using BackupEngine.Log;
+﻿using BackupEngine.Log;
 using BackupEngine.Settings;
 
-public class FileManager
+namespace BackupEngine.Backup
 {
-    private SaveStrategy saveStrategy;
-    private FileTransferLogManager logManager;
-    private SettingsRepository settingsRepository;
-
-    public FileManager(SaveStrategy saveStrategy)
+    public class FileManager
     {
-        this.saveStrategy = saveStrategy;
-        settingsRepository = new SettingsRepository();
-        logManager = new FileTransferLogManager(settingsRepository.GetLogPath().GetAbsolutePath());
-    }
+        private SaveStrategy _saveStrategy;
+        private readonly FileTransferLogManager _logManager;
+        private readonly SettingsRepository _settingsRepository;
 
-    public void SetSaveStrategy(SaveStrategy newStrategy)
-    {
-        saveStrategy = newStrategy;
-    }
-
-    public void Save(string sourcePath, string destinationBasePath)
-    {
-        if (!Directory.Exists(destinationBasePath))
+        public FileManager(SaveStrategy saveStrategy)
         {
-            Directory.CreateDirectory(destinationBasePath);
+            this._saveStrategy = saveStrategy;
+            _settingsRepository = new SettingsRepository();
+            _logManager = new FileTransferLogManager(_settingsRepository.GetLogPath().GetAbsolutePath());
         }
 
-        // Générer un nom unique pour le dossier de sauvegarde
-        string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-        string uniqueDestinationPath = Path.Combine(destinationBasePath, $"{timestamp}_Sauvegarde");
+        public void SetSaveStrategy(SaveStrategy newStrategy)
+        {
+            _saveStrategy = newStrategy;
+        }
 
-        // Créer le dossier de sauvegarde
-        Directory.CreateDirectory(uniqueDestinationPath);
+        public void Save(string sourcePath, string destinationBasePath)
+        {
+            if (!Directory.Exists(destinationBasePath))
+            {
+                Directory.CreateDirectory(destinationBasePath);
+            }
 
-        saveStrategy.Transfer += logManager.OnTransfer;
+            // Générer un nom unique pour le dossier de sauvegarde
+            string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+            string uniqueDestinationPath = System.IO.Path.Combine(destinationBasePath, $"{timestamp}_Sauvegarde");
 
-        // Lancer la sauvegarde avec le bon dossier
-        saveStrategy.Save(sourcePath, uniqueDestinationPath);
+            // Créer le dossier de sauvegarde
+            Directory.CreateDirectory(uniqueDestinationPath);
+
+            _saveStrategy.Transfer += _logManager.OnTransfer;
+
+            // Lancer la sauvegarde avec le bon dossier
+            _saveStrategy.Save();
+        }
     }
 }

@@ -13,16 +13,13 @@ namespace BackupEngine.Job
             switch (Configuration.BackupType)
             {
                 case BackupType.Full:
-                    FileManager = new FileManager(new FullSaveStrategy());
+                    FileManager = new FileManager(new FullSaveStrategy(Configuration));
                     break;
                 case BackupType.Incremental:
-                    FileManager = new FileManager(new IncrementalSaveStrategy());
+                    FileManager = new FileManager(new IncrementalSaveStrategy(Configuration));
                     break;
-            }
-
-            if (FileManager == null)
-            {
-                throw new System.Exception("Invalid backup type");
+                default:
+                    throw new Exception("Invalid backup type");
             }
         }
 
