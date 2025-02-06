@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace BackupEngine.Settings
 {
-    internal class Settings : IJsonSerializable
+    public class Settings : IJsonSerializable
     {
         public Language Language { get; set; }
         public Chemin LogPath { get; set; }

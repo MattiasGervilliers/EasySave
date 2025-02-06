@@ -8,7 +8,7 @@ namespace BackupEngine
     /// </summary>
     public class BackupConfiguration : IJsonSerializable
     {
-        ublic string Name { get; set; }
+        public string Name { get; set; }
         private Chemin SourcePath { get; set; }
         private Chemin DestinationPath { get; set; }
         private BackupType BackupType { get; set; }

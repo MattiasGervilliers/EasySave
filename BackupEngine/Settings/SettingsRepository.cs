@@ -3,7 +3,7 @@ using System.IO;
 
 namespace BackupEngine.Settings
 {
-    internal class SettingsRepository
+    public class SettingsRepository
     {
         private static readonly string _settingsPath = "settings.json";
         private Settings Settings { get; set; }
@@ -12,7 +12,7 @@ namespace BackupEngine.Settings
             Settings = Load();
         }
 
-        public Settings Load()
+        Settings Load()
         {
             if (File.Exists(_settingsPath))
             {
