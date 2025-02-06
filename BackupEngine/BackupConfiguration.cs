@@ -9,32 +9,9 @@ namespace BackupEngine
     public class BackupConfiguration : IJsonSerializable
     {
         public string Name { get; set; }
-        private Chemin SourcePath { get; set; }
-        private Chemin DestinationPath { get; set; }
-        private BackupType BackupType { get; set; }
-        public BackupType GetBackupType()
-        {
-            return this.BackupType;
-        }
-        public Chemin GetSourcePath()
-        {
-            return this.SourcePath;
-        }
-        public Chemin GetDestinationPath()
-        {
-            return this.DestinationPath;
-        }
-        public void FindConfig(string Nom)
-        {
-            //update la config
-        }
-        public void Update(string name, Chemin NewSourcePath, Chemin NewCiblePath, BackupType backupType)
-        {
-            this.Name = name;
-            this.SourcePath = NewSourcePath;
-            this.DestinationPath = NewCiblePath;
-            this.BackupType = backupType;
-        }
+        public Chemin SourcePath { get; set; }
+        public Chemin DestinationPath { get; set; }
+        public BackupType BackupType { get; set; }
 
         public void FromJson(string json)
         {

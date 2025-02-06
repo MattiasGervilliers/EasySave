@@ -1,49 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EasySaveConsole;
-using EasySaveConsole.View;
+﻿using EasySaveConsole.View;
 using BackupEngine;
-using BackupEngine.SettingsRepository;
-using EasySaveConsole.Model;
-using System.Numerics;
+using BackupEngine.Settings;
+using BackupEngine.Shared;
 
 namespace EasySaveConsole.Controller
 {
     internal class ControllerCreer
     {
         private ViewCreer vue;
-        private string SourcePath;
-        private string CiblePath;
-        private BackupConfiguration backupConfiguration;
-        private Language langue;
-        public  ControllerCreer(Language Langue)
+        private readonly Language language;
+
+        public  ControllerCreer(Language language)
         {
-            this.vue = new ViewCreer(Langue);
-            this.langue = Langue;
+            this.vue = new ViewCreer(language);
+            this.language = language;
         }
+
         public BackupConfiguration GetConfiguration()
         {
-
             vue.AfficheNom();
-            string Name = Console.ReadLine();
-            vue.AfficheFichierSource();
-            SourcePath = Console.ReadLine();
-            Chemin CheminSource = new Chemin(SourcePath);
-            vue.AfficheFichierCible();
-            CiblePath = Console.ReadLine();
-            Chemin CheminCible = new Chemin(SourcePath);
-            vue.AfficheType();
-            BackupType backupType = DemanderBackupType(langue);
-            backupConfiguration.Update(Name, CheminSource, CheminCible, backupType);
-            //Console.Clear();
-            return this.backupConfiguration;
-        }
-        public static BackupType DemanderBackupType(Language langue)
-        {
+            string Name = Console.ReadLine() ?? ""; // TODO : Check if the name is valid
 
+            vue.AfficheFichierSource();
+            Chemin SourcePath = new Chemin(Console.ReadLine() ?? ""); // TODO : Check if the path is valid
+
+            vue.AfficheFichierCible();
+            Chemin DestinationPath = new Chemin(Console.ReadLine() ?? ""); // TODO : Check if the path is valid
+
+            vue.AfficheType();
+            BackupType backupType = AskBackupType();
+
+            BackupConfiguration backupConfiguration = new BackupConfiguration
+            {
+                BackupType = backupType,
+                DestinationPath = DestinationPath,
+                SourcePath = SourcePath,
+                Name = Name
+            };
+
+            //Console.Clear();
+            return backupConfiguration;
+        }
+        private BackupType AskBackupType()
+        {
             while (true)
             {
                 string input = Console.ReadLine();
@@ -54,8 +53,7 @@ namespace EasySaveConsole.Controller
                     return BackupType.Incremental;
                 else
                 {
-
-                    if (langue == Language.French)
+                    if (language == Language.French)
                     {
                         Console.WriteLine("Entrée invalide. Veuillez entrer 1 ou 2.");
                     }

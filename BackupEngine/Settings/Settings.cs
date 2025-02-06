@@ -1,8 +1,7 @@
 ﻿using BackupEngine.Shared;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
-namespace BackupEngine.SettingsRepository
+namespace BackupEngine.Settings
 {
     public class Settings : IJsonSerializable
     {

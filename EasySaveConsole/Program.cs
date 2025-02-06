@@ -1,11 +1,12 @@
-﻿using EasySaveConsole;
-using System;
-using BackupEngine;
-using EasySaveConsole.Controller;
-class Program
+﻿using EasySaveConsole.Controller;
+
+namespace EasySaveConsole
 {
-    static void Main()
+    class Program
     {
-        GeneralController jobManager = new GeneralController();
+        static void Main()
+        {
+            new GeneralController();
+        }
     }
 }

@@ -1,9 +1,4 @@
-﻿using BackupEngine.SettingsRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BackupEngine.Settings;
 
 namespace EasySaveConsole.View
 {
@@ -32,11 +27,11 @@ namespace EasySaveConsole.View
         {
             if (this.Langue == Language.French)
             {
-                Console.WriteLine("Veuillez entrer le fichier source que vous souhaitez sauvegarder : ");
+                Console.WriteLine("Veuillez entrer le dossier source que vous souhaitez sauvegarder : ");
             }
             else
             {
-                Console.WriteLine("Please enter the source file you want to back up: ");
+                Console.WriteLine("Please enter the source folder you want to back up: ");
             }
         }
 
@@ -44,11 +39,11 @@ namespace EasySaveConsole.View
         {
             if (this.Langue == Language.French)
             {
-                Console.WriteLine("Veuillez entrer le fichier cible où vous souhaitez sauvegarder : ");
+                Console.WriteLine("Veuillez entrer le dossier cible où vous souhaitez sauvegarder : ");
             }
             else
             {
-                Console.WriteLine("Please enter the target file where you want to save: ");
+                Console.WriteLine("Please enter the target folder where you want to save: ");
             }
         }
 

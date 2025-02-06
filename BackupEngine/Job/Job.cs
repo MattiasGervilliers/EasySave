@@ -10,7 +10,7 @@ namespace BackupEngine.Job
         public Job(BackupConfiguration configuration)
         {
             Configuration = configuration;
-            switch (Configuration.GetBackupType())
+            switch (Configuration.BackupType)
             {
                 case BackupType.Full:
                     FileManager = new FileManager(new FullSaveStrategy(Configuration));
@@ -25,7 +25,7 @@ namespace BackupEngine.Job
 
         public void Run()
         {
-            FileManager.Save(Configuration.GetSourcePath().GetAbsolutePath(), Configuration.GetDestinationPath().GetAbsolutePath());
+            FileManager.Save(Configuration.SourcePath.GetAbsolutePath(), Configuration.DestinationPath.GetAbsolutePath());
         }
     }
 }

@@ -1,27 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BackupEngine;
 using EasySaveConsole.View;
-using BackupEngine;
-using BackupEngine.SettingsRepository;
+using BackupEngine.Settings;
+using EasySaveConsole.Model;
 
 namespace EasySaveConsole.Controller
 {
-    internal class ControllerLister
+    internal class ControllerLister(Language language)
     {
-        private ViewLister vue;
-        private Language langue;
+        private ViewLister vue = new ViewLister(language);
 
-        public ControllerLister(Language Langue)
-        {
-            this.langue = Langue;
-            vue = new ViewLister(Langue);
-        }
         public void AfficheConfiguration()
         {
-            vue.AfficheConfiguration();
+            vue.AfficheConfigurations();
+            List<BackupConfiguration> configs = BackupModel.GetConfigs();
+            
+            foreach (BackupConfiguration config in configs)
+            {
+                vue.AfficheConfiguration(config);
+            }
+
             Console.ReadLine();
             Console.Clear();
         }

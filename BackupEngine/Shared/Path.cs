@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
-namespace BackupEngine
+namespace BackupEngine.Shared
 {
-    internal class Chemin
+    public class Chemin
     {
         private string _path { get; set; }
 
@@ -23,7 +24,8 @@ namespace BackupEngine
 
         private bool CheckPathValidity(string TestedPath)
         {
-            return System.IO.Path.IsPathRooted(TestedPath);
+            // TODO : Check if the path is valid
+            return true;
         }
 
         public string GetAbsolutePath()

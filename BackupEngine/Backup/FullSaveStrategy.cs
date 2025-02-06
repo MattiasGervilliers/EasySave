@@ -17,8 +17,8 @@ namespace BackupEngine.Backup
             foreach (string file in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
             {
                 string relativePath = file.Substring(sourcePath.Length + 1);
-                string destFile = System.IO.Path.Combine(destinationPath, relativePath);
-                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(destFile));
+                string destFile = Path.Combine(destinationPath, relativePath);
+                Directory.CreateDirectory(Path.GetDirectoryName(destFile));
                 
                 try
                 {

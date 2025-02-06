@@ -1,49 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EasySaveConsole.View;
-using EasySaveConsole.Model;
+﻿using EasySaveConsole.View;
 using BackupEngine;
-using BackupEngine.SettingsRepository;
+using BackupEngine.Settings;
+using EasySaveConsole.Model;
+
 namespace EasySaveConsole.Controller
 {
     internal class ControllerSuppr
     {
-        private string NomSuppr;
-        private Language Langue;
-        private ViewSuppr vue;
-        private BackupConfiguration backupConfiguration;
-        private SettingsRepository settingsRepository;
-        public ControllerSuppr(Language Langue)
-        {
-            vue = new ViewSuppr();
-            vue.AfficheDemandeNom(Langue);
-            NomSuppr = Console.ReadLine();
-            this.backupConfiguration = FindConfig(NomSuppr);
-            //while !model.suppr(NomSuppr){ vue.AfficherConfigIntrouvable(langue)}
-            // Model.suppr(NomSuppr)
+        private readonly ViewSuppr _vue;
 
-        }
-        public BackupConfiguration GetConfigurationSuppr()
+        public ControllerSuppr(Language language)
         {
-            return backupConfiguration;
-        }
-        public BackupConfiguration FindConfig(string Name)
-        {
-            List<BackupConfiguration> configurations = settingsRepository.GetConfigurations();
-
-            foreach (BackupConfiguration config in configurations)
+            _vue = new ViewSuppr(language);
+            BackupConfiguration? configurationToDelete = null;
+            while (configurationToDelete == null)
             {
-                if (config.Name == Name)
-                {
-                    return config;
-                }
+                _vue.AfficheDemandeNom();
+                string? name = Console.ReadLine();
+                configurationToDelete = FindConfig(name);
             }
-            Console.WriteLine("Erreur : Configuration non trouvée");
-            return null; 
+            BackupModel.DeleteConfig(configurationToDelete);
         }
 
+        public BackupConfiguration? FindConfig(string? name)
+        {
+            BackupConfiguration? config = BackupModel.FindConfig(name ?? "");
+            if (config != null)
+            {
+                return config;
+            }
+            _vue.AfficheConfigIntrouvable();
+            return null;
+        }
     }
 }

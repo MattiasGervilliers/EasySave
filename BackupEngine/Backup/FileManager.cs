@@ -1,5 +1,5 @@
 ﻿using BackupEngine.Log;
-using BackupEngine.SettingsRepository;
+using BackupEngine.Settings;
 
 namespace BackupEngine.Backup
 {
@@ -7,12 +7,12 @@ namespace BackupEngine.Backup
     {
         private SaveStrategy _saveStrategy;
         private readonly FileTransferLogManager _logManager;
-        private readonly SettingsRepository.SettingsRepository _settingsRepository;
+        private readonly SettingsRepository _settingsRepository;
 
         public FileManager(SaveStrategy saveStrategy)
         {
             this._saveStrategy = saveStrategy;
-            _settingsRepository = new SettingsRepository.SettingsRepository();
+            _settingsRepository = new SettingsRepository();
             _logManager = new FileTransferLogManager(_settingsRepository.GetLogPath().GetAbsolutePath());
         }
 

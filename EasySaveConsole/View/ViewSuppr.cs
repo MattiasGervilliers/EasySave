@@ -1,16 +1,12 @@
-﻿using BackupEngine.SettingsRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BackupEngine.Settings;
 
 namespace EasySaveConsole.View
 {
-    internal class ViewSuppr
+    internal class ViewSuppr (Language language)
     {
-        private Language Langue;
-        public void AfficheDemandeNom(Language Langue)
+        private Language Langue = language;
+
+        public void AfficheDemandeNom()
         {
             if (Langue == Language.French)
             {
@@ -21,7 +17,8 @@ namespace EasySaveConsole.View
                 Console.WriteLine("Please enter the name of the configuration to delete: ");
             }
         }
-        public void AfficheConfigIntrouvable(Language Langue)
+
+        public void AfficheConfigIntrouvable()
         {
             if (Langue == Language.French)
             {

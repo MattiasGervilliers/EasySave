@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BackupEngine.SettingsRepository;
+﻿using BackupEngine.Settings;
 
 namespace EasySaveConsole.View
 {
     internal class Vue
     {
-        private Language Langue;
         public Vue()
         {
             Language Langues = new Language();

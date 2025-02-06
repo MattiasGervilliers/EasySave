@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using BackupEngine.Shared;
 
-namespace BackupEngine.SettingsRepository
+namespace BackupEngine.Settings
 {
     public class SettingsRepository
     {
@@ -30,7 +29,8 @@ namespace BackupEngine.SettingsRepository
 
         private void CreateFile()
         {
-            File.Create(_settingsPath);
+            FileStream fs = File.Create(_settingsPath);
+            fs.Close();
         }
 
         private void SaveSettings()
@@ -86,6 +86,16 @@ namespace BackupEngine.SettingsRepository
         public Chemin GetLogPath()
         {
             return Settings.LogPath;
+        }
+
+        public Language GetLanguage()
+        {
+            return Settings.Language;
+        }
+
+        public BackupConfiguration? GetConfiguration(string name)
+        {
+            return Settings.Configurations.Find(c => c.Name == name);
         }
     }
 }
