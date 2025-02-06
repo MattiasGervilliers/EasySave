@@ -1,8 +1,8 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using Newtonsoft.Json;
 
 namespace BackupEngine.Shared
 {
+    [JsonConverter(typeof(CheminConverter))]
     public class Chemin
     {
         private string _path { get; set; }
@@ -19,7 +19,7 @@ namespace BackupEngine.Shared
 
         private bool PathExists(string TestedPath)
         {
-            return System.IO.Directory.Exists(TestedPath);
+            return Directory.Exists(TestedPath);
         }
 
         private bool CheckPathValidity(string TestedPath)
@@ -30,7 +30,25 @@ namespace BackupEngine.Shared
 
         public string GetAbsolutePath()
         {
-            return System.IO.Path.GetFullPath(_path);
+            return Path.GetFullPath(_path);
+        }
+
+        public override string ToString()
+        {
+            return GetAbsolutePath();
+        }
+    }
+
+    public class CheminConverter : JsonConverter<Chemin>
+    {
+        public override void WriteJson(JsonWriter writer, Chemin value, JsonSerializer serializer)
+        {
+            writer.WriteValue(value.GetAbsolutePath());  // Serialize as a string with absolute path
+        }
+
+        public override Chemin ReadJson(JsonReader reader, Type objectType, Chemin existingValue, bool hasExistingValue, JsonSerializer serializer)
+        {
+            return new Chemin(reader.Value.ToString());
         }
     }
 }

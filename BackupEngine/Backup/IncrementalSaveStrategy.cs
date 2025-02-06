@@ -4,22 +4,21 @@ namespace BackupEngine.Backup
 {
     public class IncrementalSaveStrategy (BackupConfiguration configuration) : SaveStrategy (configuration)
     {
-        public override void Save()
+        public override void Save(string uniqueDestinationPath)
         {
             string sourcePath = Configuration.SourcePath.GetAbsolutePath();
-            string destinationPath = Configuration.DestinationPath.GetAbsolutePath();
 
             if (!Directory.Exists(sourcePath))
             {
                 throw new DirectoryNotFoundException($"Le dossier source '{sourcePath}' n'existe pas.");
             }
 
-            Directory.CreateDirectory(destinationPath);
+            Directory.CreateDirectory(uniqueDestinationPath);
 
             foreach (string file in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
             {
                 string relativePath = file.Substring(sourcePath.Length + 1);
-                string destFile = System.IO.Path.Combine(destinationPath, relativePath);
+                string destFile = System.IO.Path.Combine(uniqueDestinationPath, relativePath);
                 Directory.CreateDirectory(System.IO.Path.GetDirectoryName(destFile));
 
                 if (!File.Exists(destFile) || File.GetLastWriteTimeUtc(file) > File.GetLastWriteTimeUtc(destFile))

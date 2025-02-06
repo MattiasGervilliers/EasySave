@@ -7,7 +7,7 @@ namespace BackupEngine.Backup
         public event EventHandler<TransferEvent> Transfer;
         protected readonly BackupConfiguration Configuration = configuration;
 
-        public abstract void Save();
+        public abstract void Save(string uniqueDestinationPath);
 
         protected void OnTransfer(TransferEvent e)
         {

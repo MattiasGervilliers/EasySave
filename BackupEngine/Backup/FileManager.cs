@@ -38,7 +38,7 @@ namespace BackupEngine.Backup
             _saveStrategy.Transfer += _logManager.OnTransfer;
 
             // Lancer la sauvegarde avec le bon dossier
-            _saveStrategy.Save();
+            _saveStrategy.Save(uniqueDestinationPath);
         }
     }
 }

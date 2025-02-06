@@ -12,14 +12,23 @@ namespace EasySaveConsole.Controller
         public GeneralController()
         {
             Vue vue = new Vue();
+
+            Language? language = GetLanguage();
             
-            // Afficher choix langue
-            vue.UpdateLangue();
-            while (!ChoixLangue())
+            if (language != null)
             {
-                Console.Clear();
-                vue.AfficherErreur();
+                Langue = (Language)language;
+            }
+            else
+            {
+                // Afficher choix langue
                 vue.UpdateLangue();
+                while (!ChoixLangue())
+                {
+                    Console.Clear();
+                    vue.AfficherErreur();
+                    vue.UpdateLangue();
+                }
             }
 
             Console.Clear();
@@ -74,13 +83,20 @@ namespace EasySaveConsole.Controller
             {
                 case "1":
                     this.Langue = Language.English;
+                    BackupModel.UpdateLanguage(Langue);
                     return true;
                 case "2":
                     this.Langue = Language.French;
+                    BackupModel.UpdateLanguage(Langue);
                     return true;
                 default:
                     return false;
             }
+        }
+
+        Language? GetLanguage()
+        {
+            return BackupModel.GetLanguage();
         }
     }
 }

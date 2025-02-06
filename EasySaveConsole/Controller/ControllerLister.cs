@@ -19,8 +19,7 @@ namespace EasySaveConsole.Controller
                 vue.AfficheConfiguration(config);
             }
 
-            Console.ReadLine();
-            Console.Clear();
+            Console.WriteLine('\n');
         }
     }
 }

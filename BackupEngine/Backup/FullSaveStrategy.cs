@@ -4,10 +4,9 @@ namespace BackupEngine.Backup
 {
     public class FullSaveStrategy(BackupConfiguration configuration) : SaveStrategy(configuration)
     {
-        public override void Save()
+        public override void Save(string uniqueDestinationPath)
         {
             string sourcePath = Configuration.SourcePath.GetAbsolutePath();
-            string destinationPath = Configuration.DestinationPath.GetAbsolutePath();
 
             if (!Directory.Exists(sourcePath))
             {
@@ -17,7 +16,7 @@ namespace BackupEngine.Backup
             foreach (string file in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
             {
                 string relativePath = file.Substring(sourcePath.Length + 1);
-                string destFile = Path.Combine(destinationPath, relativePath);
+                string destFile = Path.Combine(uniqueDestinationPath, relativePath);
                 Directory.CreateDirectory(Path.GetDirectoryName(destFile));
                 
                 try
@@ -40,7 +39,7 @@ namespace BackupEngine.Backup
                     OnTransfer(new TransferEvent(Configuration, new TimeSpan(-1), new FileInfo(file)));
                 }
 
-                Console.WriteLine($"Sauvegarde complète effectuée dans : {destinationPath}");
+                Console.WriteLine($"Sauvegarde complète effectuée dans : {uniqueDestinationPath}");
             }
         }
     }

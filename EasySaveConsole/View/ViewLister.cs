@@ -28,15 +28,15 @@ namespace EasySaveConsole.View
         {
             if (_language == Language.French)
             {
-                Console.WriteLine($"Nom: ${configuration.Name} --- Dossier source: ${configuration.SourcePath.GetAbsolutePath()}" +
-                    $" --- Dossier de destination: ${configuration.DestinationPath.GetAbsolutePath()} " +
-                    $"--- Sauvegarde ${configuration.BackupType}");
+                Console.WriteLine($"Nom: {configuration.Name} --- Dossier source: {configuration.SourcePath.GetAbsolutePath()}" +
+                    $" --- Dossier de destination: {configuration.DestinationPath.GetAbsolutePath()} " +
+                    $"--- Sauvegarde {configuration.BackupType}");
             }
             else
             {
-                Console.WriteLine($"Name: ${configuration.Name} --- Source folder: ${configuration.SourcePath.GetAbsolutePath()}" +
-                    $" --- Destination folder: ${configuration.DestinationPath.GetAbsolutePath()} " +
-                    $"--- Backup ${configuration.BackupType}");
+                Console.WriteLine($"Name: {configuration.Name} --- Source folder: {configuration.SourcePath.GetAbsolutePath()}" +
+                    $" --- Destination folder: {configuration.DestinationPath.GetAbsolutePath()} " +
+                    $"--- Backup {configuration.BackupType}");
             }
         }
     }
