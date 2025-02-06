@@ -27,8 +27,9 @@ namespace EasySaveConsole.Controller
             Chemin CheminCible = new Chemin(SourcePath);
             viewCreer.AfficheType();
             BackupType backupType = DemanderBackupType();
-            backupConfiguration.Update(Name, CheminSource, CheminCible, backupType);
+            //backupConfiguration.Update(Name, CheminSource, CheminCible, backupType);
             //model.AddSave();
+            Console.Clear();
         }
         public static BackupType DemanderBackupType()
         {
