@@ -20,6 +20,7 @@ namespace EasySaveConsole.Controller
         private string CiblePath;
         private bool Quitter = false;
         private Language Langue;
+        private ControllerCreer controllerCreer;
 
         public GeneralController()
         {
@@ -43,8 +44,8 @@ namespace EasySaveConsole.Controller
                 switch (choixAction)
                 {
                     case "1":
-                        ControllerCreer controllerCreer = new ControllerCreer(Langue);
-
+                        controllerCreer = new ControllerCreer(Langue);
+                        model.AddConfig(controllerCreer.GetConfiguration());
                         break;
                     case "2":
                         ControllerSuppr controllerSuppr = new ControllerSuppr(Langue);

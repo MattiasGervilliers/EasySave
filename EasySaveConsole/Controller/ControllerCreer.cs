@@ -15,27 +15,31 @@ namespace EasySaveConsole.Controller
     internal class ControllerCreer
     {
         private ViewCreer vue;
-        private Modele model;
         private string SourcePath;
         private string CiblePath;
         private BackupConfiguration backupConfiguration;
-        public ControllerCreer(Language Langue)
+        private Language langue;
+        public  ControllerCreer(Language Langue)
         {
-            ViewCreer viewCreer = new ViewCreer(Langue);
-            Modele model = new Modele();
-            viewCreer.AfficheNom();
+            this.vue = new ViewCreer(Langue);
+            this.langue = Langue;
+        }
+        public BackupConfiguration GetConfiguration()
+        {
+
+            vue.AfficheNom();
             string Name = Console.ReadLine();
-            viewCreer.AfficheFichierSource();
+            vue.AfficheFichierSource();
             SourcePath = Console.ReadLine();
             Chemin CheminSource = new Chemin(SourcePath);
-            viewCreer.AfficheFichierCible();
+            vue.AfficheFichierCible();
             CiblePath = Console.ReadLine();
             Chemin CheminCible = new Chemin(SourcePath);
-            viewCreer.AfficheType();
-            BackupType backupType = DemanderBackupType(Langue);
+            vue.AfficheType();
+            BackupType backupType = DemanderBackupType(langue);
             backupConfiguration.Update(Name, CheminSource, CheminCible, backupType);
-            model.AddConfig(backupConfiguration);
             Console.Clear();
+            return this.backupConfiguration;
         }
         public static BackupType DemanderBackupType(Language langue)
         {
