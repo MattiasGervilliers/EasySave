@@ -7,6 +7,7 @@ using EasySaveConsole.Model;
 using EasySaveConsole.View;
 using BackupEngine;
 using System.Net;
+using BackupEngine.Settings;
 
 namespace EasySaveConsole.Controller
 {
@@ -18,26 +19,30 @@ namespace EasySaveConsole.Controller
         private string SourcePath;
         private string CiblePath;
         private bool Quitter = false;
+        private Language Langue;
 
         public GeneralController()
         {
             Vue vue = new Vue();
             Modele model = new Modele();
+            Language langue = new Language();
             //afficher choix langue
 
             vue.UpdateLangue();
+            this.ChoixLangue();
             while (!Quitter)
             {
-                vue.AfficheMenu();
+                vue.AfficheMenu(Langue);
                 int choixAction = int.Parse(Console.ReadLine());
                 Console.Clear();
                 switch (choixAction)
                 {
                     case 1:
                         ControllerCreer controllerCreer = new ControllerCreer();
+
                         break;
                     case 2:
-                        vue.AfficheDemandeNom();
+                        ControllerSuppr controllerSuppr = new ControllerSuppr(Langue);
                         string NomSuppr = Console.ReadLine();
                         //model.RemoveSave(NomSuppr);
                         break;
@@ -51,12 +56,27 @@ namespace EasySaveConsole.Controller
                     case 5:
                         //changer de langue
                         vue.UpdateLangue();
+                        this.ChoixLangue();
                         break;
                     case 6:
                         vue.AfficheQuitter();
                         Quitter = true;
                         break;
                 }
+            }
+        }
+        void ChoixLangue()
+        {
+            int choix = int.Parse(Console.ReadLine());
+            switch (choix)
+            {
+
+                case 1:
+                    this.Langue = Language.English;
+                    break;
+                case 2:
+                    this.Langue = Language.French;
+                    break;
             }
         }
         

@@ -20,22 +20,11 @@ namespace EasySaveConsole.View
             Console.WriteLine("1 - Anglais/" + Language.English);
             Console.WriteLine("2 - Français/" + Language.French);
             Console.WriteLine("Votre choix / Your choice : ");
-            int choix = int.Parse(Console.ReadLine());
-            switch (choix)
-            {
-
-                case 1:
-                    this.Langue = Language.English;
-                    break;
-                case 2:
-                    this.Langue = Language.French;
-                    break;
-            }
-            Console.Clear();
+            
         }
-        public void AfficheMenu()
+        public void AfficheMenu(Language Langue)
         {
-            if (this.Langue == Language.French)
+            if (Langue == Language.French)
             {
 
                 Console.WriteLine("Bienvenu sur EasySave ! ");
