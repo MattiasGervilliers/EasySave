@@ -9,18 +9,22 @@ namespace EasySaveConsole.Controller
         {
             HashSet<int> backupIds = ParseBackupArguments(args[0]);
 
+            List<BackupConfiguration> configs = new List<BackupConfiguration>();
+
             foreach (int i in backupIds)
             {
                 BackupConfiguration? config = BackupModel.FindConfig(i);
                 if (config != null)
                 {
-                    BackupModel.LaunchConfig(config);
+                    configs.Add(config);
                 }
                 else
                 {
                     Console.WriteLine($"Configuration {i} not found");
                 }
             }
+
+
         }
 
         static HashSet<int> ParseBackupArguments(string input)
