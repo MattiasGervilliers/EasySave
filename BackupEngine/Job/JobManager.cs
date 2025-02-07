@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace BackupEngine.Job
 {
-    internal class JobManager
+    public class JobManager
     {
         private List<Thread> JobsThreads { get; set; }
 
@@ -21,7 +21,7 @@ namespace BackupEngine.Job
             return job;
         }
 
-        public List<Job> LaunchBackup(List<BackupConfiguration> configurations)
+        List<Job> LaunchBackup(List<BackupConfiguration> configurations)
         {
             List<Job> jobs = new List<Job>();
             foreach (BackupConfiguration configuration in configurations)
@@ -31,7 +31,7 @@ namespace BackupEngine.Job
             return jobs;
         }
 
-        public void StopJob(Job job)
+        void StopJob(Job job)
         {
             
         }

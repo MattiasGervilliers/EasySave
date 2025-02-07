@@ -2,7 +2,7 @@
 
 namespace BackupEngine.Job
 {
-    internal class Job
+    public class Job
     {
         private BackupConfiguration Configuration { get; set; }
         private FileManager FileManager { get; set; }

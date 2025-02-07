@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 
-namespace BackupEngine
+namespace BackupEngine.Shared
 {
-    public class Path
+    [JsonConverter(typeof(CheminConverter))]
+    public class Chemin
     {
         private string _path { get; set; }
 
-        public Path(string path)
+        public Chemin(string path)
         {
             if (!CheckPathValidity(path))
             {
@@ -18,17 +19,36 @@ namespace BackupEngine
 
         private bool PathExists(string TestedPath)
         {
-            return System.IO.Directory.Exists(TestedPath);
+            return Directory.Exists(TestedPath);
         }
 
         private bool CheckPathValidity(string TestedPath)
         {
-            return System.IO.Path.IsPathRooted(TestedPath);
+            // TODO : Check if the path is valid
+            return true;
         }
 
         public string GetAbsolutePath()
         {
-            return System.IO.Path.GetFullPath(_path);
+            return Path.GetFullPath(_path);
+        }
+
+        public override string ToString()
+        {
+            return GetAbsolutePath();
+        }
+    }
+
+    public class CheminConverter : JsonConverter<Chemin>
+    {
+        public override void WriteJson(JsonWriter writer, Chemin value, JsonSerializer serializer)
+        {
+            writer.WriteValue(value.GetAbsolutePath());  // Serialize as a string with absolute path
+        }
+
+        public override Chemin ReadJson(JsonReader reader, Type objectType, Chemin existingValue, bool hasExistingValue, JsonSerializer serializer)
+        {
+            return new Chemin(reader.Value.ToString());
         }
     }
 }

@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using BackupEngine.Shared;
 
 namespace BackupEngine.Settings
 {
-    internal class SettingsRepository
+    public class SettingsRepository
     {
         private static readonly string _settingsPath = "settings.json";
         private Settings Settings { get; set; }
@@ -12,7 +11,7 @@ namespace BackupEngine.Settings
             Settings = Load();
         }
 
-        public Settings Load()
+        Settings Load()
         {
             if (File.Exists(_settingsPath))
             {
@@ -30,7 +29,8 @@ namespace BackupEngine.Settings
 
         private void CreateFile()
         {
-            File.Create(_settingsPath);
+            FileStream fs = File.Create(_settingsPath);
+            fs.Close();
         }
 
         private void SaveSettings()
@@ -77,15 +77,25 @@ namespace BackupEngine.Settings
             SaveSettings();
         }
 
-        public void UpdateLogPath(Path logPath)
+        public void UpdateLogPath(Chemin logPath)
         {
             Settings.LogPath = logPath;
             SaveSettings();
         }
 
-        public Path GetLogPath()
+        public Chemin GetLogPath()
         {
             return Settings.LogPath;
+        }
+
+        public Language GetLanguage()
+        {
+            return Settings.Language;
+        }
+
+        public BackupConfiguration? GetConfiguration(string name)
+        {
+            return Settings.Configurations.Find(c => c.Name == name);
         }
     }
 }
