@@ -40,6 +40,11 @@ namespace EasySaveConsole.Model
             return SettingsRepository.GetConfiguration(name);
         }
 
+        public static BackupConfiguration? FindConfig(int id)
+        {
+            return SettingsRepository.GetConfigurationById(id);
+        }
+
         public static Language? GetLanguage()
         {
             return SettingsRepository.GetLanguage();
