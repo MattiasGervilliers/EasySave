@@ -97,5 +97,10 @@ namespace BackupEngine.Settings
         {
             return Settings.Configurations.Find(c => c.Name == name);
         }
+
+        public BackupConfiguration? GetConfigurationById(int id)
+        {
+            return Settings.Configurations[id];
+        }
     }
 }

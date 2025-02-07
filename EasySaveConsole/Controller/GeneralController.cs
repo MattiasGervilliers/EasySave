@@ -9,12 +9,18 @@ namespace EasySaveConsole.Controller
     {
         private Language Langue;
 
-        public GeneralController()
+        public GeneralController(string[] args)
         {
+            if (args.Length > 0)
+            {
+                ArgumentsController.LaunchWithArguments(args);
+                return;
+            }
+
             Vue vue = new Vue();
 
             Language? language = GetLanguage();
-            
+
             if (language != null)
             {
                 Langue = (Language)language;

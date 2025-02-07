@@ -4,9 +4,10 @@ namespace EasySaveConsole
 {
     class Program
     {
-        static void Main()
+        // args
+        static void Main(string[] args)
         {
-            new GeneralController();
+            new GeneralController(args);
         }
     }
 }
