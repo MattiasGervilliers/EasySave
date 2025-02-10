@@ -11,10 +11,7 @@ namespace EasySaveConsole.View
     internal class View
     {
         private Language _language;
-        ControllerCreer controllerCreer = new ControllerCreer();
-        ControllerLister controllerLister = new ControllerLister();
-        ControllerSuppr controllerSuppr = new ControllerSuppr();
-        LaunchBackupController LaunchBackupController = new LaunchBackupController();
+        SaveController saveController = new SaveController();
 
 
 
@@ -79,7 +76,7 @@ namespace EasySaveConsole.View
                             Name = Name
                         };
 
-                        controllerCreer.AddBackupConfiguration(backupConfiguration);
+                        saveController.AddBackupConfiguration(backupConfiguration);
                         DisplayCreateSuccess();
                         break;
                     case "2":
@@ -90,11 +87,11 @@ namespace EasySaveConsole.View
                             AskBackupConfigurationName();
                             string configName = Console.ReadLine()?.Trim() ?? ""; 
 
-                            var backupConfig = controllerSuppr.BackupExist(configName);
+                            var backupConfig = saveController.BackupExist(configName);
 
                             if (backupConfig != null)
                             {
-                                controllerSuppr.DeleteConfiguration(backupConfig);
+                                saveController.DeleteConfiguration(backupConfig);
                                 configurationExists = true;
                                 DisplayDeleteSuccess();
                             }
@@ -111,10 +108,10 @@ namespace EasySaveConsole.View
                         {
                             AskBackupConfigurationName();
                             string configName = Console.ReadLine()?.Trim() ?? "";
-                            var backupConfig = LaunchBackupController.GetBackupConfiguration(configName);
+                            var backupConfig = saveController.GetBackupConfiguration(configName);
                             if (backupConfig != null)
                             {
-                                LaunchBackupController.LaunchBackup(backupConfig);
+                                saveController.LaunchBackup(backupConfig);
                                 configurationExists = true;
                                 DisplayLaunchSuccess();
                             }
@@ -125,7 +122,7 @@ namespace EasySaveConsole.View
                         }
                         break;
                     case "4":
-                        List<BackupConfiguration> configs = controllerLister.GetConfigurations();
+                        List<BackupConfiguration> configs = saveController.GetConfigurations();
 
                         foreach (BackupConfiguration config in configs)
                         {
