@@ -12,6 +12,7 @@ namespace EasySaveConsole.View
     {
         private Language _language;
         SaveController saveController = new SaveController();
+        LanguageController languageController = new LanguageController();
 
 
 
@@ -33,7 +34,6 @@ namespace EasySaveConsole.View
             }
             else
             {
-                // Afficher choix langue
                 UpdateLanguage();
                 while (!ChooseLanguage())
                 {
@@ -41,6 +41,7 @@ namespace EasySaveConsole.View
                     DisplayError();
                     UpdateLanguage();
                 }
+                languageController.SaveLanguage(this._language);
             }
 
             Console.Clear();
@@ -130,10 +131,15 @@ namespace EasySaveConsole.View
                         }
                         break;
                     case "5":
-                        //changer de _language
                         UpdateLanguage();
-                        ChooseLanguage();
-                        Console.Clear();
+                        while (!ChooseLanguage())
+                        {
+                            Console.Clear();
+                            DisplayError();
+                            UpdateLanguage();
+                        }
+                        languageController.SaveLanguage(this._language);
+
                         break;
                     case "6":
                         DisplayExitMessage();
@@ -180,11 +186,9 @@ namespace EasySaveConsole.View
             {
                 case "1":
                     this._language = Language.English;
-                    BackupModel.UpdateLanguage(_language);
                     return true;
                 case "2":
                     this._language = Language.French;
-                    BackupModel.UpdateLanguage(_language);
                     return true;
                 default:
                     return false;
