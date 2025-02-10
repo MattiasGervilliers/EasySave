@@ -2,7 +2,7 @@
 using BackupEngine;
 using BackupEngine.Settings;
 using EasySaveConsole.Model;
-
+/*
 namespace EasySaveConsole.Controller
 {
     internal class GeneralController
@@ -106,3 +106,4 @@ namespace EasySaveConsole.Controller
         }
     }
 }
+*/

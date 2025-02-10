@@ -5,27 +5,23 @@ using EasySaveConsole.View;
 
 namespace EasySaveConsole.Controller
 {
-    internal class LaunchBackupController (Language language)
+    internal class LaunchBackupController ()
     {
-        private LaunchBackupView _view = new LaunchBackupView(language);
 
-        public void LaunchBackup()
+        public void LaunchBackup(string Name)
         {
-            BackupConfiguration? config = null;
+        BackupConfiguration? config = BackupModel.FindConfig(Name ?? "");
+        BackupModel.LaunchConfig(config);
+        }
+        
+        public BackupConfiguration? GetBackupConfiguration(string name)
+        {
+            return BackupModel.FindConfig(name);
+        }
 
-            while (config == null)
-            {
-                _view.AskBackupConfigurationName(); 
-                string configName = Console.ReadLine();
-                config = BackupModel.FindConfig(configName ?? "");
-
-                if (config == null)
-                {
-                    _view.ConfigNotFound();
-                }
-            }
-            BackupModel.LaunchConfig(config);
-            _view.BackupLaunched();
+        public void LaunchBackup(BackupConfiguration backupConfiguration)
+        {
+            BackupModel.LaunchConfig(backupConfiguration);
         }
     }
 }

@@ -5,21 +5,18 @@ using EasySaveConsole.Model;
 
 namespace EasySaveConsole.Controller
 {
-    internal class ControllerLister(Language language)
+    internal class ControllerLister()
     {
-        private ViewLister vue = new ViewLister(language);
-
-        public void AfficheConfiguration()
+        private Language _language;
+        
+        public void ControllerListerChangeLanguage(Language language)
         {
-            vue.AfficheConfigurations();
-            List<BackupConfiguration> configs = BackupModel.GetConfigs();
-            
-            foreach (BackupConfiguration config in configs)
-            {
-                vue.AfficheConfiguration(config);
-            }
-
-            Console.WriteLine('\n');
+            _language = language;
         }
+        public List<BackupConfiguration> GetConfigurations()
+        {
+            return BackupModel.GetConfigs();
+        }
+        
     }
 }

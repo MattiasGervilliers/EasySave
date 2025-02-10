@@ -1,5 +1,5 @@
 ﻿using EasySaveConsole.Controller;
-
+using EasySaveConsole.View;
 namespace EasySaveConsole
 {
     class Program
@@ -7,7 +7,7 @@ namespace EasySaveConsole
         // args
         static void Main(string[] args)
         {
-            new GeneralController(args);
+            new EasySaveConsole.View.View(args);
         }
     }
 }

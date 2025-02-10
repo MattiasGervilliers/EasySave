@@ -2,14 +2,31 @@
 using BackupEngine;
 using BackupEngine.Settings;
 using EasySaveConsole.Model;
+using System.Xml.Linq;
 
 namespace EasySaveConsole.Controller
 {
     internal class ControllerSuppr
     {
-        private readonly ViewSuppr _vue;
 
-        public ControllerSuppr(Language language)
+        public ControllerSuppr()
+        {
+        }
+
+        public void DeleteConfiguration(BackupConfiguration backupConfiguration)
+        {
+            BackupModel.DeleteConfig(backupConfiguration);
+        }
+        public BackupConfiguration? BackupExist(String Name)
+        {
+            if (BackupModel.FindConfig(Name ?? "") != null)
+            {
+                return BackupModel.FindConfig(Name ?? "");
+            }
+            return null;
+        }
+        /*
+         public ControllerSuppr(Language language)
         {
             _vue = new ViewSuppr(language);
             BackupConfiguration? configurationToDelete = null;
@@ -32,5 +49,7 @@ namespace EasySaveConsole.Controller
             _vue.AfficheConfigIntrouvable();
             return null;
         }
+         */
+
     }
 }
