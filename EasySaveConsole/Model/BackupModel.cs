@@ -29,6 +29,11 @@ namespace EasySaveConsole.Model
         {
             JobManager.LaunchBackup(backupConfiguration);
         }
+
+        public static void LaunchConfigs(List<BackupConfiguration> backupConfigurations)
+        {
+            JobManager.LaunchBackup(backupConfigurations);
+        }
         
         public static List<BackupConfiguration> GetConfigs()
         {

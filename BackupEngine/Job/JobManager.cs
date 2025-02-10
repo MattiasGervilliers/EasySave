@@ -21,7 +21,7 @@ namespace BackupEngine.Job
             return job;
         }
 
-        List<Job> LaunchBackup(List<BackupConfiguration> configurations)
+        public List<Job> LaunchBackup(List<BackupConfiguration> configurations)
         {
             List<Job> jobs = new List<Job>();
             foreach (BackupConfiguration configuration in configurations)
