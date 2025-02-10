@@ -15,6 +15,8 @@ namespace BackupEngine.Backup
 
             Directory.CreateDirectory(uniqueDestinationPath);
 
+            Console.WriteLine($"Sauvegarde {Configuration.Name} complète en cours...");
+
             foreach (string file in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
             {
                 string relativePath = file.Substring(sourcePath.Length + 1);
@@ -27,7 +29,13 @@ namespace BackupEngine.Backup
                     DateTime start = DateTime.Now;
 
                     // Copy the file
-                    File.Copy(file, destFile, true);
+                    using (FileStream sourceStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        using (FileStream destStream = new FileStream(destFile, FileMode.Create, FileAccess.Write, FileShare.None))
+                        {
+                            sourceStream.CopyTo(destStream);
+                        }
+                    }
 
                     DateTime end = DateTime.Now;
                     TimeSpan duration = end - start;

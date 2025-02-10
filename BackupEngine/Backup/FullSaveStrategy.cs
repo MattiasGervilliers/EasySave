@@ -38,6 +38,8 @@ namespace BackupEngine.Backup
                 ""
             ));
 
+            Console.WriteLine($"Sauvegarde {Configuration.Name} complète en cours...");
+
             // Parcourir chaque fichier et copier
             foreach (string file in files)
             {
@@ -49,8 +51,14 @@ namespace BackupEngine.Backup
                 {
                     DateTime start = DateTime.Now;
 
-                    // Copier le fichier
-                    File.Copy(file, destFile, true);
+                    // Copy file using filestream to avoid file locking
+                    using (FileStream sourceStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        using (FileStream destStream = new FileStream(destFile, FileMode.Create, FileAccess.Write, FileShare.None))
+                        {
+                            sourceStream.CopyTo(destStream);
+                        }
+                    }
 
                     DateTime end = DateTime.Now;
                     TimeSpan duration = end - start;
