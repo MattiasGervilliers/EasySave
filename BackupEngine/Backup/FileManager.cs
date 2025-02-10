@@ -18,7 +18,7 @@ namespace BackupEngine.Backup
             this._saveStrategy = saveStrategy;
             _settingsRepository = new SettingsRepository();
             _logManager = new FileTransferLogManager(_settingsRepository.GetLogPath().GetAbsolutePath());
-            _stateManager = new StateManager(_settingsRepository.GetLogPath().GetAbsolutePath());
+            _stateManager = new StateManager();
         }
 
         public void SetSaveStrategy(SaveStrategy newStrategy)
@@ -26,8 +26,10 @@ namespace BackupEngine.Backup
             _saveStrategy = newStrategy;
         }
 
-        public void Save(string sourcePath, string destinationBasePath)
+        public void Save(BackupConfiguration configuration)
         {
+            string destinationBasePath = configuration.DestinationPath.GetAbsolutePath();
+
             if (!Directory.Exists(destinationBasePath))
             {
                 Directory.CreateDirectory(destinationBasePath);
@@ -35,7 +37,7 @@ namespace BackupEngine.Backup
 
             // Générer un nom unique pour le dossier de sauvegarde
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-            string uniqueDestinationPath = Path.Combine(destinationBasePath, $"{timestamp}_Sauvegarde");
+            string uniqueDestinationPath = Path.Combine(destinationBasePath, $"{timestamp}_{configuration.Name}");
 
             // Créer le dossier de sauvegarde
             Directory.CreateDirectory(uniqueDestinationPath);

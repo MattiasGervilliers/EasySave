@@ -102,5 +102,16 @@ namespace BackupEngine.Settings
         {
             return Settings.Configurations[id];
         }
+
+        public string GetStatePath()
+        {
+            return Settings.StatePath;
+        }
+
+        public void UpdateStatePath(string statePath)
+        {
+            Settings.StatePath = statePath;
+            SaveSettings();
+        }
     }
 }

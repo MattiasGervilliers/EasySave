@@ -13,7 +13,7 @@ namespace EasySaveConsole.Controller
 
             foreach (int i in backupIds)
             {
-                BackupConfiguration? config = BackupModel.FindConfig(i);
+                BackupConfiguration? config = BackupModel.FindConfig(i-1);
                 if (config != null)
                 {
                     configs.Add(config);
@@ -24,7 +24,7 @@ namespace EasySaveConsole.Controller
                 }
             }
 
-
+            BackupModel.LaunchConfigs(configs);
         }
 
         static HashSet<int> ParseBackupArguments(string input)
