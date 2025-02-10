@@ -25,7 +25,7 @@ namespace BackupEngine.Job
 
         public void Run()
         {
-            FileManager.Save(Configuration.SourcePath.GetAbsolutePath(), Configuration.DestinationPath.GetAbsolutePath());
+            FileManager.Save(Configuration);
         }
     }
 }

@@ -1,36 +1,38 @@
-﻿using System.IO;
+﻿using BackupEngine.Settings;
 using System.Text.Json;
 
 namespace BackupEngine.State
 {
     public class StateManager
     {
-        private readonly string _logPath;
+        private readonly string _statePath;
+        private static readonly object _fileLock = new object();
 
-        public StateManager(string logPath)
+        public StateManager()
         {
-            _logPath = logPath;
+            SettingsRepository settingsRepository = new SettingsRepository();
+            _statePath = settingsRepository.GetStatePath();
         }
 
         public void OnStateUpdated(object sender, StateEvent e)
         {
-            // Logge l'état mis à jour
-            Console.WriteLine($"État mis à jour : {e.JobName} - {e.JobState} - {e.RemainingFiles} fichiers restants");
-
             // Enregistre l'état dans un fichier JSON en le réécrivant
             LogState(e);
         }
 
         private void LogState(StateEvent stateEvent)
         {
-            // Chemin du fichier JSON
-            string jsonFilePath = Path.Combine(_logPath, "state_log.json");
-
             // Sérialiser l'objet StateEvent en JSON
             string jsonString = JsonSerializer.Serialize(stateEvent, new JsonSerializerOptions { WriteIndented = true });
 
             // Réécrire le fichier avec le contenu actuel
-            File.WriteAllText(jsonFilePath, jsonString);
+            lock (_fileLock) // Ensure thread safety
+            {
+                using (StreamWriter sw = new StreamWriter(_statePath))
+                {
+                    sw.WriteLine(jsonString);
+                }
+            }
         }
     }
 }

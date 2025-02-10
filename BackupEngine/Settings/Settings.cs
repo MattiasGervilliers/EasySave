@@ -7,6 +7,7 @@ namespace BackupEngine.Settings
     {
         public Language Language { get; set; }
         public Chemin LogPath { get; set; }
+        public string StatePath { get; set; }
         public List<BackupConfiguration> Configurations { get; set; }
 
         public Settings()
@@ -14,6 +15,7 @@ namespace BackupEngine.Settings
             Configurations = new List<BackupConfiguration>();
             Language = Language.English;
             LogPath = new Chemin("logs");
+            StatePath = "logs/state.json";
         }
 
         public void FromJson(string json)
@@ -23,6 +25,7 @@ namespace BackupEngine.Settings
             {
                 Language = jsonSettings.Language;
                 LogPath = jsonSettings.LogPath;
+                StatePath = jsonSettings.StatePath;
                 Configurations = jsonSettings.Configurations;
             }
         }
