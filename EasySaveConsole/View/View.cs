@@ -11,8 +11,9 @@ namespace EasySaveConsole.View
     internal class View
     {
         private Language _language;
-        SaveController saveController = new SaveController();
+        SaveController _saveController ;
         LanguageController languageController = new LanguageController();
+        ArgumentsController _argumentsController = new ArgumentsController();
 
 
 
@@ -21,7 +22,8 @@ namespace EasySaveConsole.View
         
             if (args.Length > 0)
             {
-                ArgumentsController.LaunchWithArguments(args);
+                _argumentsController.UpdateArguments(args);
+                _argumentsController.Execute();
                 return;
             }
 
@@ -41,7 +43,8 @@ namespace EasySaveConsole.View
                     DisplayError();
                     UpdateLanguage();
                 }
-                languageController.SaveLanguage(this._language);
+                languageController.UpdateLanguage(this._language);
+                languageController.Execute(); // ERROR Language not saved
             }
 
             Console.Clear();
@@ -54,12 +57,13 @@ namespace EasySaveConsole.View
                 string choiceAction = Console.ReadLine();
                 Console.Clear();
 
+                SaveController _saveController = new SaveController(SaveAction.Add);
                 switch (choiceAction)
                 {
                     case "1":
+                        _saveController.UpdateAction(SaveAction.Add);
                         AskDeleteConfigurationName();
                         string Name = Console.ReadLine() ?? ""; // TODO : Check if the name is valid
-
                         AskSourceFolder();
                         Chemin SourcePath = new Chemin(Console.ReadLine() ?? ""); // TODO : Check if the path is valid
 
@@ -67,7 +71,7 @@ namespace EasySaveConsole.View
                         Chemin DestinationPath = new Chemin(Console.ReadLine() ?? ""); // TODO : Check if the path is valid
 
                         AskBackupType();
-                        BackupType backupType = AskBackupType();
+                        BackupType backupType = AskBackupType();// ERROR asking 2 times
 
                         BackupConfiguration backupConfiguration = new BackupConfiguration
                         {
@@ -76,43 +80,49 @@ namespace EasySaveConsole.View
                             SourcePath = SourcePath,
                             Name = Name
                         };
-
-                        saveController.AddBackupConfiguration(backupConfiguration);
-                        DisplayCreateSuccess();
+                        _saveController.UpdateConfiguration(backupConfiguration);
+                        _saveController.Execute();
+                        if (_saveController.GetResult())
+                        {
+                            DisplayDeleteSuccess();
+                        }
                         break;
                     case "2":
                         bool configurationExists = false;
-
+                        _saveController.UpdateAction(SaveAction.Delete);
                         while (!configurationExists)
                         {
                             AskBackupConfigurationName();
-                            string configName = Console.ReadLine()?.Trim() ?? ""; 
-
-                            var backupConfig = saveController.BackupExist(configName);
-
+                            string configName = Console.ReadLine()?.Trim() ?? "";
+                            _saveController.UpdateConfigName(configName);
+                            var backupConfig = _saveController.BackupExist();
                             if (backupConfig != null)
                             {
-                                saveController.DeleteConfiguration(backupConfig);
+                                _saveController.Execute();
                                 configurationExists = true;
-                                DisplayDeleteSuccess();
+                                if (_saveController.GetResult())
+                                {
+                                    DisplayDeleteSuccess();
+                                }
                             }
                             else
                             {
                                 ConfigNotFound();
                             }
                         }
-
                         break;
                     case "3":
+                        _saveController.UpdateAction(SaveAction.Launch);
                         configurationExists = false;                       
                         while (!configurationExists)
                         {
                             AskBackupConfigurationName();
                             string configName = Console.ReadLine()?.Trim() ?? "";
-                            var backupConfig = saveController.GetBackupConfiguration(configName);
+                            _saveController.UpdateConfigName(configName);
+                            var backupConfig = _saveController.BackupExist();
                             if (backupConfig != null)
                             {
-                                saveController.LaunchBackup(backupConfig);
+                                _saveController.Execute();
                                 configurationExists = true;
                                 DisplayLaunchSuccess();
                             }
@@ -123,8 +133,7 @@ namespace EasySaveConsole.View
                         }
                         break;
                     case "4":
-                        List<BackupConfiguration> configs = saveController.GetConfigurations();
-
+                        List<BackupConfiguration> configs = _saveController.GetConfigurations();
                         foreach (BackupConfiguration config in configs)
                         {
                             DisplayBackupConfiguration(config);
@@ -138,7 +147,7 @@ namespace EasySaveConsole.View
                             DisplayError();
                             UpdateLanguage();
                         }
-                        languageController.SaveLanguage(this._language);
+                        languageController.UpdateLanguage(this._language);
 
                         break;
                     case "6":

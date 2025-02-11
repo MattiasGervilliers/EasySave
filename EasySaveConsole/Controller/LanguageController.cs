@@ -8,11 +8,17 @@ using System.Threading.Tasks;
 
 namespace EasySaveConsole.Controller
 {
-    internal class LanguageController
+    internal class LanguageController : IController
     {
-        public void SaveLanguage(Language language)
+        private Language _newLanguage;
+        public void UpdateLanguage(Language newlanguage)
         {
-            BackupModel.UpdateLanguage(language);
+            _newLanguage = newlanguage;
+
+        }
+        public void Execute()
+        {
+            BackupModel.UpdateLanguage(_newLanguage);
         }
     }
 }

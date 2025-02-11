@@ -3,11 +3,17 @@ using EasySaveConsole.Model;
 
 namespace EasySaveConsole.Controller
 {
-    internal class ArgumentsController
+    internal class ArgumentsController : IController
     {
-        public static void LaunchWithArguments(string[] args)
+        private  string[] _args ;
+
+        public void Execute()
         {
-            HashSet<int> backupIds = ParseBackupArguments(args[0]);
+            LaunchWithArguments();
+        }
+        public void LaunchWithArguments()
+        {
+            HashSet<int> backupIds = ParseBackupArguments(this._args[0]);
 
             List<BackupConfiguration> configs = new List<BackupConfiguration>();
 
@@ -25,6 +31,10 @@ namespace EasySaveConsole.Controller
             }
 
             BackupModel.LaunchConfigs(configs);
+        }
+        public void UpdateArguments(string[] args)
+        {
+            this._args = args;
         }
 
         static HashSet<int> ParseBackupArguments(string input)
