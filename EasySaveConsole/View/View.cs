@@ -28,7 +28,7 @@ namespace EasySaveConsole.View
             }
 
 
-            Language? language = GetLanguage();
+            Language? language = _languageController.GetLanguage();
 
             if (language != null)
             {
@@ -44,7 +44,7 @@ namespace EasySaveConsole.View
                     UpdateLanguage();
                 }
                 _languageController.UpdateLanguage(this._language);
-                _languageController.Execute(); // ERROR Language not saved
+                _languageController.Execute(); 
             }
 
             Console.Clear();
@@ -147,6 +147,7 @@ namespace EasySaveConsole.View
                             UpdateLanguage();
                         }
                         _languageController.UpdateLanguage(this._language);
+                        _languageController.Execute();
 
                         break;
                     case "6":
@@ -201,10 +202,6 @@ namespace EasySaveConsole.View
                 default:
                     return false;
             }
-        }
-        Language? GetLanguage()
-        {
-            return BackupModel.GetLanguage();
         }
         public void UpdateLanguage()
         {

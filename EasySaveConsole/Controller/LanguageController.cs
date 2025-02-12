@@ -20,5 +20,9 @@ namespace EasySaveConsole.Controller
         {
             BackupModel.UpdateLanguage(_newLanguage);
         }
+        public Language? GetLanguage()
+        {
+            return BackupModel.GetLanguage();
+        }
     }
 }
