@@ -12,7 +12,7 @@ namespace EasySaveConsole.View
     {
         private Language _language;
         SaveController _saveController ;
-        LanguageController languageController = new LanguageController();
+        LanguageController _languageController = new LanguageController();
         ArgumentsController _argumentsController = new ArgumentsController();
 
 
@@ -43,8 +43,8 @@ namespace EasySaveConsole.View
                     DisplayError();
                     UpdateLanguage();
                 }
-                languageController.UpdateLanguage(this._language);
-                languageController.Execute(); // ERROR Language not saved
+                _languageController.UpdateLanguage(this._language);
+                _languageController.Execute(); // ERROR Language not saved
             }
 
             Console.Clear();
@@ -70,8 +70,7 @@ namespace EasySaveConsole.View
                         AskDestinationFolder();
                         Chemin DestinationPath = new Chemin(Console.ReadLine() ?? ""); // TODO : Check if the path is valid
 
-                        AskBackupType();
-                        BackupType backupType = AskBackupType();// ERROR asking 2 times
+                        BackupType backupType = AskBackupType();
 
                         BackupConfiguration backupConfiguration = new BackupConfiguration
                         {
@@ -147,7 +146,7 @@ namespace EasySaveConsole.View
                             DisplayError();
                             UpdateLanguage();
                         }
-                        languageController.UpdateLanguage(this._language);
+                        _languageController.UpdateLanguage(this._language);
 
                         break;
                     case "6":
