@@ -104,14 +104,14 @@ namespace BackupEngine.Settings
             return Settings.Configurations[id];
         }
 
-        public string GetStatePath()
+        public Chemin GetStatePath()
         {
             return Settings.StatePath;
         }
 
         public void UpdateStatePath(string statePath)
         {
-            Settings.StatePath = statePath;
+            Settings.StatePath = new Chemin(statePath);
             SaveSettings();
         }
     }

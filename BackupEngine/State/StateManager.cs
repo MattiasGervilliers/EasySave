@@ -11,11 +11,16 @@ namespace BackupEngine.State
         public StateManager()
         {
             SettingsRepository settingsRepository = new SettingsRepository();
-            _statePath = settingsRepository.GetStatePath();
+            _statePath = settingsRepository.GetStatePath().GetAbsolutePath();
         }
 
         public void OnStateUpdated(object sender, StateEvent e)
         {
+            // Create file if doesn't exists
+            if (!File.Exists(_statePath))
+            {
+                File.Create(_statePath).Close();
+            }
             // Enregistre l'état dans un fichier JSON en le réécrivant
             LogState(e);
         }
@@ -25,10 +30,9 @@ namespace BackupEngine.State
             // Sérialiser l'objet StateEvent en JSON
             string jsonString = JsonSerializer.Serialize(stateEvent, new JsonSerializerOptions { WriteIndented = true });
 
-            // Réécrire le fichier avec le contenu actuel
             lock (_fileLock) // Ensure thread safety
             {
-                using (StreamWriter sw = new StreamWriter(_statePath))
+                using (StreamWriter sw = new StreamWriter(_statePath, false)) // 'false' to overwrite the file
                 {
                     sw.WriteLine(jsonString);
                 }

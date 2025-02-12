@@ -1,5 +1,6 @@
 ﻿using BackupEngine.Cache;
 using BackupEngine.Log;
+using BackupEngine.State;
 
 namespace BackupEngine.Backup
 {
@@ -45,7 +46,26 @@ namespace BackupEngine.Backup
 
             Directory.CreateDirectory(uniqueDestinationPath);
 
-            foreach (string file in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
+            string[] files = Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories);
+            int totalFiles = files.Length;
+            long totalSize = files.Sum(file => new FileInfo(file).Length);
+            int remainingFiles = totalFiles;
+            long remainingSize = totalSize;
+
+
+            // Mettre à jour l'état au début de la sauvegarde
+            OnStateUpdated(new StateEvent(
+                "Differential Backup",
+                "Active",
+                totalFiles,
+                totalSize,
+                remainingFiles,
+                remainingSize,
+                "",
+                ""
+            ));
+
+            foreach (string file in files)
             {
                 string relativePath = file.Substring(sourcePath.Length + 1);
                 string prevFile = Path.Combine(previousSavePath, relativePath);
@@ -69,13 +89,41 @@ namespace BackupEngine.Backup
                     DateTime end = DateTime.Now;
                     TimeSpan duration = end - start;
 
+                    // Mise à jour de l'état avec le fichier en cours
+                    remainingFiles--;
+                    remainingSize -= new FileInfo(file).Length;
+
+                    // On envoie l'événement d'état
+                    OnStateUpdated(new StateEvent(
+                        "Differential Backup",
+                        "Active",
+                        totalFiles,
+                        totalSize,
+                        remainingFiles,
+                        remainingSize,
+                        file,
+                        destFile
+                    ));
+
                     TransferEvent transferEvent = new TransferEvent(Configuration, duration, new FileInfo(file), new FileInfo(destFile));
                     OnTransfer(transferEvent);
                 }
             }
 
+            // Mise à jour de l'état à la fin de la sauvegarde
+            OnStateUpdated(new StateEvent(
+                "Differential Backup",
+                "Completed",
+                totalFiles,
+                totalSize,
+                0,
+                0,
+                "",
+                ""
+            ));
+
             Console.WriteLine($"Sauvegarde différentielle effectuée dans : {uniqueDestinationPath}");
-            UpdateCache(uniqueDestinationPath);
+            //UpdateCache(uniqueDestinationPath);
         }
 
 
