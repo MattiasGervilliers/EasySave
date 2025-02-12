@@ -309,7 +309,7 @@ namespace EasySaveConsole.View
                 if (input == "1")
                     return BackupType.Full;
                 else if (input == "2")
-                    return BackupType.Incremental;
+                    return BackupType.Differential;
                 else
                 {
                     if (_language == Language.French)
