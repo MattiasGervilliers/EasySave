@@ -9,7 +9,7 @@ namespace BackupEngine.Log
         public void OnTransfer(object sender, TransferEvent transferEvent)
         {
             string sourcePath = transferEvent.File.FullName;
-            string destinationPath = transferEvent.Configuration.DestinationPath.GetAbsolutePath() + "\\" + transferEvent.File.Name;
+            string destinationPath = transferEvent.NewFile.FullName;
             long size = transferEvent.File.Length;
             int duration = transferEvent.TransferDuration.Milliseconds;
             string backupName = transferEvent.Configuration.Name;
