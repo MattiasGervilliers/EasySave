@@ -15,8 +15,8 @@ namespace BackupEngine.Job
                 case BackupType.Full:
                     FileManager = new FileManager(new FullSaveStrategy(Configuration));
                     break;
-                case BackupType.Incremental:
-                    FileManager = new FileManager(new IncrementalSaveStrategy(Configuration));
+                case BackupType.Differential:
+                    FileManager = new FileManager(new DifferentialSaveStrategy(Configuration));
                     break;
                 default:
                     throw new Exception("Invalid backup type");
