@@ -5,6 +5,7 @@ using EasySaveConsole.Controller;
 using EasySaveConsole.Model;
 using BackupEngine.Shared;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace EasySaveConsole.View
 {
@@ -64,15 +65,27 @@ namespace EasySaveConsole.View
                         _saveController.UpdateAction(SaveAction.Add);
                         AskDeleteConfigurationName();
                         string Name = Console.ReadLine() ?? ""; // TODO : Check if the name is valid
+                        while (IsNameValid(Name))
+                            {
+                                DisplayNameError();
+                                Name = Console.ReadLine() ?? "";
+                            }
                         AskSourceFolder();
-                        Chemin SourcePath = new Chemin(Console.ReadLine() ?? ""); // TODO : Check if the path is valid
-
+                        Chemin SourcePath = new Chemin(Console.ReadLine() ?? ""); 
+                        while (!SourcePath.PathExists())
+                        {
+                            DisplayPathNotFound();
+                            SourcePath = new Chemin(Console.ReadLine() ?? "");
+                        }
                         AskDestinationFolder();
-                        Chemin DestinationPath = new Chemin(Console.ReadLine() ?? ""); // TODO : Check if the path is valid
-
+                        Chemin DestinationPath = new Chemin(Console.ReadLine() ?? ""); 
+                        while (!DestinationPath.PathExists())
+                        {
+                            DisplayPathNotFound();
+                            SourcePath = new Chemin(Console.ReadLine() ?? "");
+                        }
                         BackupType backupType = AskBackupType();
-
-                        BackupConfiguration backupConfiguration = new BackupConfiguration
+                        BackupConfiguration backupConfiguration = new BackupConfiguration // fa
                         {
                             BackupType = backupType,
                             DestinationPath = DestinationPath,
@@ -83,7 +96,7 @@ namespace EasySaveConsole.View
                         _saveController.Execute();
                         if (_saveController.GetResult())
                         {
-                            DisplayDeleteSuccess();
+                            DisplayCreateSuccess();
                         }
                         break;
                     case "2":
@@ -112,22 +125,31 @@ namespace EasySaveConsole.View
                         break;
                     case "3":
                         _saveController.UpdateAction(SaveAction.Launch);
-                        configurationExists = false;                       
-                        while (!configurationExists)
+                        AskBackupConfigurationName();
+                        string configLaunch = Console.ReadLine()?.Trim() ?? "";
+
+                        if (Regex.IsMatch(configLaunch, @"^\d+(-\d+)*$"))
                         {
-                            AskBackupConfigurationName();
-                            string configName = Console.ReadLine()?.Trim() ?? "";
-                            _saveController.UpdateConfigName(configName);
-                            var backupConfig = _saveController.BackupExist();
-                            if (backupConfig != null)
+                            _argumentsController.UpdateArguments([configLaunch]);
+                            _argumentsController.Execute();
+                        }
+                        else
+                        {
+                            configurationExists = false;       
+                            while (!configurationExists)
                             {
-                                _saveController.Execute();
-                                configurationExists = true;
-                                DisplayLaunchSuccess();
-                            }
-                            else
-                            {
-                                ConfigNotFound();
+                                 _saveController.UpdateConfigName(configLaunch);
+                                var backupConfig = _saveController.BackupExist();
+                                if (backupConfig != null)
+                                {
+                                    _saveController.Execute();
+                                    configurationExists = true;
+                                    DisplayLaunchSuccess();
+                                }
+                                else
+                                {
+                                    ConfigNotFound();
+                                }
                             }
                         }
                         break;
@@ -160,6 +182,23 @@ namespace EasySaveConsole.View
                 }
             }
         }
+        public void DisplayNameError()
+        {
+            Console.WriteLine(_language == Language.French
+                ? "Le nom que vous avez saisi n'est pas valide. Veuillez en saisir un valide : "
+                : "The name you entered is not valid. Please enter a valid one: ");
+        }
+        internal bool IsNameValid(string name)
+        {
+            return !string.IsNullOrWhiteSpace(name) && Regex.IsMatch(name, @"^[a-zA-ZÀ-ÿ\s'-]+$");
+        }
+        public void DisplayPathNotFound()
+        {
+            Console.WriteLine(_language == Language.French
+                ? "Le chemin que vous avez saisi n'est pas valide. Veuillez en saisir un valide : "
+                : "The path you entered is not valid. Please enter a valid one: ");
+        }
+
         public void DisplayBackupConfiguration(BackupConfiguration configuration)
         {
             Console.WriteLine(_language == Language.French
@@ -250,8 +289,8 @@ namespace EasySaveConsole.View
         public void AskBackupConfigurationName()
         {
             Console.WriteLine(_language == Language.French
-                ? "Rentrez le nom de la configuration de sauvegarde à lancer"
-                : "Enter the name of the backup configuration to launch");
+                ? "Rentrez le nom de la configuration de sauvegarde à lancer ou le(s) numéro(s) des conifgurations a lancer"
+                : "Enter the name of the backup configuration to launch or the configuration number(s) to launch");
         }
 
         public void BackupLaunched()
