@@ -50,7 +50,7 @@ namespace EasySaveConsole.Controller
                 if (input == "1")
                     return BackupType.Full;
                 else if (input == "2")
-                    return BackupType.Differential;
+                    return BackupType.Incremental;
                 else
                 {
                     if (language == Language.French)
