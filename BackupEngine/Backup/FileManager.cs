@@ -17,7 +17,7 @@ namespace BackupEngine.Backup
         {
             _saveStrategy = saveStrategy;
             _settingsRepository = new SettingsRepository();
-            _logManager = new FileTransferLogManager(_settingsRepository.GetLogPath().GetAbsolutePath());
+            _logManager = new FileTransferLogManager(_settingsRepository.GetLogPath().GetAbsolutePath(), _settingsRepository.GetLogType());
             _stateManager = new StateManager();
         }
 

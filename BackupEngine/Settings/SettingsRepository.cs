@@ -1,4 +1,5 @@
 ﻿using BackupEngine.Shared;
+using LogLib;
 using Newtonsoft.Json;
 
 namespace BackupEngine.Settings
@@ -113,6 +114,11 @@ namespace BackupEngine.Settings
         {
             Settings.StatePath = new Chemin(statePath);
             SaveSettings();
+        }
+
+        public LogType GetLogType()
+        {
+            return Settings.LogFormat;
         }
     }
 }
