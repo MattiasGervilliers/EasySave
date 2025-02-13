@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BackupEngine\BackupEngine.csproj" />
+    <ProjectReference Include="..\CryptoSoft\CryptoSoft.csproj" />
     <ProjectReference Include="..\LogLib\LogLib.csproj" />
   </ItemGroup>
 

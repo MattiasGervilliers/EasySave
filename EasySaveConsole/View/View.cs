@@ -6,7 +6,7 @@ using EasySaveConsole.Model;
 using BackupEngine.Shared;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
-
+using System.Security.Cryptography;
 namespace EasySaveConsole.View
 {
     internal class View
@@ -159,6 +159,7 @@ namespace EasySaveConsole.View
                         {
                             DisplayBackupConfiguration(config);
                         }
+                        Crypt
                         break;
                     case "5":
                         UpdateLanguage();

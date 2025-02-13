@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasySaveConsole.Controller
 {
-    internal enum SaveAction
+    public enum SaveAction
     {
         Add,
         Delete,

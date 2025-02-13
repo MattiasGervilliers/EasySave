@@ -6,6 +6,7 @@ namespace BackupEngine.Job
     {
         private BackupConfiguration Configuration { get; set; }
         private FileManager FileManager { get; set; }
+        private CryptStrategy _cryptStrategy = new CryptStrategy();
 
         public Job(BackupConfiguration configuration)
         {
@@ -13,7 +14,8 @@ namespace BackupEngine.Job
             switch (Configuration.BackupType)
             {
                 case BackupType.Full:
-                    FileManager = new FileManager(new FullSaveStrategy(Configuration));
+                    //FileManager = new FileManager(new FullSaveStrategy(Configuration));
+                    FileManager = new FileManager(new CryptStrategy(Configuration.SourcePath,Configuration.DestinationPath));
                     break;
                 case BackupType.Differential:
                     FileManager = new FileManager(new DifferentialSaveStrategy(Configuration));

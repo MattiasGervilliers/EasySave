@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasySaveConsole", "EasySave
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogLib", "LogLib\LogLib.csproj", "{890301B6-E531-4068-9FB9-82C5EF6D8ED8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoSoft", "CryptoSoft\CryptoSoft.csproj", "{1EFEE9E4-B626-4230-A6C5-F96C16133C38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{890301B6-E531-4068-9FB9-82C5EF6D8ED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{890301B6-E531-4068-9FB9-82C5EF6D8ED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{890301B6-E531-4068-9FB9-82C5EF6D8ED8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EFEE9E4-B626-4230-A6C5-F96C16133C38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EFEE9E4-B626-4230-A6C5-F96C16133C38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EFEE9E4-B626-4230-A6C5-F96C16133C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EFEE9E4-B626-4230-A6C5-F96C16133C38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
