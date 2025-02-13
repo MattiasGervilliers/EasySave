@@ -1,5 +1,6 @@
 ﻿using BackupEngine.Shared;
 using Newtonsoft.Json;
+using LogLib;
 
 namespace BackupEngine.Settings
 {
@@ -9,6 +10,7 @@ namespace BackupEngine.Settings
         public Chemin LogPath { get; set; }
         public string StatePath { get; set; }
         public List<BackupConfiguration> Configurations { get; set; }
+        public LogType LogFormat { get; set; } 
 
         public Settings()
         {
@@ -16,6 +18,7 @@ namespace BackupEngine.Settings
             Language = Language.English;
             LogPath = new Chemin("logs");
             StatePath = "logs/state.json";
+            LogFormat = LogType.Json;
         }
 
         public void FromJson(string json)
@@ -27,12 +30,13 @@ namespace BackupEngine.Settings
                 LogPath = jsonSettings.LogPath;
                 StatePath = jsonSettings.StatePath;
                 Configurations = jsonSettings.Configurations;
+                LogFormat = jsonSettings.LogFormat;
             }
         }
 
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
     }
 }

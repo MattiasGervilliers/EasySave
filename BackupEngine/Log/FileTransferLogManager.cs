@@ -1,10 +1,16 @@
 ﻿using LogLib;
+using BackupEngine.Settings;
 
 namespace BackupEngine.Log
 {
-    internal class FileTransferLogManager(string logDirectoryPath)
+    internal class FileTransferLogManager
     {
-        private readonly LogWriter _logWriter = new LogWriter(logDirectoryPath);
+        private readonly LogWriter _logWriter;
+
+        public FileTransferLogManager(string logDirectoryPath, LogType logType)
+        {
+            _logWriter = new LogWriter(logDirectoryPath, logType);
+        }
 
         public void OnTransfer(object sender, TransferEvent transferEvent)
         {

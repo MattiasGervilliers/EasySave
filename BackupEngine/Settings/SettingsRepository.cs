@@ -1,4 +1,5 @@
 ﻿using BackupEngine.Shared;
+using LogLib; 
 
 namespace BackupEngine.Settings
 {
@@ -112,6 +113,11 @@ namespace BackupEngine.Settings
         {
             Settings.StatePath = statePath;
             SaveSettings();
+        }
+
+        public LogType GetLogType()
+        {
+            return Settings.LogFormat;
         }
     }
 }
