@@ -10,6 +10,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogLib", "LogLib\LogLib.csproj", "{890301B6-E531-4068-9FB9-82C5EF6D8ED8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasySaveGUI", "EasySaveGUI\EasySaveGUI.csproj", "{75E9EC71-5F5B-4F93-9442-3ADFFE3B1449}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageLib", "LanguageLib\LanguageLib.csproj", "{C5ECCC31-20EE-44AD-A5B6-DC0C73E27EE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +34,10 @@ Global
 		{75E9EC71-5F5B-4F93-9442-3ADFFE3B1449}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75E9EC71-5F5B-4F93-9442-3ADFFE3B1449}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75E9EC71-5F5B-4F93-9442-3ADFFE3B1449}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5ECCC31-20EE-44AD-A5B6-DC0C73E27EE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5ECCC31-20EE-44AD-A5B6-DC0C73E27EE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5ECCC31-20EE-44AD-A5B6-DC0C73E27EE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5ECCC31-20EE-44AD-A5B6-DC0C73E27EE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

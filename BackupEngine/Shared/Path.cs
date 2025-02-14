@@ -3,11 +3,11 @@
 namespace BackupEngine.Shared
 {
     [JsonConverter(typeof(CheminConverter))]
-    public class Chemin
+    public class CustomPath
     {
         private string _path { get; set; }
 
-        public Chemin(string path)
+        public CustomPath(string path)
         {
             if (!CheckPathValidity(path))
             {
@@ -39,16 +39,16 @@ namespace BackupEngine.Shared
         }
     }
 
-    public class CheminConverter : JsonConverter<Chemin>
+    public class CheminConverter : JsonConverter<CustomPath>
     {
-        public override void WriteJson(JsonWriter writer, Chemin value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, CustomPath value, JsonSerializer serializer)
         {
             writer.WriteValue(value.GetAbsolutePath());  // Serialize as a string with absolute path
         }
 
-        public override Chemin ReadJson(JsonReader reader, Type objectType, Chemin existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override CustomPath ReadJson(JsonReader reader, Type objectType, CustomPath existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            return new Chemin(reader.Value.ToString());
+            return new CustomPath(reader.Value.ToString());
         }
     }
 }

@@ -11,8 +11,9 @@ namespace EasySaveConsole.View
     internal class View
     {
         private Language _language;
-        SaveController saveController = new SaveController();
-        LanguageController languageController = new LanguageController();
+        SaveController _saveController ;
+        LanguageController _languageController = new LanguageController();
+        ArgumentsController _argumentsController = new ArgumentsController();
 
 
 
@@ -21,12 +22,13 @@ namespace EasySaveConsole.View
         
             if (args.Length > 0)
             {
-                ArgumentsController.LaunchWithArguments(args);
+                _argumentsController.UpdateArguments(args);
+                _argumentsController.Execute();
                 return;
             }
 
 
-            Language? language = GetLanguage();
+            Language? language = _languageController.GetLanguage();
 
             if (language != null)
             {
@@ -41,7 +43,8 @@ namespace EasySaveConsole.View
                     DisplayError();
                     UpdateLanguage();
                 }
-                languageController.SaveLanguage(this._language);
+                _languageController.UpdateLanguage(this._language);
+                _languageController.Execute(); 
             }
 
             Console.Clear();
@@ -54,21 +57,35 @@ namespace EasySaveConsole.View
                 string choiceAction = Console.ReadLine();
                 Console.Clear();
 
+                SaveController _saveController = new SaveController(SaveAction.Add);
                 switch (choiceAction)
                 {
                     case "1":
-                        AskDeleteConfigurationName();
-                        string Name = Console.ReadLine() ?? ""; // TODO : Check if the name is valid
+                        bool configurationCreateExists = false;
+                        _saveController.UpdateAction(SaveAction.Add);
+                        AskBackupConfigurationCreateName();
+                        string Name = Console.ReadLine() ?? "";
+                        while (!configurationCreateExists)
+                        {
+                            _saveController.UpdateConfigName(Name);
+                            var backupConfig = _saveController.BackupExist();
+                            if (backupConfig != null || Name == "")
+                            {
 
+                                ConfigBadName();
+                                AskBackupConfigurationCreateName();
+                                Name = Console.ReadLine() ?? "";
+                            }
+                            else
+                            {
+                                configurationCreateExists = true;
+                            }
+                        }
                         AskSourceFolder();
-                        Chemin SourcePath = new Chemin(Console.ReadLine() ?? ""); // TODO : Check if the path is valid
-
+                        CustomPath SourcePath = new CustomPath(Console.ReadLine() ?? "");
                         AskDestinationFolder();
-                        Chemin DestinationPath = new Chemin(Console.ReadLine() ?? ""); // TODO : Check if the path is valid
-
-                        AskBackupType();
+                        CustomPath DestinationPath = new CustomPath(Console.ReadLine() ?? "");
                         BackupType backupType = AskBackupType();
-
                         BackupConfiguration backupConfiguration = new BackupConfiguration
                         {
                             BackupType = backupType,
@@ -76,43 +93,49 @@ namespace EasySaveConsole.View
                             SourcePath = SourcePath,
                             Name = Name
                         };
-
-                        saveController.AddBackupConfiguration(backupConfiguration);
-                        DisplayCreateSuccess();
+                        _saveController.UpdateConfiguration(backupConfiguration);
+                        _saveController.Execute();
+                        if (_saveController.GetResult())
+                        {
+                            DisplayCreateSuccess();
+                        }
                         break;
                     case "2":
                         bool configurationExists = false;
-
+                        _saveController.UpdateAction(SaveAction.Delete);
                         while (!configurationExists)
                         {
-                            AskBackupConfigurationName();
-                            string configName = Console.ReadLine()?.Trim() ?? ""; 
-
-                            var backupConfig = saveController.BackupExist(configName);
-
+                            AskDeleteConfigurationName();
+                            string configName = Console.ReadLine()?.Trim() ?? "";
+                            _saveController.UpdateConfigName(configName);
+                            var backupConfig = _saveController.BackupExist();
                             if (backupConfig != null)
                             {
-                                saveController.DeleteConfiguration(backupConfig);
+                                _saveController.Execute();
                                 configurationExists = true;
-                                DisplayDeleteSuccess();
+                                if (_saveController.GetResult())
+                                {
+                                    DisplayDeleteSuccess();
+                                }
                             }
                             else
                             {
                                 ConfigNotFound();
                             }
                         }
-
                         break;
                     case "3":
+                        _saveController.UpdateAction(SaveAction.Launch);
                         configurationExists = false;                       
                         while (!configurationExists)
                         {
-                            AskBackupConfigurationName();
+                            AskBackupConfigurationLaunchName();
                             string configName = Console.ReadLine()?.Trim() ?? "";
-                            var backupConfig = saveController.GetBackupConfiguration(configName);
+                            _saveController.UpdateConfigName(configName);
+                            var backupConfig = _saveController.BackupExist();
                             if (backupConfig != null)
                             {
-                                saveController.LaunchBackup(backupConfig);
+                                _saveController.Execute();
                                 configurationExists = true;
                                 DisplayLaunchSuccess();
                             }
@@ -123,12 +146,13 @@ namespace EasySaveConsole.View
                         }
                         break;
                     case "4":
-                        List<BackupConfiguration> configs = saveController.GetConfigurations();
-
+                        List<BackupConfiguration> configs = _saveController.GetConfigurations();
+                        DisplayBackupConfigurations(configs);
                         foreach (BackupConfiguration config in configs)
                         {
                             DisplayBackupConfiguration(config);
                         }
+                        Console.WriteLine();
                         break;
                     case "5":
                         UpdateLanguage();
@@ -138,8 +162,9 @@ namespace EasySaveConsole.View
                             DisplayError();
                             UpdateLanguage();
                         }
-                        languageController.SaveLanguage(this._language);
-
+                        _languageController.UpdateLanguage(this._language);
+                        _languageController.Execute();
+                        Console.WriteLine();
                         break;
                     case "6":
                         DisplayExitMessage();
@@ -159,25 +184,25 @@ namespace EasySaveConsole.View
                   $"--- Sauvegarde {configuration.BackupType}"
                 : $"Name: {configuration.Name} --- Source folder: {configuration.SourcePath.GetAbsolutePath()} " +
                   $"--- Destination folder: {configuration.DestinationPath.GetAbsolutePath()} " +
-                  $"--- Backup {configuration.BackupType}");
+                  $"--- Backup {configuration.BackupType}");            
         }
         public void DisplayDeleteSuccess()
         {
             Console.WriteLine(_language == Language.French
-                ? "La configuration a été supprimée avec succès"
-                : "The configuration has been successfully deleted");
+                ? "La configuration a été supprimée avec succès !\n"
+                : "The configuration has been successfully deleted !\n");
         }
         public void DisplayCreateSuccess()
         {
             Console.WriteLine(_language == Language.French
-                ? "La configuration a été Créée avec succès"
-                : "The configuration has been successfully created");
+                ? "La configuration a été créée avec succès !\n"
+                : "The configuration has been successfully created !\n");
         }
         public void DisplayLaunchSuccess()
         {
             Console.WriteLine(_language == Language.French
-                ? "La configuration a été lancée avec succès"
-                : "The configuration has been launched successfully");
+                ? "La configuration a été lancée avec succès !\n"
+                : "The configuration has been launched successfully !\n");
         }
         bool ChooseLanguage()
         {
@@ -194,15 +219,11 @@ namespace EasySaveConsole.View
                     return false;
             }
         }
-        Language? GetLanguage()
-        {
-            return BackupModel.GetLanguage();
-        }
         public void UpdateLanguage()
         {
             Console.WriteLine("Voici les langues disponibles / Choose a language :");
-            Console.WriteLine("1 - Anglais/" + Language.English);
-            Console.WriteLine("2 - Français/" + Language.French);
+            Console.WriteLine("1 - Anglais / " + Language.English);
+            Console.WriteLine("2 - Français / " + Language.French);
             Console.Write("Votre choix / Your choice : ");
         }
 
@@ -217,7 +238,7 @@ namespace EasySaveConsole.View
                 Console.WriteLine("4 - Afficher les configurations de sauvegarde");
                 Console.WriteLine("5 - Changer la langue");
                 Console.WriteLine("6 - Quitter");
-                Console.Write("Choisissez une option :  ");
+                Console.WriteLine("Choisissez une option :  ");
             }
             else
             {
@@ -228,7 +249,7 @@ namespace EasySaveConsole.View
                 Console.WriteLine("4 - Display backup configurations");
                 Console.WriteLine("5 - Change language");
                 Console.WriteLine("6 - Exit");
-                Console.Write("Choose an option:  ");
+                Console.WriteLine("Choose an option:  ");
             }
         }
 
@@ -242,10 +263,17 @@ namespace EasySaveConsole.View
             Console.WriteLine("Réponse incorrecte / Incorrect answer");
         }
 
-        public void AskBackupConfigurationName()
+        public void AskBackupConfigurationCreateName()
         {
             Console.WriteLine(_language == Language.French
-                ? "Rentrez le nom de la configuration de sauvegarde à lancer"
+                ? "Rentrez le nom de la configuration de sauvegarde à créer :"
+                : "Enter the name of the backup configuration to create");
+        }
+
+        public void AskBackupConfigurationLaunchName()
+        {
+            Console.WriteLine(_language == Language.French
+                ? "Rentrez le nom de la configuration de sauvegarde à lancer :"
                 : "Enter the name of the backup configuration to launch");
         }
 
@@ -261,6 +289,13 @@ namespace EasySaveConsole.View
             Console.WriteLine(_language == Language.French
                 ? "La configuration de sauvegarde n'a pas été trouvée"
                 : "The backup configuration was not found");
+        }
+        
+        public void ConfigBadName()
+        {
+            Console.WriteLine(_language == Language.French
+                ? "Le nom de configuration est vide ou existe déjà"
+                : "The name of the configuration is blank or already exist");
         }
 
         public void DisplayCreateMenu()
@@ -300,7 +335,7 @@ namespace EasySaveConsole.View
                 if (input == "1")
                     return BackupType.Full;
                 else if (input == "2")
-                    return BackupType.Incremental;
+                    return BackupType.Differential;
                 else
                 {
                     if (_language == Language.French)
@@ -315,20 +350,18 @@ namespace EasySaveConsole.View
             }
         }
 
-        public void CreationCompleted()
-        {
-            Console.WriteLine(_language == Language.French
-                ? "Création d'une configuration de sauvegarde terminée !"
-                : "Creation of a backup configuration completed !");
-        }
-
-        public void DisplayBackupConfigurations()
+        public void DisplayBackupConfigurations(List<BackupConfiguration> configurations)
         {
             Console.WriteLine(_language == Language.French
                 ? "Liste des configurations de sauvegarde : "
                 : "List of backup configurations: ");
+            if (configurations.Count == 0)
+            {
+                Console.WriteLine(_language == Language.French
+                ? "Aucune configuration actuelle"
+                : "No current configuration");
+            }
         }
-
        
 
         public void AskDeleteConfigurationName()
