@@ -324,6 +324,16 @@ namespace EasySaveConsole.View
         }
 
         /// <summary>
+        /// Asks the user to enter the name of the backup configuration to create.
+        /// </summary>
+        public void AskBackupConfigurationCreateName()
+        {
+            Console.WriteLine(_language == Language.French
+                ? "Rentrez le nom de la configuration de sauvegarde à créer :"
+                : "Enter the name of the backup configuration to create");
+        }
+
+        /// <summary>
         /// Asks the user to enter the name or number of the backup configuration to launch.
         /// </summary>
         public void AskBackupConfigurationName()
