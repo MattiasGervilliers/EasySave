@@ -361,7 +361,12 @@ namespace EasySaveConsole.View
                 ? "Le nom de configuration est vide ou existe déjà"
                 : "The name of the configuration is blank or already exist");
         }
-  
+        public void AskBackupConfigurationCreateName()
+        {
+            Console.WriteLine(_language == Language.French
+                ? "Rentrez le nom de la configuration de sauvegarde à créer :"
+                : "Enter the name of the backup configuration to create");
+        }
         public void DisplayCreateMenu()
         {
             Console.WriteLine(_language == Language.French

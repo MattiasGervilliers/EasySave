@@ -15,7 +15,7 @@ namespace BackupEngine.Backup
         {
             if (Configuration.Encrypt)
             {
-                TransferStrategy = new CryptStrategy();
+                TransferStrategy = new CryptStrategy("test");
             }
             else
             {
