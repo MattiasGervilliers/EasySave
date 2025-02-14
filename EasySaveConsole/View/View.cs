@@ -183,23 +183,34 @@ namespace EasySaveConsole.View
                 }
             }
         }
+        /// <summary>
+        /// Displays an error message when an invalid name is entered.
+        /// </summary>
         public void DisplayNameError()
         {
             Console.WriteLine(_language == Language.French
                 ? "Le nom que vous avez saisi n'est pas valide. Veuillez en saisir un valide : "
                 : "The name you entered is not valid. Please enter a valid one: ");
         }
+        /// <summary>
+        /// Checks if the given name is valid (not empty and matches the allowed character pattern).
+        /// </summary>
         internal bool IsNameValid(string name)
         {
             return !string.IsNullOrWhiteSpace(name) && Regex.IsMatch(name, @"^[a-zA-ZÀ-ÿ\s'-]+$");
         }
+        /// <summary>
+        /// Displays an error message when an invalid path is entered.
+        /// </summary>
         public void DisplayPathNotFound()
         {
             Console.WriteLine(_language == Language.French
                 ? "Le chemin que vous avez saisi n'est pas valide. Veuillez en saisir un valide : "
                 : "The path you entered is not valid. Please enter a valid one: ");
         }
-
+        /// <summary>
+        /// Displays the details of a backup configuration.
+        /// </summary>
         public void DisplayBackupConfiguration(BackupConfiguration configuration)
         {
             Console.WriteLine(_language == Language.French
@@ -210,24 +221,36 @@ namespace EasySaveConsole.View
                   $"--- Destination folder: {configuration.DestinationPath.GetAbsolutePath()} " +
                   $"--- Backup {configuration.BackupType}" + $"--- Encryption {configuration.Encrypt}");
         }
+        /// <summary>
+        /// Displays a success message when a configuration is deleted.
+        /// </summary>
         public void DisplayDeleteSuccess()
         {
             Console.WriteLine(_language == Language.French
                 ? "La configuration a été supprimée avec succès"
                 : "The configuration has been successfully deleted");
         }
+        /// <summary>
+        /// Displays a success message when a configuration is created.
+        /// </summary>
         public void DisplayCreateSuccess()
         {
             Console.WriteLine(_language == Language.French
                 ? "La configuration a été Créée avec succès"
                 : "The configuration has been successfully created");
         }
+        /// <summary>
+        /// Displays a success message when a backup is launched.
+        /// </summary>
         public void DisplayLaunchSuccess()
         {
             Console.WriteLine(_language == Language.French
                 ? "La configuration a été lancée avec succès"
                 : "The configuration has been launched successfully");
         }
+        /// <summary>
+        /// Handles user input to choose the application language.
+        /// </summary>
         bool ChooseLanguage()
         {
             string choix = Console.ReadLine();
@@ -243,6 +266,9 @@ namespace EasySaveConsole.View
                     return false;
             }
         }
+        /// <summary>
+        /// Prompts the user to select a language.
+        /// </summary>
         public void UpdateLanguage()
         {
             Console.WriteLine("Voici les langues disponibles / Choose a language :");
@@ -250,7 +276,9 @@ namespace EasySaveConsole.View
             Console.WriteLine("2 - Français/" + Language.French);
             Console.Write("Votre choix / Your choice : ");
         }
-
+        /// <summary>
+        /// Displays the main menu of the application.
+        /// </summary>
         public void DisplayMenu()
         {
             if (_language == Language.French)
@@ -276,38 +304,50 @@ namespace EasySaveConsole.View
                 Console.Write("Choose an option:  ");
             }
         }
-
+        /// <summary>
+        /// Displays an exit message.
+        /// </summary>
         public void DisplayExitMessage()
         {
             Console.WriteLine(_language == Language.French ? "Au revoir" : "Bye Bye");
         }
-
+        /// <summary>
+        /// Displays a generic error message for incorrect input.
+        /// </summary>
         public void DisplayError()
         {
             Console.WriteLine("Réponse incorrecte / Incorrect answer");
         }
-
+        /// <summary>
+        /// Asks the user to enter the name or number of the backup configuration to launch.
+        /// </summary>
         public void AskBackupConfigurationName()
         {
             Console.WriteLine(_language == Language.French
                 ? "Rentrez le nom de la configuration de sauvegarde à lancer ou le(s) numéro(s) des conifgurations a lancer"
                 : "Enter the name of the backup configuration to launch or the configuration number(s) to launch");
         }
-
+        /// <summary>
+        /// Displays a message indicating that the backup has started.
+        /// </summary>
         public void BackupLaunched()
         {
             Console.WriteLine(_language == Language.French
                 ? "La sauvegarde a été lancée"
                 : "The backup has been launched");
         }
-
+        /// <summary>
+        /// Displays an error message when a backup configuration is not found.
+        /// </summary>
         public void ConfigNotFound()
         {
             Console.WriteLine(_language == Language.French
                 ? "La configuration de sauvegarde n'a pas été trouvée"
                 : "The backup configuration was not found");
         }
-
+        /// <summary>
+        /// Displays the menu for creating a backup configuration.
+        /// </summary>
         public void DisplayCreateMenu()
         {
             Console.WriteLine(_language == Language.French
@@ -317,20 +357,27 @@ namespace EasySaveConsole.View
                 ? "Veuillez entrer le nom de la configuration : "
                 : "Please enter the name of the configuration: ");
         }
-
+        /// <summary>
+        /// Asks the user to enter the source folder for backup.
+        /// </summary>
         public void AskSourceFolder()
         {
             Console.WriteLine(_language == Language.French
                 ? "Veuillez entrer le dossier source que vous souhaitez sauvegarder : "
                 : "Please enter the source folder you want to back up: ");
         }
-
+        /// <summary>
+        /// Asks the user to enter the destination folder for backup.
+        /// </summary>
         public void AskDestinationFolder()
         {
             Console.WriteLine(_language == Language.French
                 ? "Veuillez entrer le dossier cible où vous souhaitez sauvegarder : "
                 : "Please enter the target folder where you want to save: ");
         }
+        /// <summary>
+        /// Asks the user whether they want to encrypt the backup.
+        /// </summary>
         public bool AskEncryptionPreference()
         {
             Console.WriteLine(_language == Language.French
@@ -359,6 +406,9 @@ namespace EasySaveConsole.View
                 }
             }
         }
+        /// <summary>
+        /// Asks the user to choose a backup type (full or incremental).
+        /// </summary>
 
         public BackupType AskBackupType()
         {
@@ -387,6 +437,9 @@ namespace EasySaveConsole.View
                 }
             }
         }
+        /// <summary>
+        /// Displays a message indicating that the backup configuration creation is complete.
+        /// </summary>
 
         public void CreationCompleted()
         {
@@ -394,23 +447,27 @@ namespace EasySaveConsole.View
                 ? "Création d'une configuration de sauvegarde terminée !"
                 : "Creation of a backup configuration completed !");
         }
-
+        /// <summary>
+        /// Displays the list of available backup configurations.
+        /// </summary>
         public void DisplayBackupConfigurations()
         {
             Console.WriteLine(_language == Language.French
                 ? "Liste des configurations de sauvegarde : "
                 : "List of backup configurations: ");
         }
-
-       
-
+        /// <summary>
+        /// Asks the user to enter the name of the configuration to delete.
+        /// </summary>
         public void AskDeleteConfigurationName()
         {
             Console.WriteLine(_language == Language.French
                 ? "Veuillez entrer le nom de la configuration à supprimer : "
                 : "Please enter the name of the configuration to delete: ");
         }
-
+        /// <summary>
+        /// Displays an error message when the configuration to delete does not exist.
+        /// </summary>
         public void DisplayConfigNotFound()
         {
             Console.WriteLine(_language == Language.French
