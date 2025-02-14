@@ -120,5 +120,11 @@ namespace BackupEngine.Settings
         {
             return Settings.LogFormat;
         }
+
+        public void UpdateLogType(LogType logType)
+        {
+            Settings.LogFormat = logType;
+            SaveSettings();
+        }
     }
 }
