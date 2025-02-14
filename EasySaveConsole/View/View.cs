@@ -62,30 +62,32 @@ namespace EasySaveConsole.View
                 switch (choiceAction)
                 {
                     case "1":
+                        bool configurationCreateExists = false;
                         _saveController.UpdateAction(SaveAction.Add);
-                        AskDeleteConfigurationName();
-                        string Name = Console.ReadLine() ?? ""; // TODO : Check if the name is valid
-                        while (IsNameValid(Name))
+                        AskBackupConfigurationCreateName();
+                        string Name = Console.ReadLine() ?? "";
+                        while (!configurationCreateExists)
+                        {
+                            _saveController.UpdateConfigName(Name);
+                            var backupConfig = _saveController.BackupExist();
+                            if (backupConfig != null || Name == "")
                             {
-                                DisplayNameError();
+
+                                ConfigBadName();
+                                AskBackupConfigurationCreateName();
                                 Name = Console.ReadLine() ?? "";
                             }
+                            else
+                            {
+                                configurationCreateExists = true;
+                            }
+                        }
                         AskSourceFolder();
-                        Chemin SourcePath = new Chemin(Console.ReadLine() ?? ""); 
-                        while (!SourcePath.PathExists())
-                        {
-                            DisplayPathNotFound();
-                            SourcePath = new Chemin(Console.ReadLine() ?? "");
-                        }
+                        CustomPath SourcePath = new CustomPath(Console.ReadLine() ?? "");
                         AskDestinationFolder();
-                        Chemin DestinationPath = new Chemin(Console.ReadLine() ?? ""); 
-                        while (!DestinationPath.PathExists())
-                        {
-                            DisplayPathNotFound();
-                            SourcePath = new Chemin(Console.ReadLine() ?? "");
-                        }
+                        CustomPath DestinationPath = new CustomPath(Console.ReadLine() ?? "");
                         BackupType backupType = AskBackupType();
-                        BackupConfiguration backupConfiguration = new BackupConfiguration 
+                        BackupConfiguration backupConfiguration = new BackupConfiguration
                         {
                             BackupType = backupType,
                             DestinationPath = DestinationPath,
@@ -105,7 +107,7 @@ namespace EasySaveConsole.View
                         _saveController.UpdateAction(SaveAction.Delete);
                         while (!configurationExists)
                         {
-                            AskBackupConfigurationName();
+                            AskDeleteConfigurationName();
                             string configName = Console.ReadLine()?.Trim() ?? "";
                             _saveController.UpdateConfigName(configName);
                             var backupConfig = _saveController.BackupExist();
@@ -156,10 +158,12 @@ namespace EasySaveConsole.View
                         break;
                     case "4":
                         List<BackupConfiguration> configs = _saveController.GetConfigurations();
+                        DisplayBackupConfigurations(configs);
                         foreach (BackupConfiguration config in configs)
                         {
                             DisplayBackupConfiguration(config);
                         }
+                        Console.WriteLine();
                         break;
                     case "5":
                         UpdateLanguage();
@@ -171,7 +175,7 @@ namespace EasySaveConsole.View
                         }
                         _languageController.UpdateLanguage(this._language);
                         _languageController.Execute();
-
+                        Console.WriteLine();
                         break;
                     case "6":
                         DisplayExitMessage();
@@ -227,8 +231,8 @@ namespace EasySaveConsole.View
         public void DisplayDeleteSuccess()
         {
             Console.WriteLine(_language == Language.French
-                ? "La configuration a été supprimée avec succès"
-                : "The configuration has been successfully deleted");
+                ? "La configuration a été supprimée avec succès !\n"
+                : "The configuration has been successfully deleted !\n");
         }
         /// <summary>
         /// Displays a success message when a configuration is created.
@@ -236,8 +240,8 @@ namespace EasySaveConsole.View
         public void DisplayCreateSuccess()
         {
             Console.WriteLine(_language == Language.French
-                ? "La configuration a été Créée avec succès"
-                : "The configuration has been successfully created");
+                ? "La configuration a été créée avec succès !\n"
+                : "The configuration has been successfully created !\n");
         }
         /// <summary>
         /// Displays a success message when a backup is launched.
@@ -245,8 +249,8 @@ namespace EasySaveConsole.View
         public void DisplayLaunchSuccess()
         {
             Console.WriteLine(_language == Language.French
-                ? "La configuration a été lancée avec succès"
-                : "The configuration has been launched successfully");
+                ? "La configuration a été lancée avec succès !\n"
+                : "The configuration has been launched successfully !\n");
         }
         /// <summary>
         /// Handles user input to choose the application language.
@@ -272,8 +276,8 @@ namespace EasySaveConsole.View
         public void UpdateLanguage()
         {
             Console.WriteLine("Voici les langues disponibles / Choose a language :");
-            Console.WriteLine("1 - Anglais/" + Language.English);
-            Console.WriteLine("2 - Français/" + Language.French);
+            Console.WriteLine("1 - Anglais / " + Language.English);
+            Console.WriteLine("2 - Français / " + Language.French);
             Console.Write("Votre choix / Your choice : ");
         }
         /// <summary>
@@ -290,7 +294,7 @@ namespace EasySaveConsole.View
                 Console.WriteLine("4 - Afficher les configurations de sauvegarde");
                 Console.WriteLine("5 - Changer la langue");
                 Console.WriteLine("6 - Quitter");
-                Console.Write("Choisissez une option :  ");
+                Console.WriteLine("Choisissez une option :  ");
             }
             else
             {
@@ -301,7 +305,7 @@ namespace EasySaveConsole.View
                 Console.WriteLine("4 - Display backup configurations");
                 Console.WriteLine("5 - Change language");
                 Console.WriteLine("6 - Exit");
-                Console.Write("Choose an option:  ");
+                Console.WriteLine("Choose an option:  ");
             }
         }
         /// <summary>
@@ -318,6 +322,7 @@ namespace EasySaveConsole.View
         {
             Console.WriteLine("Réponse incorrecte / Incorrect answer");
         }
+
         /// <summary>
         /// Asks the user to enter the name or number of the backup configuration to launch.
         /// </summary>
@@ -327,6 +332,7 @@ namespace EasySaveConsole.View
                 ? "Rentrez le nom de la configuration de sauvegarde à lancer ou le(s) numéro(s) des conifgurations a lancer"
                 : "Enter the name of the backup configuration to launch or the configuration number(s) to launch");
         }
+      
         /// <summary>
         /// Displays a message indicating that the backup has started.
         /// </summary>
@@ -345,9 +351,17 @@ namespace EasySaveConsole.View
                 ? "La configuration de sauvegarde n'a pas été trouvée"
                 : "The backup configuration was not found");
         }
+
         /// <summary>
         /// Displays the menu for creating a backup configuration.
         /// </summary>
+        public void ConfigBadName()
+        {
+            Console.WriteLine(_language == Language.French
+                ? "Le nom de configuration est vide ou existe déjà"
+                : "The name of the configuration is blank or already exist");
+        }
+  
         public void DisplayCreateMenu()
         {
             Console.WriteLine(_language == Language.French
@@ -440,7 +454,6 @@ namespace EasySaveConsole.View
         /// <summary>
         /// Displays a message indicating that the backup configuration creation is complete.
         /// </summary>
-
         public void CreationCompleted()
         {
             Console.WriteLine(_language == Language.French
@@ -450,11 +463,17 @@ namespace EasySaveConsole.View
         /// <summary>
         /// Displays the list of available backup configurations.
         /// </summary>
-        public void DisplayBackupConfigurations()
+        public void DisplayBackupConfigurations(List<BackupConfiguration> configurations)
         {
             Console.WriteLine(_language == Language.French
                 ? "Liste des configurations de sauvegarde : "
                 : "List of backup configurations: ");
+            if (configurations.Count == 0)
+            {
+                Console.WriteLine(_language == Language.French
+                ? "Aucune configuration actuelle"
+                : "No current configuration");
+            }
         }
         /// <summary>
         /// Asks the user to enter the name of the configuration to delete.

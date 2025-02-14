@@ -48,4 +48,9 @@ namespace LogLib
         ERROR,  // Erreur qui n'interrompt pas l'application
         FATAL   // Erreur critique nécessitant une intervention immédiate
     }
+    public enum LogType
+    {
+        Json,
+        Xml
+    }
 }

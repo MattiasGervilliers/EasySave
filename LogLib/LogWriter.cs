@@ -1,22 +1,22 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Xml.Serialization;
 
 namespace LogLib
 {
     public class LogWriter
     {
-        // Stocke le chemin du répertoire où seront sauvegardés les logs
         private string _logDirectoryPath;
+        private LogType _logFormat;
         private static readonly object _fileLock = new object();
 
-        // Constructeur qui initialise le chemin du répertoire et s'assure qu'il existe
-        public LogWriter(string logDirectoryPath)
+        public LogWriter(string logDirectoryPath, LogType logFormat)
         {
             _logDirectoryPath = logDirectoryPath;
+            _logFormat = logFormat;
             EnsureDirectoryExists();
         }
 
-        // Vérifie si le répertoire des logs existe, sinon il le crée
         private void EnsureDirectoryExists()
         {
             if (!Directory.Exists(_logDirectoryPath))
@@ -25,29 +25,35 @@ namespace LogLib
             }
         }
 
-        // Écrit un log dans un fichier JSON journalier
         public void WriteLog(object log)
         {
-            // Génère un nom de fichier basé sur la date du jour (ex: log_20240204.json)
-            string logFilePath = Path.Combine(_logDirectoryPath, $"log_{DateTime.Now:yyyyMMdd}.json");
+            string extension = _logFormat == LogType.Json ? "json" : "xml";
+            string logFilePath = Path.Combine(_logDirectoryPath, $"log_{DateTime.Now:yyyyMMdd}.{extension}");
 
-            lock (_fileLock) // Ensure thread safety
+            lock (_fileLock)
             {
-                using (StreamWriter sw = new StreamWriter(logFilePath, true)) // Append mode
+                using (StreamWriter sw = new StreamWriter(logFilePath, true))
                 {
-                    string json = JsonSerializer.Serialize(log, GetJsonOptions());
-                    sw.WriteLine(json); // Write each log on a new line
+                    if (_logFormat == LogType.Json)
+                    {
+                        string json = JsonSerializer.Serialize(log, GetJsonOptions());
+                        sw.WriteLine(json);
+                    }
+                    else
+                    {
+                        XmlSerializer serializer = new XmlSerializer(log.GetType());
+                        serializer.Serialize(sw, log);
+                    }
                 }
             }
         }
 
-        // Configure les options de sérialisation JSON
         private JsonSerializerOptions GetJsonOptions()
         {
             return new JsonSerializerOptions
             {
-                WriteIndented = true, // Indente le JSON pour le rendre lisible
-                Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) } // Convertit les enums en format camelCase
+                WriteIndented = true,
+                Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
             };
         }
     }

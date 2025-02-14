@@ -11,9 +11,19 @@ namespace BackupEngine.Backup
         public override void Save(string uniqueDestinationPath)
         {
 
-            if (PreviousSaveExists() && !NeedToPerformFullSave())
+            if (PreviousSaveExists())
             {
-                DifferentialSave(uniqueDestinationPath, PreviousSavePath());
+                string previousSavePath = PreviousSavePath();
+
+                if (!Directory.Exists(previousSavePath))
+                {
+                    PerformFullSave(uniqueDestinationPath);
+                    UpdateCache(uniqueDestinationPath);
+                }
+                else
+                {
+                    DifferentialSave(uniqueDestinationPath, previousSavePath);
+                }
             }
             else
             {
@@ -45,11 +55,6 @@ namespace BackupEngine.Backup
             if (!Directory.Exists(sourcePath))
             {
                 throw new DirectoryNotFoundException($"Le dossier source '{sourcePath}' n'existe pas.");
-            }
-
-            if (!Directory.Exists(previousSavePath))
-            {
-                throw new DirectoryNotFoundException($"Le dossier de la dernière sauvegarde complète '{previousSavePath}' n'existe pas.");
             }
 
             Directory.CreateDirectory(uniqueDestinationPath);
@@ -134,16 +139,6 @@ namespace BackupEngine.Backup
         {
             CachedConfiguration? cached = _cacheRepository.GetCachedConfiguration(Configuration);
             return cached != null;
-        }
-
-        private bool NeedToPerformFullSave()
-        {
-            CachedConfiguration? cached = _cacheRepository.GetCachedConfiguration(Configuration);
-            if (cached == null)
-            {
-                return true;
-            }
-            return cached.Backups.Count % 10 == 0;
         }
 
         private string PreviousSavePath()
