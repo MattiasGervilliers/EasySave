@@ -6,5 +6,8 @@ BackupEngine/bin/
 BackupEngine/obj/
 BackupEngine/.vs/
 LogLib/bin/
-LogLib/obj
+LogLib/obj/
 LogLib/.vs/
+LanguageLib/bin/
+LanguageLib/obj/
+LanguageLib/.vs/
