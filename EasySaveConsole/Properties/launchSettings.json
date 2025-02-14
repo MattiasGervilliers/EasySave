@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "EasySaveConsole": {
+      "commandName": "Project",
+      "commandLineArgs": "-help"
+    }
+  }
+}
