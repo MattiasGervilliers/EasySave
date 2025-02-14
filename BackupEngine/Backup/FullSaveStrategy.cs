@@ -29,7 +29,7 @@ namespace BackupEngine.Backup
             // Mettre à jour l'état au début de la sauvegarde
             OnStateUpdated(new StateEvent(
                 "Full Backup",
-                "Actif",
+                "Active",
                 totalFiles,
                 totalSize,
                 remainingFiles,
@@ -37,8 +37,6 @@ namespace BackupEngine.Backup
                 "",
                 ""
             ));
-
-            Console.WriteLine($"Sauvegarde {Configuration.Name} complète en cours...");
 
             // Parcourir chaque fichier et copier
             foreach (string file in files)
@@ -70,7 +68,7 @@ namespace BackupEngine.Backup
                     // On envoie l'événement d'état
                     OnStateUpdated(new StateEvent(
                         "Full Backup",
-                        "Actif",
+                        "Active",
                         totalFiles,
                         totalSize,
                         remainingFiles,
@@ -80,21 +78,21 @@ namespace BackupEngine.Backup
                     ));
 
                     // Créer l'événement de transfert (logique existante)
-                    TransferEvent transferEvent = new TransferEvent(Configuration, duration, new FileInfo(file));
+                    TransferEvent transferEvent = new TransferEvent(Configuration, duration, new FileInfo(file), new FileInfo(destFile));
                     OnTransfer(transferEvent);
                 }
                 catch (Exception e)
                 {
                     // En cas d'erreur lors de la copie
                     Console.WriteLine($"Erreur lors de la copie du fichier {file} : {e.Message}");
-                    OnTransfer(new TransferEvent(Configuration, new TimeSpan(-1), new FileInfo(file)));
+                    OnTransfer(new TransferEvent(Configuration, new TimeSpan(-1), new FileInfo(file), new FileInfo(destFile)));
                 }
             }
 
             // Mise à jour de l'état à la fin de la sauvegarde
             OnStateUpdated(new StateEvent(
                 "Full Backup",
-                "Terminé",
+                "Completed",
                 totalFiles,
                 totalSize,
                 0,

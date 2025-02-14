@@ -1,15 +1,21 @@
 ﻿using LogLib;
+using BackupEngine.Settings;
 
 namespace BackupEngine.Log
 {
-    internal class FileTransferLogManager(string logDirectoryPath)
+    internal class FileTransferLogManager
     {
-        private readonly LogWriter _logWriter = new LogWriter(logDirectoryPath);
+        private readonly LogWriter _logWriter;
+
+        public FileTransferLogManager(string logDirectoryPath, LogType logType)
+        {
+            _logWriter = new LogWriter(logDirectoryPath, logType);
+        }
 
         public void OnTransfer(object sender, TransferEvent transferEvent)
         {
             string sourcePath = transferEvent.File.FullName;
-            string destinationPath = transferEvent.Configuration.DestinationPath.GetAbsolutePath() + "\\" + transferEvent.File.Name;
+            string destinationPath = transferEvent.NewFile.FullName;
             long size = transferEvent.File.Length;
             int duration = transferEvent.TransferDuration.Milliseconds;
             string backupName = transferEvent.Configuration.Name;

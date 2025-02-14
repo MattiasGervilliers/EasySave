@@ -1,4 +1,6 @@
 ﻿using BackupEngine.Shared;
+using LogLib;
+using Newtonsoft.Json;
 
 namespace BackupEngine.Settings
 {
@@ -36,7 +38,7 @@ namespace BackupEngine.Settings
         private void SaveSettings()
         {
             string json = Settings.ToJson();
-            File.WriteAllText(_settingsPath, json);
+            File.WriteAllText(_settingsPath, JsonConvert.SerializeObject(JsonConvert.DeserializeObject(json), Formatting.Indented));
         }
 
         public void AddConfiguration(BackupConfiguration configuration)
@@ -103,15 +105,20 @@ namespace BackupEngine.Settings
             return Settings.Configurations[id];
         }
 
-        public string GetStatePath()
+        public Chemin GetStatePath()
         {
             return Settings.StatePath;
         }
 
         public void UpdateStatePath(string statePath)
         {
-            Settings.StatePath = statePath;
+            Settings.StatePath = new Chemin(statePath);
             SaveSettings();
+        }
+
+        public LogType GetLogType()
+        {
+            return Settings.LogFormat;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace BackupEngine.Log
 {
-    internal class FileTransferLog : LogLib.Log
+    public class FileTransferLog : LogLib.Log  
     {
         /// <summary>
         /// Chemin source du fichier transféré
@@ -29,6 +29,13 @@ namespace BackupEngine.Log
         /// </summary>
         public string? BackupName { get; set; }
 
+        /// <summary>
+        /// Constructeur sans paramètre requis pour la sérialisation XML
+        /// </summary>
+        public FileTransferLog() : base(LogLevel.INFO, "")
+        {
+        }
+
         public FileTransferLog(string fileSourcePath, string fileDestinationPath, long fileSize, int transferTime, string backupName)
             : base(LogLevel.INFO, "")
         {
@@ -37,7 +44,6 @@ namespace BackupEngine.Log
             FileSize = fileSize;
             TransferTime = transferTime;
             BackupName = backupName;
-            //Message = $"Transfert du fichier {fileSourcePath} vers {fileDestinationPath} ({fileSize} octets) en {transferTime} ms";
         }
     }
 }
