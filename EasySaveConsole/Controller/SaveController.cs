@@ -14,14 +14,18 @@ namespace EasySaveConsole.Controller
         private string? _configName;
         private BackupConfiguration? _backupConfig;
         private bool _result;
-
+        /// <summary>
+        /// Initializes a new instance of the SaveController with an action and optional configuration parameters.
+        /// </summary>
         public SaveController(SaveAction action, string? configName = null, BackupConfiguration? backupConfig = null)
         {
             _action = action;
             _configName = configName?.Trim();
             _backupConfig = backupConfig;
         }
-
+        /// <summary>
+        /// Executes the specified save action (Add, Delete, Launch).
+        /// </summary>
         public void Execute()
         {
             switch (_action)
@@ -37,9 +41,13 @@ namespace EasySaveConsole.Controller
                     break;
             }
         }
-
+        /// <summary>
+        /// Returns the result of the executed action.
+        /// </summary>
         public bool GetResult() => _result;
-
+        /// <summary>
+        /// Adds a new backup configuration if provided.
+        /// </summary>
         internal bool AddBackupConfiguration()
         {
             if (_backupConfig != null)
@@ -49,7 +57,9 @@ namespace EasySaveConsole.Controller
             }
             return false;
         }
-
+        /// <summary>
+        /// Deletes a backup configuration if it exists.
+        /// </summary>
         internal bool DeleteBackupConfiguration()
         {
             if (!string.IsNullOrEmpty(_configName))
@@ -63,7 +73,9 @@ namespace EasySaveConsole.Controller
             }
             return false;
         }
-
+        /// <summary>
+        /// Launches a backup if the configuration exists.
+        /// </summary>
         internal bool LaunchBackup()
         {
             if (!string.IsNullOrEmpty(_configName))
@@ -77,22 +89,37 @@ namespace EasySaveConsole.Controller
             }
             return false;
         }
+        /// <summary>
+        /// Updates the configuration name.
+        /// </summary>
         public void UpdateConfigName(string configName)
         {
             this._configName = configName;
         }
+        /// <summary>
+        /// Updates the backup configuration.
+        /// </summary>
         public void UpdateConfiguration(BackupConfiguration backupConfiguration)
         {
             this._backupConfig = backupConfiguration;
         }
+        /// <summary>
+        /// Updates the save action.
+        /// </summary>
         public void UpdateAction(SaveAction saveAction)
         {
             this._action = saveAction;
         }
+        /// <summary>
+        /// Retrieves the list of all backup configurations.
+        /// </summary>
         public List<BackupConfiguration> GetConfigurations()
         {
             return BackupModel.GetConfigs();
         }
+        /// <summary>
+        /// Checks if the backup configuration exists and returns it if found.
+        /// </summary>
 
         public BackupConfiguration? BackupExist()
         {
