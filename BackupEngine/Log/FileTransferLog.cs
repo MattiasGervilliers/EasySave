@@ -5,12 +5,12 @@ namespace BackupEngine.Log
     public class FileTransferLog : LogLib.Log  
     {
         /// <summary>
-        /// Chemin source du fichier transféré
+        /// CustomPath source du fichier transféré
         /// </summary>
         public string? FileSourcePath { get; set; }
 
         /// <summary>
-        /// Chemin de destination du fichier transféré
+        /// CustomPath de destination du fichier transféré
         /// </summary>
         public string? FileDestinationPath { get; set; }
 

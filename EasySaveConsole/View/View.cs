@@ -82,9 +82,9 @@ namespace EasySaveConsole.View
                             }
                         }
                         AskSourceFolder();
-                        Chemin SourcePath = new Chemin(Console.ReadLine() ?? "");
+                        CustomPath SourcePath = new CustomPath(Console.ReadLine() ?? "");
                         AskDestinationFolder();
-                        Chemin DestinationPath = new Chemin(Console.ReadLine() ?? "");
+                        CustomPath DestinationPath = new CustomPath(Console.ReadLine() ?? "");
                         BackupType backupType = AskBackupType();
                         BackupConfiguration backupConfiguration = new BackupConfiguration
                         {

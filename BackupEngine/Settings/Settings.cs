@@ -7,8 +7,8 @@ namespace BackupEngine.Settings
     public class Settings : IJsonSerializable
     {
         public Language Language { get; set; }
-        public Chemin LogPath { get; set; }
-        public Chemin StatePath { get; set; }
+        public CustomPath LogPath { get; set; }
+        public CustomPath StatePath { get; set; }
         public List<BackupConfiguration> Configurations { get; set; }
         public LogType LogFormat { get; set; } 
 
@@ -16,9 +16,9 @@ namespace BackupEngine.Settings
         {
             Configurations = new List<BackupConfiguration>();
             Language = Language.English;
-            LogPath = new Chemin("logs");
+            LogPath = new CustomPath("logs");
             LogFormat = LogType.Json;
-            StatePath = new Chemin("logs/state.json");
+            StatePath = new CustomPath("logs/state.json");
         }
 
         public void FromJson(string json)
