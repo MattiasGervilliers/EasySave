@@ -6,11 +6,16 @@ namespace EasySaveConsole.Controller
     internal class ArgumentsController : IController
     {
         private  string[] _args ;
-
+        /// <summary>
+        /// Executes the backup process by launching configurations with specified arguments.
+        /// </summary>
         public void Execute()
         {
             LaunchWithArguments();
         }
+        /// <summary>
+        /// Parses backup arguments and launches the corresponding configurations.
+        /// </summary>
         public void LaunchWithArguments()
         {
             HashSet<int> backupIds = ParseBackupArguments(this._args[0]);
@@ -32,11 +37,16 @@ namespace EasySaveConsole.Controller
 
             BackupModel.LaunchConfigs(configs);
         }
+        /// <summary>
+        /// Updates the arguments used for launching backups.
+        /// </summary>
         public void UpdateArguments(string[] args)
         {
             this._args = args;
         }
-
+        /// <summary>
+        /// Parses a string input to extract backup configuration IDs, supporting both single values and ranges.
+        /// </summary>
         static HashSet<int> ParseBackupArguments(string input)
         {
             HashSet<int> backupIds = new HashSet<int>();
