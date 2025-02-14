@@ -61,17 +61,31 @@ namespace EasySaveConsole.View
                 switch (choiceAction)
                 {
                     case "1":
+                        bool configurationCreateExists = false;
                         _saveController.UpdateAction(SaveAction.Add);
                         AskBackupConfigurationCreateName();
-                        string Name = Console.ReadLine() ?? ""; // TODO : Check if the name is valid
+                        string Name = Console.ReadLine() ?? "";
+                        while (!configurationCreateExists)
+                        {
+                            _saveController.UpdateConfigName(Name);
+                            var backupConfig = _saveController.BackupExist();
+                            if (backupConfig != null || Name == "")
+                            {
+
+                                ConfigBadName();
+                                AskBackupConfigurationCreateName();
+                                Name = Console.ReadLine() ?? "";
+                            }
+                            else
+                            {
+                                configurationCreateExists = true;
+                            }
+                        }
                         AskSourceFolder();
-                        Chemin SourcePath = new Chemin(Console.ReadLine() ?? ""); // TODO : Check if the path is valid
-
+                        Chemin SourcePath = new Chemin(Console.ReadLine() ?? "");
                         AskDestinationFolder();
-                        Chemin DestinationPath = new Chemin(Console.ReadLine() ?? ""); // TODO : Check if the path is valid
-
+                        Chemin DestinationPath = new Chemin(Console.ReadLine() ?? "");
                         BackupType backupType = AskBackupType();
-
                         BackupConfiguration backupConfiguration = new BackupConfiguration
                         {
                             BackupType = backupType,
@@ -276,6 +290,13 @@ namespace EasySaveConsole.View
                 ? "La configuration de sauvegarde n'a pas été trouvée"
                 : "The backup configuration was not found");
         }
+        
+        public void ConfigBadName()
+        {
+            Console.WriteLine(_language == Language.French
+                ? "Le nom de configuration est vide ou existe déjà"
+                : "The name of the configuration is blank or already exist");
+        }
 
         public void DisplayCreateMenu()
         {
@@ -336,7 +357,9 @@ namespace EasySaveConsole.View
                 : "List of backup configurations: ");
             if (configurations.Count == 0)
             {
-                Console.WriteLine("");
+                Console.WriteLine(_language == Language.French
+                ? "Aucune configuration actuelle"
+                : "No current configuration");
             }
         }
        
