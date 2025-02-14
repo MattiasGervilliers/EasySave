@@ -1,17 +1,12 @@
-﻿namespace EasySaveGUI
+﻿using EasySaveGUI.ViewModels.Base;
+using System.Windows.Controls;
+
+namespace EasySaveGUI
 {
     public class NavigationService
     {
-        public event Action<object>? CurrentViewChanged;
-        private object? _currentView;
-        public object? CurrentView
-        {
-            get => _currentView;
-            set
-            {
-                _currentView = value;
-                CurrentViewChanged?.Invoke(value);
-            }
-        }
+        private Action<ViewModelBase>? _navigate;
+        public void Configure(Action<ViewModelBase> navigate) => _navigate = navigate;
+        public void Navigate(ViewModelBase viewModel) => _navigate?.Invoke(viewModel);
     }
 }
