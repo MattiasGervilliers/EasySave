@@ -12,6 +12,7 @@ namespace BackupEngine
         public Chemin SourcePath { get; set; }
         public Chemin DestinationPath { get; set; }
         public BackupType BackupType { get; set; }
+        public bool Encrypt { get; set; }
 
         public void FromJson(string json)
         {
@@ -22,6 +23,7 @@ namespace BackupEngine
                 SourcePath = jsonConfiguration.SourcePath;
                 DestinationPath = jsonConfiguration.DestinationPath;
                 BackupType = jsonConfiguration.BackupType;
+                Encrypt = jsonConfiguration.Encrypt;
             }
         }
 

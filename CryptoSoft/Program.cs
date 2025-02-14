@@ -9,19 +9,20 @@ namespace CryptoSoft
 
         static int Main(string[] args)
         {
+
             int returnValue = 0;
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
             try
             {
-                if (args[2] == "0")
+                if (args[2] == "True")
                 {
                     Encoder.Encrypt(args[0], args[1]);
                 }
-                else if (args[2] == "1")
+                else 
                 {
-                    Encoder.Decrypt(args[0]);
+                    //Encoder.Decrypt(args[0]);
                 }
 
             }

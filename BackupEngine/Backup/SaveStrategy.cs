@@ -8,6 +8,7 @@ namespace BackupEngine.Backup
         public event EventHandler<TransferEvent> Transfer;
         public event EventHandler<StateEvent> StateUpdated;
         protected readonly BackupConfiguration Configuration = configuration;
+        public ITransferStrategy TransferStrategy;
 
         public abstract void Save(string uniqueDestinationPath);
 

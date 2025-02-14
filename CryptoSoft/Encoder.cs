@@ -7,7 +7,7 @@ namespace CryptoSoft
 {
     internal class Encoder
     {
-        public static string key = "lmskdjfglmsdj";
+        public static string key = "azertyuiopaze";
         public static string binaryKey = "";
         public Encoder()
         {
@@ -16,11 +16,7 @@ namespace CryptoSoft
 
         public static void Encrypt(string source, string destination)
         {
-            if (!File.Exists(source))
-            {
-                Console.WriteLine($"Erreur : le fichier source '{source}' n'existe pas.");
-                return;
-            }
+
 
             byte[] keyBytes = Encoding.UTF8.GetBytes(key);
             int keyLength = keyBytes.Length;
@@ -57,7 +53,46 @@ namespace CryptoSoft
             }
         }
 
+        public static void EEncrypt(FileStream sourceStream, FileStream destStream)
+        {
 
+
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+            int keyLength = keyBytes.Length;
+            try
+            {
+                // Ouvrir les streams en mode lecture et écriture
+                using (sourceStream)
+                using (destStream)
+                {
+
+                    byte[] buffer = new byte[4096]; // Taille de buffer pour lecture/écriture par blocs
+                    int bytesRead;
+                    int keyIndex = 0;
+
+                    while ((bytesRead = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+
+                        // Appliquer XOR pour chiffrer le buffer
+                        for (int i = 0; i < bytesRead; i++)
+                        {
+
+                            buffer[i] ^= keyBytes[keyIndex % keyLength]; // XOR avec la clé
+                            keyIndex++;
+                        }
+
+                        // Écrire les données chiffrées
+                        destStream.Write(buffer, 0, bytesRead);
+                    }
+                }
+
+                Console.WriteLine($"Fichier chiffré avec succès ");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Erreur lors du chiffrement : {e.Message}");
+            }
+        }
 
         public static void Decrypt(string source, string destination)
         {

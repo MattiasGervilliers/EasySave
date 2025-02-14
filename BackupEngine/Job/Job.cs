@@ -14,8 +14,7 @@ namespace BackupEngine.Job
             switch (Configuration.BackupType)
             {
                 case BackupType.Full:
-                    //FileManager = new FileManager(new FullSaveStrategy(Configuration));
-                    FileManager = new FileManager(new CryptStrategy(Configuration.SourcePath,Configuration.DestinationPath));
+                    FileManager = new FileManager(new FullSaveStrategy(Configuration));
                     break;
                 case BackupType.Differential:
                     FileManager = new FileManager(new DifferentialSaveStrategy(Configuration));

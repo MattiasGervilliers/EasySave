@@ -85,12 +85,13 @@ namespace EasySaveConsole.View
                             SourcePath = new Chemin(Console.ReadLine() ?? "");
                         }
                         BackupType backupType = AskBackupType();
-                        BackupConfiguration backupConfiguration = new BackupConfiguration // fa
+                        BackupConfiguration backupConfiguration = new BackupConfiguration 
                         {
                             BackupType = backupType,
                             DestinationPath = DestinationPath,
                             SourcePath = SourcePath,
-                            Name = Name
+                            Name = Name,
+                            Encrypt = AskEncryptionPreference()
                         };
                         _saveController.UpdateConfiguration(backupConfiguration);
                         _saveController.Execute();
@@ -159,7 +160,6 @@ namespace EasySaveConsole.View
                         {
                             DisplayBackupConfiguration(config);
                         }
-                        Crypt
                         break;
                     case "5":
                         UpdateLanguage();
@@ -330,6 +330,34 @@ namespace EasySaveConsole.View
             Console.WriteLine(_language == Language.French
                 ? "Veuillez entrer le dossier cible où vous souhaitez sauvegarder : "
                 : "Please enter the target folder where you want to save: ");
+        }
+        public bool AskEncryptionPreference()
+        {
+            Console.WriteLine(_language == Language.French
+                ? "Voulez-vous chiffrer votre sauvegarde ? (oui/non)"
+                : "Do you want to encrypt your backup? (yes/no)");
+            Console.Write("Votre choix / Your choice: ");
+
+            while (true)
+            {
+                string input = Console.ReadLine().Trim().ToLower();
+
+                if (input == "oui" || input == "yes")
+                    return true;
+                else if (input == "non" || input == "no")
+                    return false;
+                else
+                {
+                    if (_language == Language.French)
+                    {
+                        Console.WriteLine("Entrée invalide. Veuillez répondre par 'oui' ou 'non'.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid entry. Please answer 'yes' or 'no'.");
+                    }
+                }
+            }
         }
 
         public BackupType AskBackupType()

@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace BackupEngine.Backup
 {
-    internal interface ITransferStrategy
+    public interface ITransferStrategy
     {
-        public void TrasferFile(Chemin cheminSource, Chemin cheminDestination)
-        {
-
-        }
+        public void TransferFile(string cheminSource, string cheminDestination);
     }
 }
