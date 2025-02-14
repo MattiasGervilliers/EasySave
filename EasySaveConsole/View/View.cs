@@ -205,10 +205,10 @@ namespace EasySaveConsole.View
             Console.WriteLine(_language == Language.French
                 ? $"Nom: {configuration.Name} --- Dossier source: {configuration.SourcePath.GetAbsolutePath()} " +
                   $"--- Dossier de destination: {configuration.DestinationPath.GetAbsolutePath()} " +
-                  $"--- Sauvegarde {configuration.BackupType}"
+                  $"--- Sauvegarde {configuration.BackupType}" + $"--- Encryption {configuration.Encrypt}"
                 : $"Name: {configuration.Name} --- Source folder: {configuration.SourcePath.GetAbsolutePath()} " +
                   $"--- Destination folder: {configuration.DestinationPath.GetAbsolutePath()} " +
-                  $"--- Backup {configuration.BackupType}");
+                  $"--- Backup {configuration.BackupType}" + $"--- Encryption {configuration.Encrypt}");
         }
         public void DisplayDeleteSuccess()
         {
