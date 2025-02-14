@@ -12,4 +12,9 @@
     <Folder Include="Model\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BackupEngine\BackupEngine.csproj" />
+    <ProjectReference Include="..\LanguageLib\LanguageLib.csproj" />
+  </ItemGroup>
+
 </Project>
