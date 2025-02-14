@@ -9,8 +9,8 @@ namespace BackupEngine
     public class BackupConfiguration : IJsonSerializable
     {
         public string Name { get; set; }
-        public Chemin SourcePath { get; set; }
-        public Chemin DestinationPath { get; set; }
+        public CustomPath SourcePath { get; set; }
+        public CustomPath DestinationPath { get; set; }
         public BackupType BackupType { get; set; }
 
         public void FromJson(string json)
