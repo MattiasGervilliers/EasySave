@@ -14,11 +14,9 @@ namespace BackupEngine.Backup
     {
         public CopyStrategy() 
         {
-            Console.WriteLine("initialisation de la copie");
         }
         public void TransferFile(string file, string destFile)
         {
-            Console.WriteLine("transfert en cours ...");
 
             // Copy file using filestream to avoid file locking
             using (FileStream sourceStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -28,7 +26,6 @@ namespace BackupEngine.Backup
                     sourceStream.CopyTo(destStream);
                 }
             }
-            Console.WriteLine("transfert fini");
         }
 
     }

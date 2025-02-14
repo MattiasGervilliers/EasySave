@@ -32,6 +32,14 @@ namespace BackupEngine.Backup
 
         private void DifferentialSave(string uniqueDestinationPath, string previousSavePath)
         {
+            if (Configuration.Encrypt)
+            {
+                TransferStrategy = new CryptStrategy();
+            }
+            else
+            {
+                TransferStrategy = new CopyStrategy();
+            }
             string sourcePath = Configuration.SourcePath.GetAbsolutePath();
 
             if (!Directory.Exists(sourcePath))
@@ -79,13 +87,8 @@ namespace BackupEngine.Backup
                 if (fileHasChanged)
                 {
                     DateTime start = DateTime.Now;
-
-                    using (FileStream sourceStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                    using (FileStream destStream = new FileStream(destFile, FileMode.Create, FileAccess.Write, FileShare.None))
-                    {
-                        sourceStream.CopyTo(destStream);
-                    }
-
+                    // transfer the file
+                    TransferStrategy.TransferFile(file, destFile);
                     DateTime end = DateTime.Now;
                     TimeSpan duration = end - start;
 

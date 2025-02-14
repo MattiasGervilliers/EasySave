@@ -32,7 +32,6 @@ namespace BackupEngine.Backup
 
                 using (Process process = new Process { StartInfo = psi })
                 {
-                    Console.WriteLine(psi.Arguments);
                     process.Start();
 
                     // Lire la sortie du programme (utile pour debug)
@@ -40,9 +39,10 @@ namespace BackupEngine.Backup
                     string error = process.StandardError.ReadToEnd();
 
                     process.WaitForExit(); // Attendre la fin du processus
-
+                    /*
                     Console.WriteLine($"CryptoSoft terminé avec code {process.ExitCode}");
                     Console.WriteLine($"Sortie : {output}");
+                     */
 
                     if (!string.IsNullOrEmpty(error))
                     {
