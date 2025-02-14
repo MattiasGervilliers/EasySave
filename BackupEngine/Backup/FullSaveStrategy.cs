@@ -3,15 +3,24 @@ using System.IO;
 using BackupEngine.State;
 using System.Linq;
 using BackupEngine.Log;
+using System.Text;
+using System.Diagnostics;
 
 namespace BackupEngine.Backup
 {
     public class FullSaveStrategy : SaveStrategy
     {
         public FullSaveStrategy(BackupConfiguration configuration) : base(configuration) { }
-
         public override void Save(string uniqueDestinationPath)
         {
+            if (Configuration.Encrypt)
+            {
+                TransferStrategy = new CryptStrategy();
+            }
+            else
+            {
+                TransferStrategy = new CopyStrategy();
+            }
             string sourcePath = Configuration.SourcePath.GetAbsolutePath();
 
             if (!Directory.Exists(sourcePath))
@@ -48,16 +57,7 @@ namespace BackupEngine.Backup
                 try
                 {
                     DateTime start = DateTime.Now;
-
-                    // Copy file using filestream to avoid file locking
-                    using (FileStream sourceStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                    {
-                        using (FileStream destStream = new FileStream(destFile, FileMode.Create, FileAccess.Write, FileShare.None))
-                        {
-                            sourceStream.CopyTo(destStream);
-                        }
-                    }
-
+                    TransferStrategy.TransferFile(file, destFile);
                     DateTime end = DateTime.Now;
                     TimeSpan duration = end - start;
 
@@ -103,5 +103,6 @@ namespace BackupEngine.Backup
 
             Console.WriteLine($"Sauvegarde complète effectuée dans : {uniqueDestinationPath}");
         }
+        
     }
 }

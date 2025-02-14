@@ -6,16 +6,34 @@
         xmlns:vm="clr-namespace:EasySaveGUI.ViewModels"
         mc:Ignorable="d"
         Title="EasySave" Height="450" Width="800">
-
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
 
     <Grid>
         <DockPanel>
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="10">
-                <Button Content="Home" Command="{Binding NavigateHomeCommand}" Margin="5"/>
-                <Button Content="Settings" Command="{Binding NavigateSettingsCommand}" Margin="5"/>
+            <StackPanel DockPanel.Dock="Top">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Image Source="..\assets\EasySave_logo.png"/>
+                        <TextBlock Text="EasySave" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="Home" Command="{Binding NavigateHomeCommand}" Margin="5"/>
+                        <Button Content="Settings" Command="{Binding NavigateSettingsCommand}" Margin="5"/>
+                    </StackPanel>
+                </Grid>
             </StackPanel>
             <ContentControl Content="{Binding CurrentView}" DockPanel.Dock="Bottom" Margin="10"/>
         </DockPanel>

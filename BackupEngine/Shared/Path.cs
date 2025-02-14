@@ -17,9 +17,9 @@ namespace BackupEngine.Shared
             _path = path;
         }
 
-        private bool PathExists(string TestedPath)
+        public bool PathExists()
         {
-            return Directory.Exists(TestedPath);
+            return Directory.Exists(_path);
         }
 
         private bool CheckPathValidity(string TestedPath)
