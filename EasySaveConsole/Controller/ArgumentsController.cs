@@ -11,7 +11,36 @@ namespace EasySaveConsole.Controller
         /// </summary>
         public void Execute()
         {
-            LaunchWithArguments();
+            if (IsHelpRequested()) // Vérifie si l'argument "-help" est passé
+            {
+                DisplayHelp(); // Affiche l'aide
+            }
+            else
+            {
+                LaunchWithArguments(); // Sinon, lance le programme avec les arguments
+            }
+        }
+
+        // Méthode pour vérifier si l'argument "-help" est passé
+        private bool IsHelpRequested()
+        {
+            return _args.Contains("-help");
+        }
+
+        // Méthode pour afficher la documentation ou l'aide
+        private void DisplayHelp()
+        {
+            Console.WriteLine("=== EasySave ===");
+            Console.WriteLine("Usage: console.exe <arguments>");
+            Console.WriteLine();
+            Console.WriteLine("Arguments:");
+            Console.WriteLine("  -help                 Affiche cette documentation.");
+            Console.WriteLine("  <backupIds>           Liste des ID de sauvegarde à lancer. Utilisez des numéros séparés par des points-virgules (par exemple, 1;3) ou des plages (par exemple, 1-3).");
+            Console.WriteLine();
+            Console.WriteLine("Exemple:");
+            Console.WriteLine("  EasySaveConsole.exe 1;3");
+            Console.WriteLine("  EasySaveConsole.exe 1-3");
+            Console.WriteLine("===========================================");
         }
         /// <summary>
         /// Parses backup arguments and launches the corresponding configurations.
@@ -37,6 +66,7 @@ namespace EasySaveConsole.Controller
 
             BackupModel.LaunchConfigs(configs);
         }
+        
         /// <summary>
         /// Updates the arguments used for launching backups.
         /// </summary>
