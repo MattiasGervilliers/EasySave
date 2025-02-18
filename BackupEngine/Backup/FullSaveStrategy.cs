@@ -5,6 +5,7 @@ using System.Linq;
 using BackupEngine.Log;
 using System.Text;
 using System.Diagnostics;
+using BackupEngine.Settings;
 
 namespace BackupEngine.Backup
 {
@@ -13,9 +14,9 @@ namespace BackupEngine.Backup
         public FullSaveStrategy(BackupConfiguration configuration) : base(configuration) { }
         public override void Save(string uniqueDestinationPath)
         {
-            if (Configuration.Encrypt)
+            if (Configuration.EncryptionKey != "")
             {
-                TransferStrategy = new CryptStrategy("test");
+                TransferStrategy = new CryptStrategy(Configuration.EncryptionKey);
             }
             else
             {
