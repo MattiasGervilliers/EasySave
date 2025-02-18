@@ -1,6 +1,5 @@
 ﻿using BackupEngine;
-using BackupEngine.Job;
-using BackupEngine.Settings;
+using EasySaveGUI.Models;
 using EasySaveGUI.ViewModels.Base;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -9,8 +8,8 @@ namespace EasySaveGUI.ViewModels
 {
     public class HomeViewModel : ViewModelBase
     {
-        private readonly SettingsRepository _settingsRepository;
-        private readonly JobManager _jobManager;
+        private readonly SettingsModel _settingsModel = new SettingsModel();
+        private readonly BackupModel _backupModel = new BackupModel();
         public ObservableCollection<BackupConfiguration> BackupConfigurations { get; set; }
 
         // Selected configurations
@@ -22,9 +21,7 @@ namespace EasySaveGUI.ViewModels
 
         public HomeViewModel()
         {
-            _settingsRepository = new SettingsRepository();
-            _jobManager = new JobManager();
-            BackupConfigurations = new ObservableCollection<BackupConfiguration>(_settingsRepository.GetConfigurations());
+            BackupConfigurations = new ObservableCollection<BackupConfiguration>(_settingsModel.GetConfigurations());
             // Initialize SelectedConfigurations
             SelectedConfigurations = new ObservableCollection<BackupConfiguration>();
 
@@ -38,7 +35,7 @@ namespace EasySaveGUI.ViewModels
         {
             if (SelectedConfigurations.Any())
             {
-                _jobManager.LaunchBackup(SelectedConfigurations.ToList());
+                _backupModel.LaunchBackup(SelectedConfigurations.ToList());
             }
         }
 
@@ -47,7 +44,7 @@ namespace EasySaveGUI.ViewModels
         {
             if (backupConfiguration is BackupConfiguration configuration)
             {
-                _jobManager.LaunchBackup(configuration);
+                _backupModel.LaunchBackup(configuration);
             }
         }
     }
