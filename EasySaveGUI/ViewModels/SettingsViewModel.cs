@@ -1,21 +1,17 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using BackupEngine.Settings;
-using BackupEngine.Shared;
+using EasySaveGUI.Models;
 using EasySaveGUI.ViewModels.Base;
-using LogLib;
 
 namespace EasySaveGUI.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
-        private readonly SettingsRepository _settingsRepository;
+        private readonly SettingsModel _settingsModel;
         private string _language;
         private string _logPath;
         private string _statePath;
         private string _logType;
-
-        public string WelcomeMessage { get; } = "Settings";
 
         public string Language
         {
@@ -28,7 +24,7 @@ namespace EasySaveGUI.ViewModels
                 // Convertir la langue sélectionnée en énumération Language
                 if (Enum.TryParse(value, out Language lang))
                 {
-                    _settingsRepository.UpdateLanguage(lang);
+                    _settingsModel.UpdateLanguage(lang);
                 }
             }
         }
@@ -67,7 +63,7 @@ namespace EasySaveGUI.ViewModels
 
         public SettingsViewModel()
         {
-            _settingsRepository = new SettingsRepository();
+            _settingsModel = new SettingsModel();
             LoadSettings();
 
             SaveCommand = new CommandHandler(() => SaveSettings(), true);
@@ -75,21 +71,21 @@ namespace EasySaveGUI.ViewModels
 
         private void LoadSettings()
         {
-            var language = _settingsRepository.GetLanguage();
+            var language = _settingsModel.GetLanguage();
             Language = language.ToString();  
-            LogPath = _settingsRepository.GetLogPath().ToString();
-            StatePath = _settingsRepository.GetStatePath().ToString();
-            LogType = _settingsRepository.GetLogType().ToString();
+            LogPath = _settingsModel.GetLogPath();
+            StatePath = _settingsModel.GetStatePath();
+            LogType = _settingsModel.GetLogType();
         }
 
         private void SaveSettings()
         {
-            _settingsRepository.UpdateLanguage((Language)Enum.Parse(typeof(Language), Language));
-            _settingsRepository.UpdateLogPath(new CustomPath(LogPath));
-            _settingsRepository.UpdateStatePath(StatePath);
+            _settingsModel.UpdateLanguage((Language)Enum.Parse(typeof(Language), Language));
+            _settingsModel.UpdateLogPath(LogPath);
+            _settingsModel.UpdateStatePath(StatePath);
 
             // Mise à jour du type de log avec la nouvelle fonction
-            _settingsRepository.UpdateLogType((LogType)Enum.Parse(typeof(LogType), LogType));
+            _settingsModel.UpdateLogType(LogType);
 
             // Notification des changements de propriétés
             OnPropertyChanged(nameof(Language));

@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="source">Chemin source</sys:String>
+    <sys:String x:Key="destination">Chemin de destination</sys:String>
+    <sys:String x:Key="multipleLaunch">Lancer les configurations sélectionnées</sys:String>
+    <sys:String x:Key="full">Sauvegarde complète</sys:String>
+    <sys:String x:Key="differential">Sauvegarde différentielle</sys:String>
+</ResourceDictionary>

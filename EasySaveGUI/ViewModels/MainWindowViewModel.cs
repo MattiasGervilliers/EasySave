@@ -1,6 +1,4 @@
 ﻿using EasySaveGUI.ViewModels.Base;
-using EasySaveGUI.Views;
-using System.Windows.Controls;
 
 namespace EasySaveGUI.ViewModels
 {
