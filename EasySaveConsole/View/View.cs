@@ -93,7 +93,7 @@ namespace EasySaveConsole.View
                             DestinationPath = DestinationPath,
                             SourcePath = SourcePath,
                             Name = Name,
-                            Encrypt = AskEncryptionPreference()
+                            EncryptionKey = AskEncryptionKey()
                         };
                         _saveController.UpdateConfiguration(backupConfiguration);
                         _saveController.Execute();
@@ -220,10 +220,10 @@ namespace EasySaveConsole.View
             Console.WriteLine(_language == Language.French
                 ? $"Nom: {configuration.Name} --- Dossier source: {configuration.SourcePath.GetAbsolutePath()} " +
                   $"--- Dossier de destination: {configuration.DestinationPath.GetAbsolutePath()} " +
-                  $"--- Sauvegarde {configuration.BackupType}" + $"--- Encryption {configuration.Encrypt}"
+                  $"--- Sauvegarde {configuration.BackupType}" 
                 : $"Name: {configuration.Name} --- Source folder: {configuration.SourcePath.GetAbsolutePath()} " +
                   $"--- Destination folder: {configuration.DestinationPath.GetAbsolutePath()} " +
-                  $"--- Backup {configuration.BackupType}" + $"--- Encryption {configuration.Encrypt}");
+                  $"--- Backup {configuration.BackupType}" );
         }
         /// <summary>
         /// Displays a success message when a configuration is deleted.
@@ -371,7 +371,12 @@ namespace EasySaveConsole.View
                 ? "Le nom de configuration est vide ou existe déjà"
                 : "The name of the configuration is blank or already exist");
         }
-  
+        public void AskBackupConfigurationCreateName()
+        {
+            Console.WriteLine(_language == Language.French
+                ? "Rentrez le nom de la configuration de sauvegarde à créer :"
+                : "Enter the name of the backup configuration to create");
+        }
         public void DisplayCreateMenu()
         {
             Console.WriteLine(_language == Language.French
@@ -402,34 +407,42 @@ namespace EasySaveConsole.View
         /// <summary>
         /// Asks the user whether they want to encrypt the backup.
         /// </summary>
-        public bool AskEncryptionPreference()
+
+        internal string AskEncryptionKey()
         {
             Console.WriteLine(_language == Language.French
-                ? "Voulez-vous chiffrer votre sauvegarde ? (oui/non)"
-                : "Do you want to encrypt your backup? (yes/no)");
-            Console.Write("Votre choix / Your choice: ");
+                ? "Voulez-vous chiffrer vos données ? (oui/non) : "
+                : "Do you want to encrypt your data? (yes/no) : ");
 
-            while (true)
+            string choice;
+            do
             {
-                string input = Console.ReadLine().Trim().ToLower();
+                choice = Console.ReadLine().Trim().ToLower();
+            } while (choice != "oui" && choice != "non" && choice != "yes" && choice != "no");
 
-                if (input == "oui" || input == "yes")
-                    return true;
-                else if (input == "non" || input == "no")
-                    return false;
-                else
+            string encryptionKey = "";
+
+            if (choice == "oui" || choice == "yes")
+            {
+                Console.WriteLine(_language == Language.French
+                    ? "Veuillez entrer la clé de chiffrement de vos sauvegardes : "
+                    : "Please enter the encryption key for your backups : ");
+
+                while (!Regex.IsMatch(encryptionKey = Console.ReadLine(), "^[a-zA-Z]*$"))
                 {
-                    if (_language == Language.French)
-                    {
-                        Console.WriteLine("Entrée invalide. Veuillez répondre par 'oui' ou 'non'.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid entry. Please answer 'yes' or 'no'.");
-                    }
+                    Console.WriteLine(_language == Language.French
+                        ? "Erreur : Veuillez entrer uniquement des lettres (A-Z, a-z)."
+                        : "Error: Please enter only letters (A-Z, a-z).");
+                    Console.Write("Votre choix / Your choice: ");
                 }
             }
+
+            Console.WriteLine(_language == Language.French
+                ? "Configuration terminée."
+                : "Configuration complete.");
+            return encryptionKey;
         }
+
         /// <summary>
         /// Asks the user to choose a backup type (full or incremental).
         /// </summary>

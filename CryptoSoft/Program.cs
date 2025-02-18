@@ -9,16 +9,15 @@ namespace CryptoSoft
 
         static int Main(string[] args)
         {
+            Console.WriteLine("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
             int returnValue = 0;
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-
             try
             {
                 if (args[2] == "True")
                 {
-                    Encoder.Encrypt(args[0], args[1]);
+
+                    Encoder.Encrypt(args[0], args[1], args[3]);
                 }
                 else 
                 {
@@ -30,11 +29,6 @@ namespace CryptoSoft
             {
                 return -1;
             }
-
-
-            stopWatch.Stop();
-            int elapsedTime = (int)stopWatch.ElapsedMilliseconds;
-            Console.WriteLine(elapsedTime);
             return returnValue;
         }
     }

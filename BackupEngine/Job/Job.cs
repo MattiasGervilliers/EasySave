@@ -6,7 +6,7 @@ namespace BackupEngine.Job
     {
         private BackupConfiguration Configuration { get; set; }
         private FileManager FileManager { get; set; }
-        private CryptStrategy _cryptStrategy = new CryptStrategy();
+        private CryptStrategy _cryptStrategy = new CryptStrategy("test");
 
         public Job(BackupConfiguration configuration)
         {

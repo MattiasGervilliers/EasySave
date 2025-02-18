@@ -78,6 +78,11 @@ namespace BackupEngine.Settings
             Settings.Language = language;
             SaveSettings();
         }
+        public void UpdateEncryptionKey(String key)
+        {
+            Settings._encryptionKey = key;
+            SaveSettings();
+        }
 
         public void UpdateLogPath(CustomPath logPath)
         {
