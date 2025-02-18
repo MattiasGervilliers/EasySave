@@ -18,7 +18,7 @@
     <Grid>
         <DockPanel>
             <StackPanel DockPanel.Dock="Top">
-                <Grid Margin="0,5,0,0">
+                <Grid Margin="0,5,0,5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="28"/>
                     </Grid.RowDefinitions>
@@ -42,6 +42,7 @@
                     </StackPanel>
 
                 </Grid>
+                <Separator Height="2" HorizontalAlignment="Stretch" Background="LightGray"/>
             </StackPanel>
             <ContentControl Content="{Binding CurrentView}" DockPanel.Dock="Bottom" Margin="10"/>
         </DockPanel>
