@@ -17,12 +17,14 @@ namespace BackupEngine.Backup
         private string _extensions;
         public CryptStrategy(string key, HashSet<string> extensions)
         {
+            /*
             _key = new NetworkCredential("", key).SecurePassword;
             if (extensions == null)
             {
                 _extensions =  "";
             }
             _extensions = string.Join(", ", extensions);
+             */
         }
         public void TransferFile(string source, string destination)
         {
@@ -51,7 +53,8 @@ namespace BackupEngine.Backup
                 ProcessStartInfo psi = new ProcessStartInfo
                 {
                     FileName = "\"C:\\Users\\Nino\\source\\repos\\EasySave\\CryptoSoft\\bin\\Debug\\net8.0\\CryptoSoft.exe\"",
-                    Arguments = $"\"{source}\" \"{destination}\" {encrypt} \" {encryptionkey} \" {extensions}",
+                    Arguments = $"\"{source}\" \"{destination} \" True",
+                    //Arguments = $"\"{source}\" \"{destination}\" {encrypt} \" {encryptionkey} \" {extensions}",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,

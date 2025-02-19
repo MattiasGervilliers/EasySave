@@ -9,15 +9,14 @@ namespace CryptoSoft
 
         static int Main(string[] args)
         {
-            Console.WriteLine("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-
+            Console.WriteLine("voici les arg : "+args[0]+", " + args[1]);
             int returnValue = 0;
             try
             {
                 if (args[2] == "True")
                 {
 
-                    Encoder.Encrypt(args[0], args[1], args[3]);
+                    Encoder.Encrypt(args[0], args[1]);
                 }
                 else 
                 {
