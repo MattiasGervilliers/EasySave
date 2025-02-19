@@ -12,6 +12,8 @@ namespace EasySaveGUI.ViewModels
         private string _logPath;
         private string _statePath;
         private string _logType;
+        
+        public string WelcomeMessage { get; } = "Settings";
 
         public string Language
         {

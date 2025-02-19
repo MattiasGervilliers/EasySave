@@ -12,7 +12,7 @@ namespace BackupEngine
         public CustomPath SourcePath { get; set; }
         public CustomPath DestinationPath { get; set; }
         public BackupType BackupType { get; set; }
-        public string EncryptionKey { get; set; }
+        public string? EncryptionKey { get; set; }
 
         public void FromJson(string json)
         {
