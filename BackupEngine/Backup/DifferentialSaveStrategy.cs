@@ -44,7 +44,7 @@ namespace BackupEngine.Backup
         {
             if (Configuration.EncryptionKey != "")
             {
-                TransferStrategy = new CryptStrategy(Configuration.EncryptionKey);
+                TransferStrategy = new CryptStrategy(Configuration.EncryptionKey,Configuration.ExtensionsToSave);
             }
             else
             {
