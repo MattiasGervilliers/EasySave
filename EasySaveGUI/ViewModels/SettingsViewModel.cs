@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using BackupEngine.Settings;
 using BackupEngine.Shared;
 using EasySaveGUI.ViewModels.Base;
 using LogLib;
+using Microsoft.WindowsAPICodePack.Dialogs;  // Nécessaire pour le FolderPicker
+using System.IO;
 
 namespace EasySaveGUI.ViewModels
 {
@@ -17,6 +20,7 @@ namespace EasySaveGUI.ViewModels
 
         public string WelcomeMessage { get; } = "Settings";
 
+        // Propriétés de données
         public string Language
         {
             get => _language;
@@ -24,12 +28,6 @@ namespace EasySaveGUI.ViewModels
             {
                 _language = value;
                 OnPropertyChanged(nameof(Language));
-
-                // Convertir la langue sélectionnée en énumération Language
-                if (Enum.TryParse(value, out Language lang))
-                {
-                    _settingsRepository.UpdateLanguage(lang);
-                }
             }
         }
 
@@ -63,7 +61,17 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
+        // Liste des langues disponibles
+        public List<string> AvailableLanguages { get; } = new List<string>
+        {
+            "English", "French"
+        };
+
+        public List<string> AvailableLogTypes { get; } = new List<string> { "Json", "Xml" };
+
         public ICommand SaveCommand { get; }
+        public ICommand BrowseLogPathCommand { get; }
+        public ICommand BrowseStatePathCommand { get; }
 
         public SettingsViewModel()
         {
@@ -71,15 +79,45 @@ namespace EasySaveGUI.ViewModels
             LoadSettings();
 
             SaveCommand = new CommandHandler(() => SaveSettings(), true);
+
+            // Initialisation des commandes pour ouvrir l'explorateur
+            BrowseLogPathCommand = new CommandHandler(() => BrowseLogPath(), true);
+            BrowseStatePathCommand = new CommandHandler(() => BrowseStatePath(), true);
+        }
+
+        private void BrowseLogPath()
+        {
+            var dialog = new CommonOpenFileDialog
+            {
+                IsFolderPicker = true  // Spécifie que c'est un explorateur de dossiers
+            };
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                LogPath = dialog.FileName;  // Met à jour la propriété LogPath avec le chemin choisi
+            }
+        }
+
+        private void BrowseStatePath()
+        {
+            var dialog = new CommonOpenFileDialog
+            {
+                IsFolderPicker = true
+            };
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                StatePath = dialog.FileName;  // Met à jour la propriété StatePath avec le chemin choisi
+            }
         }
 
         private void LoadSettings()
         {
             var language = _settingsRepository.GetLanguage();
-            Language = language.ToString();  
+            Language = language.ToString();
             LogPath = _settingsRepository.GetLogPath().ToString();
             StatePath = _settingsRepository.GetStatePath().ToString();
-            LogType = _settingsRepository.GetLogType().ToString();
+            LogType = _settingsRepository.GetLogType().ToString();  // Charge correctement le type de log
         }
 
         private void SaveSettings()
@@ -88,33 +126,35 @@ namespace EasySaveGUI.ViewModels
             _settingsRepository.UpdateLogPath(new CustomPath(LogPath));
             _settingsRepository.UpdateStatePath(StatePath);
 
-            // Mise à jour du type de log avec la nouvelle fonction
-            _settingsRepository.UpdateLogType((LogType)Enum.Parse(typeof(LogType), LogType));
+            if (Enum.TryParse(LogType, out LogType logTypeEnum))
+            {
+                _settingsRepository.UpdateLogType(logTypeEnum);
+            }
 
-            // Notification des changements de propriétés
+            // Mise à jour des propriétés après sauvegarde
             OnPropertyChanged(nameof(Language));
             OnPropertyChanged(nameof(LogPath));
             OnPropertyChanged(nameof(StatePath));
             OnPropertyChanged(nameof(LogType));
         }
-
     }
+}
 
-    public class CommandHandler : ICommand
+// Déplacement de la classe CommandHandler en dehors de SettingsViewModel
+public class CommandHandler : ICommand
+{
+    private readonly Action _execute;
+    private readonly bool _canExecute;
+
+    public CommandHandler(Action execute, bool canExecute)
     {
-        private readonly Action _execute;
-        private readonly bool _canExecute;
-
-        public CommandHandler(Action execute, bool canExecute)
-        {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
-
-        public bool CanExecute(object parameter) => _canExecute;
-
-        public void Execute(object parameter) => _execute();
-
-        public event EventHandler CanExecuteChanged;
+        _execute = execute;
+        _canExecute = canExecute;
     }
+
+    public bool CanExecute(object parameter) => _canExecute;
+
+    public void Execute(object parameter) => _execute();
+
+    public event EventHandler CanExecuteChanged;
 }
