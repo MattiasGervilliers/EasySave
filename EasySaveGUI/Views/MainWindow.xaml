@@ -20,24 +20,32 @@
             <StackPanel DockPanel.Dock="Top">
                 <Grid Margin="0,5,0,5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="125"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="62.5"/>
-                        <ColumnDefinition Width="62.5"/>
+                        <ColumnDefinition Width="62.5" />
+                        <ColumnDefinition Width="62.5" />
+                        <ColumnDefinition Width="62.5" />
                         <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Image Source="..\assets\EasySave_logo.png" Margin="0,0,10,0" Width="30" Height="30"/>
-                        <TextBlock Text="EasySave" FontSize="15" VerticalAlignment="Center"/>
+                        <Button Command="{Binding NavigateHomeCommand}" Style="{DynamicResource ButtonStyle}">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Image Source="..\assets\EasySave_logo.png" Margin="0,0,10,0" Width="30" Height="30"/>
+                                <TextBlock Text="EasySave" FontSize="15" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                     <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Content="Home" Style="{DynamicResource ButtonStyle}" Command="{Binding NavigateHomeCommand}" Margin="5,0,5,0"/>
                     </StackPanel>
                     <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="Create" Style="{DynamicResource ButtonStyle}" Command="{Binding NavigateCreateCommand}" Margin="5,0,5,0"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Content="Settings" Style="{DynamicResource ButtonStyle}" Command="{Binding NavigateSettingsCommand}" Margin="5,0,5,0"/>
                     </StackPanel>
 

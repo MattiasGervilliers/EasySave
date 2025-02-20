@@ -2,6 +2,7 @@
 using BackupEngine.Settings;
 using BackupEngine.Shared;
 using LogLib;
+using System.Xml.Linq;
 
 namespace EasySaveGUI.Models
 {
@@ -52,6 +53,24 @@ namespace EasySaveGUI.Models
         public void UpdateLogType(string logType)
         {
             _settingsRepository.UpdateLogType((LogType)Enum.Parse(typeof(LogType), logType));
+        }
+
+        public void CreateConfiguration(
+            string Name, 
+            string SourcePath, 
+            string DestinationPath, 
+            BackupType backupType,
+            string? EncryptionKey
+        )
+        {
+            BackupConfiguration configuration = new BackupConfiguration
+            {
+                Name = Name,
+                SourcePath = new CustomPath(SourcePath),
+                DestinationPath = new CustomPath(DestinationPath),
+                BackupType = backupType,
+                EncryptionKey = EncryptionKey
+            };
         }
     }
 }

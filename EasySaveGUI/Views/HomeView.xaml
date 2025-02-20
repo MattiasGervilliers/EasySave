@@ -50,6 +50,29 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <Style x:Key="PlayButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+                                BorderThickness="2"
+                                Padding="4,4" 
+                                BorderBrush="Transparent" 
+                                CornerRadius="50" 
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="FontWeight" Value="Bold" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
@@ -84,10 +107,9 @@
                             </StackPanel>
                             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Button Content="▶️"
+                                        Style="{StaticResource PlayButton}"
                                         Command="{Binding DataContext.LaunchConfigurationCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                         CommandParameter="{Binding}" 
-                                        Background="Transparent"
-                                        BorderThickness="0"
                                         Height="30"
                                         Width="30"
                                         HorizontalAlignment="Right">
