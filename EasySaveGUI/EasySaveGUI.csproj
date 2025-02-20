@@ -9,7 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Model\" />
+    <Compile Remove="Model\**" />
+    <EmbeddedResource Remove="Model\**" />
+    <None Remove="Model\**" />
+    <Page Remove="Model\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="assets\EasySave_logo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,4 +27,10 @@
     <ProjectReference Include="..\BackupEngine\BackupEngine.csproj" />
     <ProjectReference Include="..\LanguageLib\LanguageLib.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\EasySave_logo.png" />
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties fr_1json__JsonSchema="json" /></VisualStudio></ProjectExtensions>
 </Project>

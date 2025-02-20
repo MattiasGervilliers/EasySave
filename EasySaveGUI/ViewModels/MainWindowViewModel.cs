@@ -1,6 +1,4 @@
 ﻿using EasySaveGUI.ViewModels.Base;
-using EasySaveGUI.Views;
-using System.Windows.Controls;
 
 namespace EasySaveGUI.ViewModels
 {
@@ -15,6 +13,7 @@ namespace EasySaveGUI.ViewModels
 
         public RelayCommand NavigateHomeCommand { get; }
         public RelayCommand NavigateSettingsCommand { get; }
+        public RelayCommand NavigateCreateCommand { get; }
         private readonly NavigationService _navigationService;
 
         public MainWindowViewModel()
@@ -24,6 +23,7 @@ namespace EasySaveGUI.ViewModels
 
             NavigateHomeCommand = new RelayCommand(_ => _navigationService.Navigate(new HomeViewModel()));
             NavigateSettingsCommand = new RelayCommand(_ => _navigationService.Navigate(new SettingsViewModel()));
+            NavigateCreateCommand = new RelayCommand(_ => _navigationService.Navigate(new CreateViewModel()));
 
             _navigationService.Navigate(new HomeViewModel()); // Default view
         }

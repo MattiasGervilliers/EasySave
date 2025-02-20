@@ -59,5 +59,9 @@ namespace EasySaveConsole.Model
         {
             SettingsRepository.UpdateLanguage(language);
         }
+        public static void UpdateEncrytpionKey(string key)
+        {
+            SettingsRepository.UpdateEncryptionKey(key);
+        }
     }
 }

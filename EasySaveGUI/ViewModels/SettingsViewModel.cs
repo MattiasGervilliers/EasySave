@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Input;
 using BackupEngine.Settings;
-using BackupEngine.Shared;
+using EasySaveGUI.Models;
 using EasySaveGUI.ViewModels.Base;
 using LogLib;
 using Microsoft.WindowsAPICodePack.Dialogs;  // Nécessaire pour le FolderPicker
@@ -12,7 +12,7 @@ namespace EasySaveGUI.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
-        private readonly SettingsRepository _settingsRepository;
+        private readonly SettingsModel _settingsModel;
         private string _language;
         private string _logPath;
         private string _statePath;
@@ -29,8 +29,14 @@ namespace EasySaveGUI.ViewModels
             {
                 _language = value;
                 OnPropertyChanged(nameof(Language));
+                // Convertir la langue sélectionnée en énumération Language
+                if (Enum.TryParse(value, out Language lang))
+                {
+                    _settingsModel.UpdateLanguage(lang);
+                }
             }
         }
+        
         public string Theme
         {
             get => _theme;
@@ -87,7 +93,7 @@ namespace EasySaveGUI.ViewModels
 
         public SettingsViewModel()
         {
-            _settingsRepository = new SettingsRepository();
+            _settingsModel = new SettingsModel();
             LoadSettings();
 
             SaveCommand = new CommandHandler(() => SaveSettings(), true);
