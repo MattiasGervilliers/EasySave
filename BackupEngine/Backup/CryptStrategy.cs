@@ -13,54 +13,51 @@ namespace BackupEngine.Backup
 {
     internal class CryptStrategy : ITransferStrategy
     {
-        private SecureString _key;
-        private string _extensions;
-        public CryptStrategy(string key, HashSet<string> extensions)
+        private string _extensionsToCrypt;
+        private string _extensionsPriority;
+        public CryptStrategy(HashSet<string> extensions, HashSet<string> ExtensionPriority)
         {
-            /*
-            _key = new NetworkCredential("", key).SecurePassword;
+            //convert HashSet into string
             if (extensions == null)
             {
-                _extensions =  "";
+                _extensionsToCrypt =  "";
             }
-            _extensions = string.Join(", ", extensions);
-             */
+            _extensionsToCrypt = string.Join(", ", extensions);
+            if (ExtensionPriority == null)
+            {
+                _extensionsPriority = "";
+            }
+            _extensionsPriority = string.Join(", ", ExtensionPriority);
+            //Console.WriteLine("voici la liste des priorité : " + _extensionsPriority);
         }
         public void TransferFile(string source, string destination)
         {
+            //Console.WriteLine("début du transfert avec les priorités suivantes : "+ _extensionsPriority);
             bool encrypt = true;
-            LaunchCryptoSoft(source, destination,encrypt, GetKeyToString(),_extensions);
-
-        }
-        public void UpdateKey(string key)
-        {
-            _key = new NetworkCredential("", key).SecurePassword;
+            //Only launch cryptosoft if the source file extension is in configuration.extension hashset
+            if (_extensionsToCrypt.Contains(Path.GetExtension(source).ToLower()))
+            {
+                LaunchCryptoSoft(source, destination, encrypt);
+            }
         }
         public void UpdateExtensions(string extensions)
         {
-            this._extensions = extensions;
+            this._extensionsToCrypt = extensions;
         }
-        internal string GetKeyToString()
-        {
-            string theString = new NetworkCredential("", _key).Password;
-            return theString;
-
-        }
-        public void LaunchCryptoSoft(string source, string destination, bool encrypt, String encryptionkey, string extensions)
+        public void LaunchCryptoSoft(string source, string destination, bool encrypt)
         {
             try
             {
                 ProcessStartInfo psi = new ProcessStartInfo
                 {
                     FileName = "\"C:\\Users\\Nino\\source\\repos\\EasySave\\CryptoSoft\\bin\\Debug\\net8.0\\CryptoSoft.exe\"",
-                    Arguments = $"\"{source}\" \"{destination} \" True",
-                    //Arguments = $"\"{source}\" \"{destination}\" {encrypt} \" {encryptionkey} \" {extensions}",
+                    Arguments = $"\"{source}\" \"{destination}\" {encrypt}",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
                     CreateNoWindow = true
                 };
-                Console.WriteLine(psi.Arguments);
+                Console.WriteLine("Appel de Cryptosoft avec les arguments suivants : "+psi.Arguments);
                 using (Process process = new Process { StartInfo = psi })
                 {
                     process.Start();

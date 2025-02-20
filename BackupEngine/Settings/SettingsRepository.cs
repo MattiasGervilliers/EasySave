@@ -78,10 +78,14 @@ namespace BackupEngine.Settings
             Settings.Language = language;
             SaveSettings();
         }
-        public void UpdateEncryptionKey(String key)
+        public void UpdateExtensionPriority(HashSet<string> extensionPriority)
         {
-            Settings._encryptionKey = key;
+            Settings.ExtensionPriority = extensionPriority;
             SaveSettings();
+        }
+        public HashSet<string> GetExtensionPriority()
+        {
+            return Settings.ExtensionPriority;
         }
 
         public void UpdateLogPath(CustomPath logPath)

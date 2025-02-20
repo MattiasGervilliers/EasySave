@@ -3,40 +3,57 @@ using System.IO;
 using BackupEngine.State;
 using System.Linq;
 using BackupEngine.Log;
-using System.Text;
-using System.Diagnostics;
+using System.Collections.Generic;
 using BackupEngine.Settings;
 
 namespace BackupEngine.Backup
 {
     public class FullSaveStrategy : SaveStrategy
     {
+        private SettingsRepository SettingsRepository = new SettingsRepository();
+
         public FullSaveStrategy(BackupConfiguration configuration) : base(configuration) { }
+
         public override void Save(string uniqueDestinationPath)
         {
-            if (Configuration.EncryptionKey != "")
+            // Choose the transfer strategy based on encryption settings
+            if (!string.IsNullOrEmpty(Configuration.EncryptionKey))
             {
-                TransferStrategy = new CryptStrategy(Configuration.EncryptionKey, Configuration.ExtensionsToSave);
+                TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, SettingsRepository.GetExtensionPriority());
             }
             else
             {
                 TransferStrategy = new CopyStrategy();
             }
+
             string sourcePath = Configuration.SourcePath.GetAbsolutePath();
 
             if (!Directory.Exists(sourcePath))
             {
-                throw new DirectoryNotFoundException($"Le dossier source '{sourcePath}' n'existe pas.");
+                throw new DirectoryNotFoundException($"The source folder '{sourcePath}' does not exist.");
             }
 
-            // Obtenir les fichiers à sauvegarder
+            // Retrieve all files to be backed up
             string[] files = Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories);
-            int totalFiles = files.Length;
-            long totalSize = files.Sum(file => new FileInfo(file).Length);
+
+            // Load extension priority list
+            HashSet<string> extensionPriority = SettingsRepository.GetExtensionPriority();
+
+            // Order files based on extension priority and depth in the directory structure
+            List<string> orderedFiles = files
+                .OrderBy(file => extensionPriority.Contains(Path.GetExtension(file))
+                    ? extensionPriority.ToList().IndexOf(Path.GetExtension(file))
+                    : int.MaxValue) // Prioritize extensions
+                .ThenBy(file => file.Split(Path.DirectorySeparatorChar).Length) // Prefer shallower directories
+                .ThenBy(file => file) // Ensure stable order
+                .ToList();
+
+            int totalFiles = orderedFiles.Count;
+            long totalSize = orderedFiles.Sum(file => new FileInfo(file).Length);
             int remainingFiles = totalFiles;
             long remainingSize = totalSize;
 
-            // Mettre à jour l'état au début de la sauvegarde
+            // Update the state at the beginning of the backup
             OnStateUpdated(new StateEvent(
                 "Full Backup",
                 "Active",
@@ -48,13 +65,12 @@ namespace BackupEngine.Backup
                 ""
             ));
 
-            // Parcourir chaque fichier et copier
-            foreach (string file in files)
+            // Process each file in the sorted order
+            foreach (string file in orderedFiles)
             {
                 string relativePath = file.Substring(sourcePath.Length + 1);
                 string destFile = Path.Combine(uniqueDestinationPath, relativePath);
                 Directory.CreateDirectory(Path.GetDirectoryName(destFile));
-
                 try
                 {
                     DateTime start = DateTime.Now;
@@ -62,11 +78,11 @@ namespace BackupEngine.Backup
                     DateTime end = DateTime.Now;
                     TimeSpan duration = end - start;
 
-                    // Mise à jour de l'état avec le fichier en cours
+                    // Update remaining file count and size
                     remainingFiles--;
                     remainingSize -= new FileInfo(file).Length;
 
-                    // On envoie l'événement d'état
+                    // Notify state update
                     OnStateUpdated(new StateEvent(
                         "Full Backup",
                         "Active",
@@ -78,19 +94,18 @@ namespace BackupEngine.Backup
                         destFile
                     ));
 
-                    // Créer l'événement de transfert (logique existante)
+                    // Log transfer event
                     TransferEvent transferEvent = new TransferEvent(Configuration, duration, new FileInfo(file), new FileInfo(destFile));
                     OnTransfer(transferEvent);
                 }
                 catch (Exception e)
                 {
-                    // En cas d'erreur lors de la copie
-                    Console.WriteLine($"Erreur lors de la copie du fichier {file} : {e.Message}");
+                    Console.WriteLine($"Error copying file {file}: {e.Message}");
                     OnTransfer(new TransferEvent(Configuration, new TimeSpan(-1), new FileInfo(file), new FileInfo(destFile)));
                 }
             }
 
-            // Mise à jour de l'état à la fin de la sauvegarde
+            // Final state update after backup completion
             OnStateUpdated(new StateEvent(
                 "Full Backup",
                 "Completed",
@@ -102,8 +117,7 @@ namespace BackupEngine.Backup
                 ""
             ));
 
-            Console.WriteLine($"Sauvegarde complète effectuée dans : {uniqueDestinationPath}");
+            Console.WriteLine($"Full backup completed in: {uniqueDestinationPath}");
         }
-        
     }
 }

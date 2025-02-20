@@ -15,9 +15,9 @@ namespace CryptoSoft
         {
             SecureString secureKey = new SecureString();
             Random random = new Random();
-            for (int i = 0; i < 32; i++) // Clé de 32 caractères
+            for (int i = 0; i < 32; i++) 
             {
-                secureKey.AppendChar((char)random.Next(33, 126)); // Caractères imprimables ASCII
+                secureKey.AppendChar((char)random.Next(33, 126)); 
             }
             secureKey.MakeReadOnly();
             return secureKey;
@@ -46,19 +46,19 @@ namespace CryptoSoft
                 using (FileStream sourceStream = new FileStream(source, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 using (FileStream destStream = new FileStream(destination, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    byte[] buffer = new byte[4096];
-                    int bytesRead;
+                    byte[] buffer = new byte[4096]; // lit les données par bloc 
+                    int bytesRead; // bytes lis a chaque itération 
                     int keyIndex = 0;
 
-                    while ((bytesRead = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
+                    while ((bytesRead = sourceStream.Read(buffer, 0, buffer.Length)) > 0) //lit les donnes par bloc de 4096 octet
                     {
-                        for (int i = 0; i < bytesRead; i++)
+                        for (int i = 0; i < bytesRead; i++)// pour chaque octet lu
                         {
-                            buffer[i] ^= keyBytes[keyIndex % keyLength];
+                            buffer[i] ^= keyBytes[keyIndex % keyLength];// XOR avec la clé de chiffrement
                             keyIndex++;
                         }
 
-                        destStream.Write(buffer, 0, bytesRead);
+                        destStream.Write(buffer, 0, bytesRead); // ecriture du bloc chiffré dans le fichier de destinantion
                     }
                 }
 

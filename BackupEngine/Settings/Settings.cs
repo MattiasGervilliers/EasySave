@@ -11,7 +11,7 @@ namespace BackupEngine.Settings
         public CustomPath StatePath { get; set; }
         public List<BackupConfiguration> Configurations { get; set; }
         public LogType LogFormat { get; set; }
-        public string _encryptionKey { get; set; }
+        public HashSet<string> ExtensionPriority { get; set; }
 
         public Settings()
         {
@@ -20,9 +20,8 @@ namespace BackupEngine.Settings
             LogPath = new CustomPath("logs");
             LogFormat = LogType.Json;
             StatePath = new CustomPath("logs/state.json");
-            Random random = new Random();   
-            _encryptionKey=  new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 10)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
+            ExtensionPriority = new HashSet<string>() { ".txt", ".pdf" };
+
         }
 
         public void FromJson(string json)

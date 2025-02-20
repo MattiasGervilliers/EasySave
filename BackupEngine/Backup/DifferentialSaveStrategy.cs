@@ -1,5 +1,6 @@
 ﻿using BackupEngine.Cache;
 using BackupEngine.Log;
+using BackupEngine.Settings;
 using BackupEngine.State;
 
 namespace BackupEngine.Backup
@@ -7,6 +8,7 @@ namespace BackupEngine.Backup
     public class DifferentialSaveStrategy (BackupConfiguration configuration) : SaveStrategy (configuration)
     {
         private DifferentialBackupCacheRepository _cacheRepository = new DifferentialBackupCacheRepository();
+        private SettingsRepository SettingsRepository = new SettingsRepository();
 
         public override void Save(string uniqueDestinationPath)
         {
@@ -44,7 +46,7 @@ namespace BackupEngine.Backup
         {
             if (Configuration.EncryptionKey != "")
             {
-                TransferStrategy = new CryptStrategy(Configuration.EncryptionKey,Configuration.ExtensionsToSave);
+                TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, SettingsRepository.GetExtensionPriority());
             }
             else
             {

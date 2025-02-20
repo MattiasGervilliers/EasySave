@@ -17,7 +17,7 @@ namespace EasySaveConsole.Controller
         }
         public void Execute()
         {
-            BackupModel.UpdateEncrytpionKey(_encryptionKey);
+           // BackupModel.UpdateEncrytpionKey(_encryptionKey);
         }
     }
 }
