@@ -24,7 +24,7 @@
         <!-- Custom Style for ListBoxItem -->
         <Style x:Key="CustomListBoxItemStyle" TargetType="ListBoxItem">
             <Setter Property="Background" Value="White" />
-            <Setter Property="BorderBrush" Value="LightGray" />
+            <Setter Property="BorderBrush" Value="{DynamicResource List}" />
             <Setter Property="BorderThickness" Value="0 0 0 1" />
             <Setter Property="Padding" Value="10" />
             <Setter Property="Foreground" Value="#333333" />
@@ -82,7 +82,7 @@
                      Style="{StaticResource CustomListBoxStyle}"
                      ItemContainerStyle="{StaticResource CustomListBoxItemStyle}"
                      SelectionMode="Extended"
-                     SelectionChanged="ListBox_SelectionChanged">
+                     SelectionChanged="ListBox_SelectionChanged" Background="{DynamicResource List}">
                 <!-- Bind selected items -->
                 <ListBox.ItemTemplate>
                     <DataTemplate>

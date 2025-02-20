@@ -146,13 +146,11 @@ namespace EasySaveGUI.ViewModels
             if (toChangeTheme == "Dark")
             {
                 ResourceDictionary Theme = new ResourceDictionary() { Source = new Uri("../assets/DarkTheme.xaml", UriKind.Relative) };
-
                 App.Current.Resources.MergedDictionaries.Add(Theme);
             }
             else if (toChangeTheme == "Light")
             {
                 ResourceDictionary Theme = new ResourceDictionary() { Source = new Uri("../assets/LightTheme.xaml", UriKind.Relative) };
-
                 App.Current.Resources.MergedDictionaries.Add(Theme);
             }
             else
