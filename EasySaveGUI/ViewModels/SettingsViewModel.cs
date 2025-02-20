@@ -96,11 +96,11 @@ namespace EasySaveGUI.ViewModels
             _settingsModel = new SettingsModel();
             LoadSettings();
 
-            SaveCommand = new CommandHandler(() => SaveSettings(), true);
+            SaveCommand = new RelayCommand(_ => SaveSettings());
 
             // Initialisation des commandes pour ouvrir l'explorateur
-            BrowseLogPathCommand = new CommandHandler(() => BrowseLogPath(), true);
-            BrowseStatePathCommand = new CommandHandler(() => BrowseStatePath(), true);
+            BrowseLogPathCommand = new RelayCommand(_ => BrowseLogPath());
+            BrowseStatePathCommand = new RelayCommand(_ => BrowseStatePath());
         }
 
         private void BrowseLogPath()
@@ -131,26 +131,20 @@ namespace EasySaveGUI.ViewModels
 
         private void LoadSettings()
         {
-            var language = _settingsRepository.GetLanguage();
-            Language = language.ToString();
-            var theme = _settingsRepository.GetTheme();
-            Theme = theme.ToString();
-            LogPath = _settingsRepository.GetLogPath().ToString();
-            StatePath = _settingsRepository.GetStatePath().ToString();
-            LogType = _settingsRepository.GetLogType().ToString();  // Charge correctement le type de log
+            Language = _settingsModel.GetLanguage().ToString();
+            Theme = _settingsModel.GetTheme().ToString();
+            LogPath = _settingsModel.GetLogPath();
+            StatePath = _settingsModel.GetStatePath();
+            LogType = _settingsModel.GetLogType();  // Charge correctement le type de log
         }
 
         private void SaveSettings()
         {
-            _settingsRepository.UpdateLanguage((Language)Enum.Parse(typeof(Language), Language));
-            _settingsRepository.UpdateTheme((Theme)Enum.Parse(typeof(Theme), Theme));
-            _settingsRepository.UpdateLogPath(new CustomPath(LogPath));
-            _settingsRepository.UpdateStatePath(StatePath);
-
-            if (Enum.TryParse(LogType, out LogType logTypeEnum))
-            {
-                _settingsRepository.UpdateLogType(logTypeEnum);
-            }
+            // Mise à jour des propriétés dans le modèle
+            _settingsModel.UpdateLogPath(LogPath);
+            _settingsModel.UpdateStatePath(StatePath);
+            _settingsModel.UpdateLogType(LogType);
+            _settingsModel.UpdateTheme(Theme);
 
             // Mise à jour des propriétés après sauvegarde
             OnPropertyChanged(nameof(Language));
@@ -160,23 +154,4 @@ namespace EasySaveGUI.ViewModels
             OnPropertyChanged(nameof(LogType));
         }
     }
-}
-
-// Déplacement de la classe CommandHandler en dehors de SettingsViewModel
-public class CommandHandler : ICommand
-{
-    private readonly Action _execute;
-    private readonly bool _canExecute;
-
-    public CommandHandler(Action execute, bool canExecute)
-    {
-        _execute = execute;
-        _canExecute = canExecute;
-    }
-
-    public bool CanExecute(object parameter) => _canExecute;
-
-    public void Execute(object parameter) => _execute();
-
-    public event EventHandler CanExecuteChanged;
 }

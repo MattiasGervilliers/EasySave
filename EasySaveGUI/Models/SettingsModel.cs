@@ -55,6 +55,16 @@ namespace EasySaveGUI.Models
             _settingsRepository.UpdateLogType((LogType)Enum.Parse(typeof(LogType), logType));
         }
 
+        public void UpdateTheme(string theme)
+        {
+            _settingsRepository.UpdateTheme((Theme)Enum.Parse(typeof(Theme), theme));
+        }
+
+        public Theme GetTheme()
+        {
+            return _settingsRepository.GetTheme();
+        }
+
         public void CreateConfiguration(
             string Name, 
             string SourcePath, 
