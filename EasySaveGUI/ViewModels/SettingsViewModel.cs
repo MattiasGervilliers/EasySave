@@ -7,6 +7,8 @@ using EasySaveGUI.ViewModels.Base;
 using LogLib;
 using Microsoft.WindowsAPICodePack.Dialogs;  // Nécessaire pour le FolderPicker
 using System.IO;
+using System.Windows;
+using System.Collections;
 
 namespace EasySaveGUI.ViewModels
 {
@@ -138,6 +140,27 @@ namespace EasySaveGUI.ViewModels
             LogType = _settingsModel.GetLogType();  // Charge correctement le type de log
         }
 
+        public void SetTheme()
+        {
+            string toChangeTheme = _theme;
+            if (toChangeTheme == "Dark")
+            {
+                ResourceDictionary Theme = new ResourceDictionary() { Source = new Uri("../assets/DarkTheme.xaml", UriKind.Relative) };
+
+                App.Current.Resources.MergedDictionaries.Add(Theme);
+            }
+            else if (toChangeTheme == "Light")
+            {
+                ResourceDictionary Theme = new ResourceDictionary() { Source = new Uri("../assets/LightTheme.xaml", UriKind.Relative) };
+
+                App.Current.Resources.MergedDictionaries.Add(Theme);
+            }
+            else
+            {
+                throw new InvalidOperationException("name theme problem");
+            }
+        }
+
         private void SaveSettings()
         {
             // Mise à jour des propriétés dans le modèle
@@ -152,6 +175,7 @@ namespace EasySaveGUI.ViewModels
             OnPropertyChanged(nameof(LogPath));
             OnPropertyChanged(nameof(StatePath));
             OnPropertyChanged(nameof(LogType));
+            SetTheme();
         }
     }
 }

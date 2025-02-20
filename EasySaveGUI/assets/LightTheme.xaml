@@ -2,6 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <SolidColorBrush Color="#dcdde1" x:Key="Background"/>
-    <SolidColorBrush Color="#718093" x:Key="Text"/>
+    <SolidColorBrush Color="Black" x:Key="Text"/>
     <SolidColorBrush Color="#fff" x:Key="Card"/>
 </ResourceDictionary>
