@@ -10,6 +10,7 @@ namespace BackupEngine.Settings
         public CustomPath LogPath { get; set; }
         public CustomPath StatePath { get; set; }
         public List<BackupConfiguration> Configurations { get; set; }
+        public Theme Theme { get; set; }
         public LogType LogFormat { get; set; }
         public string _encryptionKey { get; set; }
 
@@ -20,6 +21,7 @@ namespace BackupEngine.Settings
             LogPath = new CustomPath("logs");
             LogFormat = LogType.Json;
             StatePath = new CustomPath("logs/state.json");
+            Theme = Theme.Light;
             Random random = new Random();   
             _encryptionKey=  new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 10)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
@@ -35,6 +37,7 @@ namespace BackupEngine.Settings
                 StatePath = jsonSettings.StatePath;
                 Configurations = jsonSettings.Configurations;
                 LogFormat = jsonSettings.LogFormat;
+                Theme = jsonSettings.Theme;
             }
         }
 

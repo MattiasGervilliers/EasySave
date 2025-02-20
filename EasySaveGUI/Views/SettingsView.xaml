@@ -16,16 +16,35 @@
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" Text="{Binding WelcomeMessage}" />
 
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,100,0,0" Text="Language: " />
-        <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,100,0,0" Text="{Binding Language, Mode=TwoWay}" Width="200"/>
+        <!-- ComboBox pour la selection de la langue -->
+        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,100,0,0" 
+                  ItemsSource="{Binding AvailableLanguages}" 
+                  SelectedItem="{Binding Language, Mode=TwoWay}" Width="200"/>
 
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,150,0,0" Text="Log Path: " />
-        <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,150,0,0" Text="{Binding LogPath, Mode=TwoWay}" Width="200"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,150,0,0">
+            <TextBox Text="{Binding LogPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+            <Button Content="..." Width="30" Command="{Binding BrowseLogPathCommand}" />
+        </StackPanel>
 
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,200,0,0" Text="State Path: " />
-        <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,200,0,0" Text="{Binding StatePath, Mode=TwoWay}" Width="200"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,200,0,0">
+            <TextBox Text="{Binding StatePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+            <Button Content="..." Width="30" Command="{Binding BrowseStatePathCommand}" />
+        </StackPanel>
+
 
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,250,0,0" Text="Log Type: " />
-        <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,250,0,0" Text="{Binding LogType, Mode=TwoWay}" Width="200"/>
+        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,250,0,0"
+          ItemsSource="{Binding AvailableLogTypes}"
+          SelectedItem="{Binding LogType, Mode=TwoWay}" Width="200"/>
+
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,300,0,0" Text="Theme: " />
+        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,300,0,0"
+          ItemsSource="{Binding AvailableTheme}"
+          SelectedItem="{Binding Theme, Mode=TwoWay}" Width="200"/>
+
+
 
         <!-- Bouton Save -->
         <Button Content="Save" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20" Width="100"

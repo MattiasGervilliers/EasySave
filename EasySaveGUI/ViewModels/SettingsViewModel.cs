@@ -1,7 +1,12 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Input;
 using BackupEngine.Settings;
 using EasySaveGUI.Models;
 using EasySaveGUI.ViewModels.Base;
+using LogLib;
+using Microsoft.WindowsAPICodePack.Dialogs;  // Nécessaire pour le FolderPicker
+using System.IO;
 
 namespace EasySaveGUI.ViewModels
 {
@@ -12,9 +17,11 @@ namespace EasySaveGUI.ViewModels
         private string _logPath;
         private string _statePath;
         private string _logType;
-        
+        private string _theme;
+
         public string WelcomeMessage { get; } = "Settings";
 
+        // Propriétés de données
         public string Language
         {
             get => _language;
@@ -22,12 +29,21 @@ namespace EasySaveGUI.ViewModels
             {
                 _language = value;
                 OnPropertyChanged(nameof(Language));
-
                 // Convertir la langue sélectionnée en énumération Language
                 if (Enum.TryParse(value, out Language lang))
                 {
                     _settingsModel.UpdateLanguage(lang);
                 }
+            }
+        }
+        
+        public string Theme
+        {
+            get => _theme;
+            set
+            {
+                _theme = value;
+                OnPropertyChanged(nameof(Theme));
             }
         }
 
@@ -61,58 +77,81 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
+        // Liste des langues disponibles
+        public List<string> AvailableLanguages { get; } = new List<string>
+        {
+            "English", "French"
+        };
+
+        public List<string> AvailableLogTypes { get; } = new List<string> { "Json", "Xml" };
+
+        public List<string> AvailableTheme { get; } = new List<string> { "Dark", "Light" }; 
+
         public ICommand SaveCommand { get; }
+        public ICommand BrowseLogPathCommand { get; }
+        public ICommand BrowseStatePathCommand { get; }
 
         public SettingsViewModel()
         {
             _settingsModel = new SettingsModel();
             LoadSettings();
 
-            SaveCommand = new CommandHandler(() => SaveSettings(), true);
+            SaveCommand = new RelayCommand(_ => SaveSettings());
+
+            // Initialisation des commandes pour ouvrir l'explorateur
+            BrowseLogPathCommand = new RelayCommand(_ => BrowseLogPath());
+            BrowseStatePathCommand = new RelayCommand(_ => BrowseStatePath());
+        }
+
+        private void BrowseLogPath()
+        {
+            var dialog = new CommonOpenFileDialog
+            {
+                IsFolderPicker = true  // Spécifie que c'est un explorateur de dossiers
+            };
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                LogPath = dialog.FileName;  // Met à jour la propriété LogPath avec le chemin choisi
+            }
+        }
+
+        private void BrowseStatePath()
+        {
+            var dialog = new CommonOpenFileDialog
+            {
+                IsFolderPicker = true
+            };
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                StatePath = dialog.FileName;  // Met à jour la propriété StatePath avec le chemin choisi
+            }
         }
 
         private void LoadSettings()
         {
-            var language = _settingsModel.GetLanguage();
-            Language = language.ToString();  
+            Language = _settingsModel.GetLanguage().ToString();
+            Theme = _settingsModel.GetTheme().ToString();
             LogPath = _settingsModel.GetLogPath();
             StatePath = _settingsModel.GetStatePath();
-            LogType = _settingsModel.GetLogType();
+            LogType = _settingsModel.GetLogType();  // Charge correctement le type de log
         }
 
         private void SaveSettings()
         {
-            _settingsModel.UpdateLanguage((Language)Enum.Parse(typeof(Language), Language));
+            // Mise à jour des propriétés dans le modèle
             _settingsModel.UpdateLogPath(LogPath);
             _settingsModel.UpdateStatePath(StatePath);
-
-            // Mise à jour du type de log avec la nouvelle fonction
             _settingsModel.UpdateLogType(LogType);
+            _settingsModel.UpdateTheme(Theme);
 
-            // Notification des changements de propriétés
+            // Mise à jour des propriétés après sauvegarde
             OnPropertyChanged(nameof(Language));
+            OnPropertyChanged(nameof(Theme));
             OnPropertyChanged(nameof(LogPath));
             OnPropertyChanged(nameof(StatePath));
             OnPropertyChanged(nameof(LogType));
         }
-
-    }
-
-    public class CommandHandler : ICommand
-    {
-        private readonly Action _execute;
-        private readonly bool _canExecute;
-
-        public CommandHandler(Action execute, bool canExecute)
-        {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
-
-        public bool CanExecute(object parameter) => _canExecute;
-
-        public void Execute(object parameter) => _execute();
-
-        public event EventHandler CanExecuteChanged;
     }
 }

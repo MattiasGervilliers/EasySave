@@ -99,6 +99,15 @@ namespace BackupEngine.Settings
         {
             return Settings.Language;
         }
+        public Theme GetTheme()
+        {
+            return Settings.Theme;
+        }
+        public void UpdateTheme(Theme theme)
+        {
+            Settings.Theme = theme;
+            SaveSettings();
+        }
 
         public BackupConfiguration? GetConfiguration(string name)
         {
