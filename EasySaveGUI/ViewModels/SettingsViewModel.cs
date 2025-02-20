@@ -17,6 +17,7 @@ namespace EasySaveGUI.ViewModels
         private string _logPath;
         private string _statePath;
         private string _logType;
+        private string _theme;
 
         public string WelcomeMessage { get; } = "Settings";
 
@@ -28,6 +29,15 @@ namespace EasySaveGUI.ViewModels
             {
                 _language = value;
                 OnPropertyChanged(nameof(Language));
+            }
+        }
+        public string Theme
+        {
+            get => _theme;
+            set
+            {
+                _theme = value;
+                OnPropertyChanged(nameof(Theme));
             }
         }
 
@@ -68,6 +78,8 @@ namespace EasySaveGUI.ViewModels
         };
 
         public List<string> AvailableLogTypes { get; } = new List<string> { "Json", "Xml" };
+
+        public List<string> AvailableTheme { get; } = new List<string> { "Dark", "Light" }; 
 
         public ICommand SaveCommand { get; }
         public ICommand BrowseLogPathCommand { get; }
@@ -115,6 +127,8 @@ namespace EasySaveGUI.ViewModels
         {
             var language = _settingsRepository.GetLanguage();
             Language = language.ToString();
+            var theme = _settingsRepository.GetTheme();
+            Theme = theme.ToString();
             LogPath = _settingsRepository.GetLogPath().ToString();
             StatePath = _settingsRepository.GetStatePath().ToString();
             LogType = _settingsRepository.GetLogType().ToString();  // Charge correctement le type de log
@@ -123,6 +137,7 @@ namespace EasySaveGUI.ViewModels
         private void SaveSettings()
         {
             _settingsRepository.UpdateLanguage((Language)Enum.Parse(typeof(Language), Language));
+            _settingsRepository.UpdateTheme((Theme)Enum.Parse(typeof(Theme), Theme));
             _settingsRepository.UpdateLogPath(new CustomPath(LogPath));
             _settingsRepository.UpdateStatePath(StatePath);
 
@@ -133,6 +148,7 @@ namespace EasySaveGUI.ViewModels
 
             // Mise à jour des propriétés après sauvegarde
             OnPropertyChanged(nameof(Language));
+            OnPropertyChanged(nameof(Theme));
             OnPropertyChanged(nameof(LogPath));
             OnPropertyChanged(nameof(StatePath));
             OnPropertyChanged(nameof(LogType));

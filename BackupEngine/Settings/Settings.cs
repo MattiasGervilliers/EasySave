@@ -11,7 +11,7 @@ namespace BackupEngine.Settings
         public CustomPath StatePath { get; set; }
         public List<BackupConfiguration> Configurations { get; set; }
         public LogType LogFormat { get; set; } 
-
+        public Theme Theme { get; set; }
         public Settings()
         {
             Configurations = new List<BackupConfiguration>();
@@ -19,6 +19,7 @@ namespace BackupEngine.Settings
             LogPath = new CustomPath("logs");
             LogFormat = LogType.Json;
             StatePath = new CustomPath("logs/state.json");
+            Theme = Theme.Light;
         }
 
         public void FromJson(string json)
@@ -31,6 +32,7 @@ namespace BackupEngine.Settings
                 StatePath = jsonSettings.StatePath;
                 Configurations = jsonSettings.Configurations;
                 LogFormat = jsonSettings.LogFormat;
+                Theme = jsonSettings.Theme;
             }
         }
 

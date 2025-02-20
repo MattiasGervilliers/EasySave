@@ -39,6 +39,13 @@
           ItemsSource="{Binding AvailableLogTypes}"
           SelectedItem="{Binding LogType, Mode=TwoWay}" Width="200"/>
 
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,300,0,0" Text="Theme: " />
+        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,300,0,0"
+          ItemsSource="{Binding AvailableTheme}"
+          SelectedItem="{Binding Theme, Mode=TwoWay}" Width="200"/>
+
+
+
         <!-- Bouton Save -->
         <Button Content="Save" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20" Width="100"
                 Command="{Binding SaveCommand}" />
