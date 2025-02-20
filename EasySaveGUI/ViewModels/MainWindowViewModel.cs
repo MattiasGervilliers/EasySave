@@ -21,11 +21,11 @@ namespace EasySaveGUI.ViewModels
             _navigationService = new NavigationService();
             _navigationService.Configure(vm => CurrentView = vm);
 
-            NavigateHomeCommand = new RelayCommand(_ => _navigationService.Navigate(new HomeViewModel()));
+            NavigateHomeCommand = new RelayCommand(_ => _navigationService.Navigate(new HomeViewModel(_navigationService)));
             NavigateSettingsCommand = new RelayCommand(_ => _navigationService.Navigate(new SettingsViewModel()));
             NavigateCreateCommand = new RelayCommand(_ => _navigationService.Navigate(new CreateViewModel()));
 
-            _navigationService.Navigate(new HomeViewModel()); // Default view
+            _navigationService.Navigate(new HomeViewModel(_navigationService)); // Default view
         }
     }
 }

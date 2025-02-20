@@ -3,6 +3,7 @@ using EasySaveGUI.Models;
 using EasySaveGUI.ViewModels.Base;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Windows.Navigation;
 
 namespace EasySaveGUI.ViewModels
 {
@@ -18,8 +19,9 @@ namespace EasySaveGUI.ViewModels
         // Command to launch configurations
         public ICommand LaunchConfigurationsCommand { get; }
         public ICommand LaunchConfigurationCommand { get; }
+        public RelayCommand NavigateCreateCommand { get; }
 
-        public HomeViewModel()
+        public HomeViewModel(NavigationService navigationService)
         {
             BackupConfigurations = new ObservableCollection<BackupConfiguration>(_settingsModel.GetConfigurations());
             // Initialize SelectedConfigurations
@@ -28,6 +30,7 @@ namespace EasySaveGUI.ViewModels
             // Initialize the command
             LaunchConfigurationsCommand = new RelayCommand(_ => LaunchConfigurations());
             LaunchConfigurationCommand = new RelayCommand(backupConfiguration => LaunchConfiguration(backupConfiguration));
+            NavigateCreateCommand = new RelayCommand(_ => navigationService.Navigate(new CreateViewModel()));
         }
 
         // Function to launch selected configurations
