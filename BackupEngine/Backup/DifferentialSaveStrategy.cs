@@ -2,17 +2,20 @@
 using BackupEngine.Log;
 using BackupEngine.Settings;
 using BackupEngine.State;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace BackupEngine.Backup
 {
-    public class DifferentialSaveStrategy (BackupConfiguration configuration) : SaveStrategy (configuration)
+    public class DifferentialSaveStrategy(BackupConfiguration configuration) : SaveStrategy(configuration)
     {
         private DifferentialBackupCacheRepository _cacheRepository = new DifferentialBackupCacheRepository();
         private SettingsRepository SettingsRepository = new SettingsRepository();
 
         public override void Save(string uniqueDestinationPath)
         {
-
             if (PreviousSaveExists())
             {
                 string previousSavePath = PreviousSavePath();
@@ -44,14 +47,17 @@ namespace BackupEngine.Backup
 
         private void DifferentialSave(string uniqueDestinationPath, string previousSavePath)
         {
-            if (Configuration.EncryptionKey != "")
+            var extensionPriorities = SettingsRepository.GetExtensionPriority();
+
+            if (Configuration.ExtensionsToSave != null)
             {
-                TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, SettingsRepository.GetExtensionPriority());
+                TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, extensionPriorities);
             }
             else
             {
                 TransferStrategy = new CopyStrategy();
             }
+
             string sourcePath = Configuration.SourcePath.GetAbsolutePath();
 
             if (!Directory.Exists(sourcePath))
@@ -61,14 +67,15 @@ namespace BackupEngine.Backup
 
             Directory.CreateDirectory(uniqueDestinationPath);
 
-            string[] files = Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories)
+                                      .OrderBy(f => extensionPriorities.Contains(Path.GetExtension(f)) ? 0 : 1)
+                                      .ToArray();
+
             int totalFiles = files.Length;
             long totalSize = files.Sum(file => new FileInfo(file).Length);
             int remainingFiles = totalFiles;
             long remainingSize = totalSize;
 
-
-            // Mettre à jour l'état au début de la sauvegarde
             OnStateUpdated(new StateEvent(
                 "Differential Backup",
                 "Active",
@@ -94,16 +101,13 @@ namespace BackupEngine.Backup
                 if (fileHasChanged)
                 {
                     DateTime start = DateTime.Now;
-                    // transfer the file
                     TransferStrategy.TransferFile(file, destFile);
                     DateTime end = DateTime.Now;
                     TimeSpan duration = end - start;
 
-                    // Mise à jour de l'état avec le fichier en cours
                     remainingFiles--;
                     remainingSize -= new FileInfo(file).Length;
 
-                    // On envoie l'événement d'état
                     OnStateUpdated(new StateEvent(
                         "Differential Backup",
                         "Active",
@@ -120,7 +124,6 @@ namespace BackupEngine.Backup
                 }
             }
 
-            // Mise à jour de l'état à la fin de la sauvegarde
             OnStateUpdated(new StateEvent(
                 "Differential Backup",
                 "Completed",
@@ -133,9 +136,7 @@ namespace BackupEngine.Backup
             ));
 
             Console.WriteLine($"Sauvegarde différentielle effectuée dans : {uniqueDestinationPath}");
-            //UpdateCache(uniqueDestinationPath);
         }
-
 
         private bool PreviousSaveExists()
         {

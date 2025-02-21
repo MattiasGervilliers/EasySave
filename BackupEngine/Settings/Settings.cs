@@ -20,7 +20,7 @@ namespace BackupEngine.Settings
             LogPath = new CustomPath("logs");
             LogFormat = LogType.Json;
             StatePath = new CustomPath("logs/state.json");
-            ExtensionPriority = new HashSet<string>() { ".txt", ".pdf" };
+            ExtensionPriority = new HashSet<string>() { ".txt", ".pdf" };// Pour l'instant les priorité d'extensions sont set ici
 
         }
 

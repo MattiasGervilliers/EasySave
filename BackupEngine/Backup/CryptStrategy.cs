@@ -28,7 +28,6 @@ namespace BackupEngine.Backup
                 _extensionsPriority = "";
             }
             _extensionsPriority = string.Join(", ", ExtensionPriority);
-            //Console.WriteLine("voici la liste des priorité : " + _extensionsPriority);
         }
         public void TransferFile(string source, string destination)
         {
@@ -57,7 +56,6 @@ namespace BackupEngine.Backup
                     UseShellExecute = false,
                     CreateNoWindow = true
                 };
-                Console.WriteLine("Appel de Cryptosoft avec les arguments suivants : "+psi.Arguments);
                 using (Process process = new Process { StartInfo = psi })
                 {
                     process.Start();

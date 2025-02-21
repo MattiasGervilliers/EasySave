@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using BackupEngine.Backup;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 namespace EasySaveConsole.View
 {
     internal class View
@@ -93,7 +94,6 @@ namespace EasySaveConsole.View
                             DestinationPath = DestinationPath,
                             SourcePath = SourcePath,
                             Name = Name,
-                            EncryptionKey = AskEncryptionKey(SourcePath.ToString()),
                             ExtensionsToSave = AskExtensions(SourcePath.ToString())
                         };
                         _saveController.UpdateConfiguration(backupConfiguration);
@@ -451,7 +451,19 @@ namespace EasySaveConsole.View
 
         public HashSet<string>? AskExtensions(string sourcePath)
         {
-            if (this._encrypted)
+            Console.WriteLine(_language == Language.French
+                ? "Voulez-vous chiffrer vos données ? (oui/non) : "
+                : "Do you want to encrypt your data? (yes/no) : ");
+
+            string choice;
+            do
+            {
+                choice = Console.ReadLine().Trim().ToLower();
+            } while (choice != "oui" && choice != "non" && choice != "yes" && choice != "no");
+
+            string encryptionKey = "";
+
+            if (choice == "oui" || choice == "yes")
             {
                 try
                 {
@@ -461,7 +473,6 @@ namespace EasySaveConsole.View
                     if (availableExtensions.Count == 0)
                     {
                         Console.WriteLine("Aucune extension trouvée dans le dossier.");
-                        return null;
                     }
 
                     Console.WriteLine("\nExtensions trouvées :");
@@ -480,6 +491,10 @@ namespace EasySaveConsole.View
                     if (input.Equals("tout", StringComparison.OrdinalIgnoreCase) || input.Equals("all", StringComparison.OrdinalIgnoreCase))
                     {
                         selectedExtensions = new HashSet<string>(availableExtensions, StringComparer.OrdinalIgnoreCase);
+                    }
+                    else if (input == "")
+                    {
+                        return null;
                     }
                     else
                     {
@@ -506,8 +521,12 @@ namespace EasySaveConsole.View
                     return null;
                 }
             }
-            return null;
-        }
+            else
+            {
+                return null;
+            }
+
+        } 
 
 
         /// <summary>

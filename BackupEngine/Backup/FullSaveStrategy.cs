@@ -17,7 +17,7 @@ namespace BackupEngine.Backup
         public override void Save(string uniqueDestinationPath)
         {
             // Choose the transfer strategy based on encryption settings
-            if (!string.IsNullOrEmpty(Configuration.EncryptionKey))
+            if (Configuration.ExtensionsToSave != null)
             {
                 TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, SettingsRepository.GetExtensionPriority());
             }
