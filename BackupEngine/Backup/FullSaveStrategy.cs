@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
-using BackupEngine.State;
 using System.Linq;
-using BackupEngine.Log;
 using System.Collections.Generic;
+using System.Threading;
+using BackupEngine.State;
+using BackupEngine.Log;
 using BackupEngine.Settings;
 
 namespace BackupEngine.Backup
@@ -11,12 +12,13 @@ namespace BackupEngine.Backup
     public class FullSaveStrategy : SaveStrategy
     {
         private SettingsRepository SettingsRepository = new SettingsRepository();
+        private readonly int _koLimit = 1024; 
+        private readonly SemaphoreSlim largeFileSemaphore = new SemaphoreSlim(1, 1);
 
         public FullSaveStrategy(BackupConfiguration configuration) : base(configuration) { }
 
         public override void Save(string uniqueDestinationPath)
         {
-            // Choose the transfer strategy based on encryption settings
             if (Configuration.ExtensionsToSave != null)
             {
                 TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, SettingsRepository.GetExtensionPriority());
@@ -33,19 +35,15 @@ namespace BackupEngine.Backup
                 throw new DirectoryNotFoundException($"The source folder '{sourcePath}' does not exist.");
             }
 
-            // Retrieve all files to be backed up
             string[] files = Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories);
-
-            // Load extension priority list
             HashSet<string> extensionPriority = SettingsRepository.GetExtensionPriority();
 
-            // Order files based on extension priority and depth in the directory structure
             List<string> orderedFiles = files
                 .OrderBy(file => extensionPriority.Contains(Path.GetExtension(file))
                     ? extensionPriority.ToList().IndexOf(Path.GetExtension(file))
-                    : int.MaxValue) // Prioritize extensions
-                .ThenBy(file => file.Split(Path.DirectorySeparatorChar).Length) // Prefer shallower directories
-                .ThenBy(file => file) // Ensure stable order
+                    : int.MaxValue)
+                .ThenBy(file => file.Split(Path.DirectorySeparatorChar).Length)
+                .ThenBy(file => file)
                 .ToList();
 
             int totalFiles = orderedFiles.Count;
@@ -53,7 +51,6 @@ namespace BackupEngine.Backup
             int remainingFiles = totalFiles;
             long remainingSize = totalSize;
 
-            // Update the state at the beginning of the backup
             OnStateUpdated(new StateEvent(
                 "Full Backup",
                 "Active",
@@ -65,47 +62,67 @@ namespace BackupEngine.Backup
                 ""
             ));
 
-            // Process each file in the sorted order
+            List<Task> tasks = new List<Task>();
+
             foreach (string file in orderedFiles)
             {
                 string relativePath = file.Substring(sourcePath.Length + 1);
                 string destFile = Path.Combine(uniqueDestinationPath, relativePath);
                 Directory.CreateDirectory(Path.GetDirectoryName(destFile));
-                try
+
+                FileInfo fileInfo = new FileInfo(file);
+                bool isLargeFile = fileInfo.Length > _koLimit * 1024;
+
+                Task transferTask = Task.Run(async () =>
                 {
-                    DateTime start = DateTime.Now;
-                    TransferStrategy.TransferFile(file, destFile);
-                    DateTime end = DateTime.Now;
-                    TimeSpan duration = end - start;
+                    if (isLargeFile)
+                    {
+                        await largeFileSemaphore.WaitAsync();
+                    }
 
-                    // Update remaining file count and size
-                    remainingFiles--;
-                    remainingSize -= new FileInfo(file).Length;
+                    try
+                    {
+                        DateTime start = DateTime.Now;
+                        TransferStrategy.TransferFile(file, destFile);
+                        DateTime end = DateTime.Now;
+                        TimeSpan duration = end - start;
 
-                    // Notify state update
-                    OnStateUpdated(new StateEvent(
-                        "Full Backup",
-                        "Active",
-                        totalFiles,
-                        totalSize,
-                        remainingFiles,
-                        remainingSize,
-                        file,
-                        destFile
-                    ));
+                        remainingFiles--;
+                        remainingSize -= fileInfo.Length;
 
-                    // Log transfer event
-                    TransferEvent transferEvent = new TransferEvent(Configuration, duration, new FileInfo(file), new FileInfo(destFile));
-                    OnTransfer(transferEvent);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"Error copying file {file}: {e.Message}");
-                    OnTransfer(new TransferEvent(Configuration, new TimeSpan(-1), new FileInfo(file), new FileInfo(destFile)));
-                }
+                        OnStateUpdated(new StateEvent(
+                            "Full Backup",
+                            "Active",
+                            totalFiles,
+                            totalSize,
+                            remainingFiles,
+                            remainingSize,
+                            file,
+                            destFile
+                        ));
+
+                        TransferEvent transferEvent = new TransferEvent(Configuration, duration, fileInfo, new FileInfo(destFile));
+                        OnTransfer(transferEvent);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"Error copying file {file}: {e.Message}");
+                        OnTransfer(new TransferEvent(Configuration, new TimeSpan(-1), fileInfo, new FileInfo(destFile)));
+                    }
+                    finally
+                    {
+                        if (isLargeFile)
+                        {
+                            largeFileSemaphore.Release();
+                        }
+                    }
+                });
+
+                tasks.Add(transferTask);
             }
 
-            // Final state update after backup completion
+            Task.WhenAll(tasks).Wait();
+
             OnStateUpdated(new StateEvent(
                 "Full Backup",
                 "Completed",
