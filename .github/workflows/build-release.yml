@@ -27,7 +27,7 @@ jobs:
         run: nuget restore EasySave.sln
 
       - name: Compiler l'application en mode Release
-        run: msbuild EasySave.sln /p:Configuration=Release /p:Platform=x86
+        run: msbuild EasySave.sln /p:Configuration=Release /p:Platform="Any CPU"
 
       - name: Publier l'application
         run: dotnet publish EasySave.sln /p:PublishProfile=FolderProfile.pubxml
