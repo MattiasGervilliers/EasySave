@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - develop
   pull_request:
     branches:
       - main
+      - develop
   release:
     types: [created]
 
@@ -37,7 +39,7 @@ jobs:
           copy MonProjetUWP\AppPackages\* package\
       
       - name: Télécharger l'artefact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: UWP-App
           path: package/
@@ -49,7 +51,7 @@ jobs:
 
     steps:
       - name: Télécharger l'artefact du build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: UWP-App
           path: package/
