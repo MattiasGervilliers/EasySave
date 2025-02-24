@@ -29,11 +29,14 @@ jobs:
       - name: Compiler l'application en mode Release
         run: msbuild EasySave.sln /p:Configuration=Release /p:Platform=x86
 
+      - name: Publier l'application
+        run: dotnet publish EasySave.sln /p:PublishProfile=FolderProfile.pubxml
+          
       - name: Packager l'application (MSIX)
         run: |
           mkdir package
-          copy EasySave\AppPackages\* package\
-      
+          copy EasySave/publish/* package/
+          
       - name: Télécharger l'artefact
         uses: actions/upload-artifact@v4
         with:
