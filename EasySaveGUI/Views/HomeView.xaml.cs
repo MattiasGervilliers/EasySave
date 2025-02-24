@@ -18,13 +18,25 @@ namespace EasySaveGUI.Views
         {
             if (DataContext is HomeViewModel viewModel && sender is ListBox listBox)
             {
-                // Sync selected items with the ViewModel
-                viewModel.SelectedConfigurations.Clear();
-                foreach (var item in listBox.SelectedItems.Cast<BackupConfiguration>())
+                foreach (var item in e.RemovedItems.Cast<BackupConfiguration>())
                 {
-                    viewModel.SelectedConfigurations.Add(item);
+                    viewModel.SelectedConfigurations.Remove(item);
+                }
+
+                foreach (var item in e.AddedItems.Cast<BackupConfiguration>())
+                {
+                    if (viewModel.SelectedConfigurations.Contains(item))
+                    {
+                        // Deselect if already selected (toggle effect)
+                        listBox.SelectedItems.Remove(item);
+                    }
+                    else
+                    {
+                        viewModel.SelectedConfigurations.Add(item);
+                    }
                 }
             }
         }
+
     }
 }
