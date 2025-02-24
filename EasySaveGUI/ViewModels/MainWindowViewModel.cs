@@ -16,8 +16,11 @@ namespace EasySaveGUI.ViewModels
         public RelayCommand NavigateCreateCommand { get; }
         private readonly NavigationService _navigationService;
 
+        private SettingsViewModel _settingViewModel = new SettingsViewModel();
+        
         public MainWindowViewModel()
         {
+            _settingViewModel.SetTheme();
             _navigationService = new NavigationService();
             _navigationService.Configure(vm => CurrentView = vm);
 
@@ -27,5 +30,6 @@ namespace EasySaveGUI.ViewModels
 
             _navigationService.Navigate(new HomeViewModel()); // Default view
         }
+
     }
 }
