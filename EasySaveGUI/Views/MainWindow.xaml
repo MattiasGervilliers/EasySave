@@ -15,7 +15,7 @@
         <ResourceDictionary Source="../assets/NavbarButtonStyle.xaml"/>
     </Window.Resources>
 
-    <Grid>
+    <Grid Background="{DynamicResource Background}">
         <DockPanel>
             <StackPanel DockPanel.Dock="Top">
                 <Grid Margin="0,5,0,5" VerticalAlignment="Center">
@@ -35,15 +35,15 @@
                         <Button Command="{Binding NavigateHomeCommand}" Style="{DynamicResource ButtonStyle}">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Image Source="..\assets\EasySave_logo.png" Margin="0,0,10,0" Width="30" Height="30"/>
-                                <TextBlock Text="EasySave" FontSize="15" VerticalAlignment="Center"/>
+                                <TextBlock Text="EasySave" Foreground="{DynamicResource Text}" FontSize="15" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
                     <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Content="Home" Style="{DynamicResource HoverButtonStyle}" Command="{Binding NavigateHomeCommand}" Margin="5,0,5,0"/>
+                        <Button Content="Home" Foreground="{DynamicResource Text}" Style="{DynamicResource HoverButtonStyle}" Command="{Binding NavigateHomeCommand}" Margin="5,0,5,0"/>
                     </StackPanel>
                     <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Content="Create" Style="{DynamicResource HoverButtonStyle}" Command="{Binding NavigateCreateCommand}" Margin="5,0,5,0"/>
+                        <Button Content="Create" Foreground="{DynamicResource Text}" Style="{DynamicResource HoverButtonStyle}" Command="{Binding NavigateCreateCommand}" Margin="5,0,5,0"/>
                     </StackPanel>
                     <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Style="{DynamicResource HoverButtonStyle}" Command="{Binding NavigateSettingsCommand}" Margin="5,0,5,0">

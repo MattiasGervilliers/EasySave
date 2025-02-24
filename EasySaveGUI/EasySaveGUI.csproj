@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BackupEngine\BackupEngine.csproj" />
     <ProjectReference Include="..\LanguageLib\LanguageLib.csproj" />
   </ItemGroup>
