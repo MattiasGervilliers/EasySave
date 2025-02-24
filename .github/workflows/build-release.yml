@@ -30,7 +30,7 @@ jobs:
 
       - name: Publier EasySaveGUI (UWP) avec le profil de publication
         run: dotnet publish EasySaveGUI/EasySaveGUI.csproj /p:PublishProfile=FolderProfile.pubxml
-
+        
       - name: Télécharger l'artefact
         uses: actions/upload-artifact@v4
         with:
