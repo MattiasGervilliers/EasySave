@@ -1,4 +1,4 @@
-name: Build and Release UWP App
+name: Build and Release UWP & Console App
 
 on:
   push:
@@ -19,29 +19,25 @@ jobs:
       - name: Configurer MSBuild
         uses: microsoft/setup-msbuild@v1.1
 
-      - name: Installer le SDK Windows UWP
-        run: |
-          choco install visualstudio2022buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.UniversalBuildTools"
-
       - name: Restaurer les dépendances NuGet
         run: nuget restore EasySave.sln
 
       - name: Compiler l'application en mode Release
         run: msbuild EasySave.sln /p:Configuration=Release /p:Platform="Any CPU"
 
-      - name: Publier l'application
-        run: dotnet publish EasySave.sln /p:PublishProfile=FolderProfile.pubxml
-          
-      - name: Packager l'application (MSIX)
-        run: |
-          mkdir package
-          copy EasySave/publish/* package/
-          
+      - name: Publier EasySaveConsole (Console App) avec le profil de publication
+        run: dotnet publish EasySaveConsole/EasySaveConsole.csproj /p:PublishProfile=FolderProfile.pubxml
+
+      - name: Publier EasySaveGUI (UWP) avec le profil de publication
+        run: dotnet publish EasySaveGUI/EasySaveGUI.csproj /p:PublishProfile=FolderProfile.pubxml
+        
       - name: Télécharger l'artefact
         uses: actions/upload-artifact@v4
         with:
-          name: UWP-App
-          path: package/
+          name: EasySave-Apps
+          path: |
+            EasySaveConsole/publish/
+            EasySaveGUI/publish/
 
   release:
     needs: build
@@ -52,12 +48,12 @@ jobs:
       - name: Télécharger l'artefact du build
         uses: actions/download-artifact@v4
         with:
-          name: UWP-App
+          name: EasySave-Apps
           path: package/
 
       - name: Créer une Release GitHub
         uses: softprops/action-gh-release@v1
         with:
-          files: package/*
+          files: package/**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
