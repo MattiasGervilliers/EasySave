@@ -28,6 +28,9 @@ jobs:
       - name: Publier EasySaveConsole (Console App) avec le profil de publication
         run: dotnet publish EasySaveConsole/EasySaveConsole.csproj /p:PublishProfile=FolderProfile.pubxml
 
+      - name: Publier CryptoSoft (Console App) avec le profil de publication
+        run: dotnet publish CryptoSoft/CryptoSoft.csproj /p:PublishProfile=FolderProfile.pubxml
+
       - name: Publier EasySaveGUI (UWP) avec le profil de publication
         run: dotnet publish EasySaveGUI/EasySaveGUI.csproj /p:PublishProfile=FolderProfile.pubxml
         
@@ -38,6 +41,7 @@ jobs:
           path: |
             EasySaveConsole/publish/
             EasySaveGUI/publish/
+	    CryptoSoft/publish/
 
   release:
     needs: build
