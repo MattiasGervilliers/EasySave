@@ -44,9 +44,9 @@ jobs:
         with:
           name: EasySave-Apps
           path: |
-            EasySaveConsole/publish/
-            EasySaveGUI/publish/
-            CryptoSoft/publish/
+            EasySaveConsole/bin/Release/net6.0/publish/
+            EasySaveGUI/bin/Release/net6.0/publish/
+            CryptoSoft/bin/Release/net6.0/publish/
 
   release:
     needs: build
@@ -85,7 +85,10 @@ jobs:
       - name: Créer une Release GitHub
         uses: softprops/action-gh-release@v1
         with:
-          files: package/**
+          files: |
+            package/EasySaveConsole/bin/Release/net6.0/publish/**/*
+            package/EasySaveGUI/bin/Release/net6.0/publish/**/*
+            package/CryptoSoft/bin/Release/net6.0/publish/**/*
           tag_name: ${{ steps.semantic-release.outputs.release_tag }}  # Use the tag created by semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the default GITHUB_TOKEN
