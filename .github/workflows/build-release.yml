@@ -11,15 +11,15 @@ jobs:
     runs-on: windows-latest
 
     permissions:
-      contents: write
-      issues: write
-      pull-requests: write
+      contents: write  # Allow pushing to the repository
+      issues: write    # Required for @semantic-release/github
+      pull-requests: write  # Required for @semantic-release/github
 
     steps:
       - name: Checkout du code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Fetch full Git history for semantic-release
 
       - name: Configurer MSBuild
         uses: microsoft/setup-msbuild@v1.1
@@ -53,15 +53,15 @@ jobs:
     runs-on: windows-latest
 
     permissions:
-      contents: write
-      issues: write
-      pull-requests: write
+      contents: write  # Allow pushing to the repository
+      issues: write    # Required for @semantic-release/github
+      pull-requests: write  # Required for @semantic-release/github
 
     steps:
       - name: Checkout du code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Fetch full Git history for semantic-release
 
       - name: Configurer Node.js
         uses: actions/setup-node@v4
@@ -73,7 +73,7 @@ jobs:
 
       - name: Exécuter semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the default GITHUB_TOKEN
         run: npx semantic-release
 
       - name: Télécharger l'artefact du build
@@ -86,5 +86,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: package/**
+          tag_name: ${{ steps.semantic-release.outputs.release_tag }}  # Use the tag created by semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the default GITHUB_TOKEN
