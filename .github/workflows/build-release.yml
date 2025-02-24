@@ -10,9 +10,16 @@ jobs:
   build:
     runs-on: windows-latest
 
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
     steps:
       - name: Checkout du code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Configurer MSBuild
         uses: microsoft/setup-msbuild@v1.1
@@ -45,9 +52,16 @@ jobs:
     needs: build
     runs-on: windows-latest
 
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
     steps:
       - name: Checkout du code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Configurer Node.js
         uses: actions/setup-node@v4
