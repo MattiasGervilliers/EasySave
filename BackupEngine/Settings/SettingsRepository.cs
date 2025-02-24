@@ -72,7 +72,10 @@ namespace BackupEngine.Settings
         {
             return Settings.Configurations;
         }
-
+        public List<string> GetBusinessSoftwareList()
+        {
+            return Settings.BusinessSoftwareList;
+        }
         public void UpdateLanguage(Language language)
         {
             Settings.Language = language;

@@ -31,7 +31,6 @@ namespace BackupEngine.Backup
         }
         public void TransferFile(string source, string destination)
         {
-            //Console.WriteLine("début du transfert avec les priorités suivantes : "+ _extensionsPriority);
             bool encrypt = true;
             //Only launch cryptosoft if the source file extension is in configuration.extension hashset
             if (_extensionsToCrypt.Contains(Path.GetExtension(source).ToLower()))

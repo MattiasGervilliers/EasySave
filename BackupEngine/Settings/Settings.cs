@@ -12,6 +12,7 @@ namespace BackupEngine.Settings
         public List<BackupConfiguration> Configurations { get; set; }
         public LogType LogFormat { get; set; }
         public HashSet<string> ExtensionPriority { get; set; }
+        public List<string> BusinessSoftwareList { get; set; }
 
         public Settings()
         {
@@ -20,7 +21,8 @@ namespace BackupEngine.Settings
             LogPath = new CustomPath("logs");
             LogFormat = LogType.Json;
             StatePath = new CustomPath("logs/state.json");
-            ExtensionPriority = new HashSet<string>() { ".txt", ".pdf" };// Pour l'instant les priorité d'extensions sont set ici
+            ExtensionPriority = new HashSet<string>() { ".txt", ".pdf" };// Pour l'instant la priorité des extensions est set ici
+            BusinessSoftwareList = new List<string> { "CalculatorApp", "msedge" };//idem pour les logitiels metiers
 
         }
 

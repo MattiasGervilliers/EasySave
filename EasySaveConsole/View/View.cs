@@ -475,16 +475,22 @@ namespace EasySaveConsole.View
                         Console.WriteLine("Aucune extension trouvée dans le dossier.");
                     }
 
-                    Console.WriteLine("\nExtensions trouvées :");
-                    foreach (string ext in availableExtensions)
+                    Console.WriteLine(_language == Language.French
+                         ? "\nExtensions trouvées :"
+                         : "\nFound extensions:"); foreach (string ext in availableExtensions)
                     {
                         Console.WriteLine($"- {ext}");
                     }
 
-                    Console.WriteLine("\nEntrez les extensions à sauvegarder :");
-                    Console.WriteLine("- Tapez \"tout\" ou \"all\" pour sélectionner toutes les extensions trouvées.");
-                    Console.WriteLine("- Ou entrez manuellement les extensions séparées par des virgules (ex: .txt,.pdf,.cs).");
-
+                    Console.WriteLine(_language == Language.French
+                         ? "\nEntrez les extensions à sauvegarder :"
+                         : "\nEnter the extensions to save:");
+                    Console.WriteLine(_language == Language.French
+                         ? "- Tapez \"tout\" ou \"all\" pour sélectionner toutes les extensions trouvées."
+                         : "- Type \"all\" to select all found extensions.");
+                    Console.WriteLine(_language == Language.French
+                        ? "- Ou entrez manuellement les extensions séparées par des virgules (ex: .txt,.pdf,.cs)."
+                        : "- Or manually enter the extensions separated by commas (e.g., .txt,.pdf,.cs).");
                     string input = Console.ReadLine().Trim();
                     HashSet<string> selectedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -509,7 +515,9 @@ namespace EasySaveConsole.View
                             }
                             else
                             {
-                                Console.WriteLine($"Extension ignorée (format invalide) : {ext}");
+                                Console.WriteLine(_language == Language.French
+                                    ? $"Extension ignorée (format invalide) : {ext}"
+                                    : $"Ignored extension (invalid format): {ext}");
                             }
                         }
                     }
@@ -517,7 +525,9 @@ namespace EasySaveConsole.View
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Erreur : {ex.Message}");
+                    Console.WriteLine(_language == Language.French
+                        ? $"Erreur : {ex.Message}"
+                        : $"Error: {ex.Message}");
                     return null;
                 }
             }

@@ -5,6 +5,7 @@ using BackupEngine.State;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -151,6 +152,8 @@ namespace BackupEngine.Backup
 
             if (fileHasChanged)
             {
+                // Vérifier et attendre si un logiciel métier est en cours d'exécution
+                WaitForBusinessSoftwareToClose();
                 DateTime start = DateTime.Now;
                 TransferStrategy.TransferFile(file, destFile);
                 DateTime end = DateTime.Now;
@@ -174,7 +177,28 @@ namespace BackupEngine.Backup
                 OnTransfer(transferEvent);
             }
         }
+        private void WaitForBusinessSoftwareToClose()
+        {
+            List<string> businessApps = _settingsRepository.GetBusinessSoftwareList();
 
+            while (IsBusinessSoftwareRunning(businessApps))
+            {
+                Console.WriteLine("Un logiciel métier est en cours d'exécution. Pause des sauvegardes...");
+                Thread.Sleep(5000); // Vérifie toutes les 5 secondes
+            }
+        }
+
+        private bool IsBusinessSoftwareRunning(List<string> businessApps)
+        {
+            foreach (var process in Process.GetProcesses())
+            {
+                if (businessApps.Contains(process.ProcessName, StringComparer.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private bool PreviousSaveExists()
         {
             CachedConfiguration? cached = _cacheRepository.GetCachedConfiguration(Configuration);
