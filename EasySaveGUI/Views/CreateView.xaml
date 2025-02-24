@@ -10,15 +10,15 @@
       d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" Text="Create a new Backup Configuration" Foreground="{DynamicResource Text}"/>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" Text="{DynamicResource TitleCreate}" Foreground="{DynamicResource Text}"/>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,100,0,0" Text="Name: " Foreground="{DynamicResource Text}"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,100,0,0" Text="{DynamicResource NameTitleCaseCreate}" Foreground="{DynamicResource Text}"/>
         <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,100,0,0" Text="{Binding Name, Mode=TwoWay}" Width="200"/>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,150,0,0" Text="Log Path: " Foreground="{DynamicResource Text}"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,150,0,0" Text="... : " Foreground="{DynamicResource Text}"/>
         <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,150,0,0" Text="{Binding SourcePath, Mode=TwoWay}" Width="200"/>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,200,0,0" Text="State Path: " Foreground="{DynamicResource Text}"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,200,0,0" Text="... : " Foreground="{DynamicResource Text}"/>
         <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,200,0,0" Text="{Binding DestinationPath, Mode=TwoWay}" Width="200"/>
 
         <!-- Bouton Save -->
@@ -27,6 +27,9 @@
                 VerticalAlignment="Bottom"
                 Margin="0,0,0,20"
                 Width="100"
+                Background="{DynamicResource List}"
+                BorderBrush="{DynamicResource Card}"
+                Foreground="{DynamicResource Text}"
                 Command="{Binding CreateCommand}" />
     </Grid>
 </UserControl>

@@ -21,6 +21,7 @@ namespace EasySaveGUI.ViewModels
         public MainWindowViewModel()
         {
             _settingViewModel.SetTheme();
+            _settingViewModel.SetLanguage();
             _navigationService = new NavigationService();
             _navigationService.Configure(vm => CurrentView = vm);
 
