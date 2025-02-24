@@ -41,7 +41,7 @@ jobs:
           path: |
             EasySaveConsole/publish/
             EasySaveGUI/publish/
-	    CryptoSoft/publish/
+            CryptoSoft/publish/
 
   release:
     needs: build
