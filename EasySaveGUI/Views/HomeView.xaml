@@ -64,12 +64,8 @@
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="0">
-            <TextBlock FontSize="32" FontWeight="Bold">
-            Backups
-            </TextBlock>
-            <TextBlock Margin="0,5,0,0" FontSize="14">
-            Liste des backups
-            </TextBlock>
+            <TextBlock FontSize="32" Text="{DynamicResource TitleHome}" Foreground="{DynamicResource Text}" FontWeight="Bold"/>
+            <TextBlock Margin="0,5,0,0" Text="{DynamicResource LittleTitleHome}" Foreground="{DynamicResource Text}" FontSize="14"/>
         </StackPanel>
             
             <!-- ListBox to display BackupConfigurations -->
@@ -134,16 +130,20 @@
             <Button Command="{Binding NavigateCreateCommand}" 
                         Grid.Column="0"
                         Style="{DynamicResource HoverButtonStyle}"
-                        HorizontalAlignment="Left">
-                + Create
-            </Button>
-            <Button Content="Launch Selected Configurations"
+                        Content="{DynamicResource CreateButtonHome}"
+                        Foreground="{DynamicResource Text}"
+                        FontSize="16"
+                        HorizontalAlignment="Left"/>
+            <Button Command="{Binding LaunchConfigurationsCommand}"
                         Grid.Column="2"
                         Style="{DynamicResource ClassicButtonStyle}"
-                        Command="{Binding LaunchConfigurationsCommand}"
-                        HorizontalAlignment="Right"
+                        Background="{DynamicResource List}"
+                        BorderBrush="{DynamicResource Card}"
+                        Foreground="{DynamicResource Text}"
+                        Content="{DynamicResource LaunchButtonHome}"
                         Padding="10,5"
-                        FontSize="14" />
+                        FontSize="14"
+                        HorizontalAlignment="Right"/>
         </Grid>
     </Grid>
 </UserControl>

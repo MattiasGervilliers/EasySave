@@ -21,8 +21,6 @@ namespace EasySaveGUI.ViewModels
         private string _logType;
         private string _theme;
 
-        public string WelcomeMessage { get; } = "Settings";
-
         // Propriétés de données
         public string Language
         {
@@ -159,6 +157,25 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
+        public void SetLanguage()
+        {
+            string toChangeLanguage = _language;
+            if (toChangeLanguage == "French")
+            {
+                ResourceDictionary Langue = new ResourceDictionary() { Source = new Uri("../assets/fr.xaml", UriKind.Relative) };
+                App.Current.Resources.MergedDictionaries.Add(Langue);
+            }
+            else if (toChangeLanguage == "English")
+            {
+                ResourceDictionary Langue = new ResourceDictionary() { Source = new Uri("../assets/en.xaml", UriKind.Relative) };
+                App.Current.Resources.MergedDictionaries.Add(Langue);
+            }
+            else
+            {
+                throw new InvalidOperationException("name language problem");
+            }
+        }
+
         private void SaveSettings()
         {
             // Mise à jour des propriétés dans le modèle
@@ -174,6 +191,7 @@ namespace EasySaveGUI.ViewModels
             OnPropertyChanged(nameof(StatePath));
             OnPropertyChanged(nameof(LogType));
             SetTheme();
+            SetLanguage();
         }
     }
 }
