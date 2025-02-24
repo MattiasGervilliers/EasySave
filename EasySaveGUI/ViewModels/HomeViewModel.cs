@@ -20,6 +20,7 @@ namespace EasySaveGUI.ViewModels
         public ICommand LaunchConfigurationsCommand { get; }
         public ICommand LaunchConfigurationCommand { get; }
         public RelayCommand NavigateCreateCommand { get; }
+        public RelayCommand ToggleSelectionCommand { get; }
 
         public HomeViewModel(NavigationService navigationService)
         {
@@ -27,10 +28,24 @@ namespace EasySaveGUI.ViewModels
             // Initialize SelectedConfigurations
             SelectedConfigurations = new ObservableCollection<BackupConfiguration>();
 
+            ToggleSelectionCommand = new RelayCommand(backupConfiguration => ToggleSelection((BackupConfiguration) backupConfiguration));
+
             // Initialize the command
             LaunchConfigurationsCommand = new RelayCommand(_ => LaunchConfigurations());
             LaunchConfigurationCommand = new RelayCommand(backupConfiguration => LaunchConfiguration(backupConfiguration));
             NavigateCreateCommand = new RelayCommand(_ => navigationService.Navigate(new CreateViewModel()));
+        }
+
+        private void ToggleSelection(BackupConfiguration item)
+        {
+            if (SelectedConfigurations.Contains(item))
+            {
+                SelectedConfigurations.Remove(item);
+            }
+            else
+            {
+                SelectedConfigurations.Add(item);
+            }
         }
 
         // Function to launch selected configurations
