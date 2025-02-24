@@ -4,9 +4,7 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+      - develop
   release:
     types: [created]
 
@@ -26,18 +24,21 @@ jobs:
           choco install visualstudio2022buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.UniversalBuildTools"
 
       - name: Restaurer les dépendances NuGet
-        run: nuget restore MonProjetUWP.sln
+        run: nuget restore EasySave.sln
 
       - name: Compiler l'application en mode Release
-        run: msbuild MonProjetUWP.sln /p:Configuration=Release /p:Platform=x86
+        run: msbuild EasySave.sln /p:Configuration=Release /p:Platform=x86
 
+      - name: Publier l'application
+        run: dotnet publish EasySave.sln /p:PublishProfile=FolderProfile.pubxml
+          
       - name: Packager l'application (MSIX)
         run: |
           mkdir package
-          copy MonProjetUWP\AppPackages\* package\
-      
+          copy EasySave/publish/* package/
+
       - name: Télécharger l'artefact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: UWP-App
           path: package/
@@ -49,7 +50,7 @@ jobs:
 
     steps:
       - name: Télécharger l'artefact du build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: UWP-App
           path: package/
