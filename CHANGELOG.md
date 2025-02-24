@@ -1,3 +1,10 @@
+## [2.0.1-beta.2](https://github.com/MattiasGervilliers/EasySave/compare/v2.0.1-beta.1...v2.0.1-beta.2) (2025-02-24)
+
+
+### Bug Fixes
+
+* workflowfile ([fa3d41d](https://github.com/MattiasGervilliers/EasySave/commit/fa3d41dddf1627e92b32e27e8a93aaf76ea886d2))
+
 ## [2.0.1-beta.1](https://github.com/MattiasGervilliers/EasySave/compare/v2.0.0...v2.0.1-beta.1) (2025-02-24)
 
 
