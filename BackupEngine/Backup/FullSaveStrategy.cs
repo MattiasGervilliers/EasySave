@@ -14,7 +14,7 @@ namespace BackupEngine.Backup
         public FullSaveStrategy(BackupConfiguration configuration) : base(configuration) { }
         public override void Save(string uniqueDestinationPath)
         {
-            if (Configuration.EncryptionKey != "")
+            if (Configuration.EncryptionKey != null && Configuration.EncryptionKey != "")
             {
                 TransferStrategy = new CryptStrategy(Configuration.EncryptionKey);
             }

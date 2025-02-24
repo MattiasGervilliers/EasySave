@@ -42,7 +42,7 @@ namespace BackupEngine.Backup
 
         private void DifferentialSave(string uniqueDestinationPath, string previousSavePath)
         {
-            if (Configuration.EncryptionKey != "")
+            if (Configuration.EncryptionKey != null && Configuration.EncryptionKey != "")
             {
                 TransferStrategy = new CryptStrategy(Configuration.EncryptionKey);
             }

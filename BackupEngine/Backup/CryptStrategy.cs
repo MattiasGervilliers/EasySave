@@ -20,7 +20,7 @@ namespace BackupEngine.Backup
         public void TransferFile(string source, string destination)
         {
             bool encrypt = true;
-            LaunchCryptoSoft(source, destination,encrypt, GetKeyToString());
+            LaunchCryptoSoft(source, destination, encrypt, GetKeyToString());
             
         }
         public void UpdateKey(string key)
@@ -39,7 +39,7 @@ namespace BackupEngine.Backup
             {
                 ProcessStartInfo psi = new ProcessStartInfo
                 {
-                    FileName = "\"C:\\Users\\Nino\\source\\repos\\EasySave\\CryptoSoft\\bin\\Debug\\net8.0\\CryptoSoft.exe\"",
+                    FileName = "CryptoSoft.exe",
                     Arguments = $"\"{source}\" \"{destination}\" {encrypt} \" {encryptionkey}",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
