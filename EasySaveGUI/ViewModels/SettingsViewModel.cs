@@ -7,6 +7,8 @@ using EasySaveGUI.ViewModels.Base;
 using LogLib;
 using Microsoft.WindowsAPICodePack.Dialogs;  // Nécessaire pour le FolderPicker
 using System.IO;
+using MaterialDesignThemes.Wpf; // Import pour Snackbar
+
 
 namespace EasySaveGUI.ViewModels
 {
@@ -19,7 +21,21 @@ namespace EasySaveGUI.ViewModels
         private string _logType;
         private string _theme;
 
+        public SnackbarMessageQueue MessageQueue { get; } = new SnackbarMessageQueue();
+
         public string WelcomeMessage { get; } = "Settings";
+
+        private bool _isSnackbarActive;
+        public bool IsSnackbarActive
+        {
+            get => _isSnackbarActive;
+            set
+            {
+                _isSnackbarActive = value;
+                OnPropertyChanged(nameof(IsSnackbarActive));
+            }
+        }
+
 
         // Propriétés de données
         public string Language
@@ -29,11 +45,6 @@ namespace EasySaveGUI.ViewModels
             {
                 _language = value;
                 OnPropertyChanged(nameof(Language));
-                // Convertir la langue sélectionnée en énumération Language
-                if (Enum.TryParse(value, out Language lang))
-                {
-                    _settingsModel.UpdateLanguage(lang);
-                }
             }
         }
         
@@ -140,18 +151,24 @@ namespace EasySaveGUI.ViewModels
 
         private void SaveSettings()
         {
-            // Mise à jour des propriétés dans le modèle
+            _settingsModel.UpdateLanguage(Language);
             _settingsModel.UpdateLogPath(LogPath);
             _settingsModel.UpdateStatePath(StatePath);
             _settingsModel.UpdateLogType(LogType);
             _settingsModel.UpdateTheme(Theme);
 
-            // Mise à jour des propriétés après sauvegarde
             OnPropertyChanged(nameof(Language));
             OnPropertyChanged(nameof(Theme));
             OnPropertyChanged(nameof(LogPath));
             OnPropertyChanged(nameof(StatePath));
             OnPropertyChanged(nameof(LogType));
+
+            // Activer le Snackbar
+            IsSnackbarActive = true;
+            MessageQueue.Enqueue("Paramètres sauvegardés avec succès !");
+
+            // Désactiver le Snackbar après un délai
+            Task.Delay(3000).ContinueWith(_ => IsSnackbarActive = false);
         }
     }
 }

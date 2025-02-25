@@ -3,5 +3,7 @@
   "LogPath": "C:\\Users\\rb153\\Desktop\\EasySave\\logs",
   "StatePath": "C:\\Users\\rb153\\Desktop\\EasySave\\logs\\state.json",
   "Configurations": [],
-  "LogFormat": 0
+  "Theme": 1,
+  "LogFormat": 0,
+  "_encryptionKey": "HUELSMEDNT"
 }

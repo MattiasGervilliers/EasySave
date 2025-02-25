@@ -2,6 +2,7 @@
 using BackupEngine.Settings;
 using BackupEngine.Shared;
 using LogLib;
+using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
 
 namespace EasySaveGUI.Models
@@ -15,9 +16,9 @@ namespace EasySaveGUI.Models
             return _settingsRepository.GetConfigurations();
         }
 
-        public void UpdateLanguage(Language language)
+        public void UpdateLanguage(string language)
         {
-            _settingsRepository.UpdateLanguage(language);
+            _settingsRepository.UpdateLanguage((Language)Enum.Parse(typeof(Language), language));
         }
 
         public Language GetLanguage()

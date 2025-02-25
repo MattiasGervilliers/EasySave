@@ -17,9 +17,11 @@
 
   <ItemGroup>
     <None Remove="assets\EasySave_logo.png" />
+    <None Remove="assets\folder-icon.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
     <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
   </ItemGroup>
 
@@ -30,6 +32,7 @@
 
   <ItemGroup>
     <Resource Include="assets\EasySave_logo.png" />
+    <Resource Include="assets\folder-icon.png" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties fr_1json__JsonSchema="json" /></VisualStudio></ProjectExtensions>
