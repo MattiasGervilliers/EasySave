@@ -52,6 +52,7 @@
         <Setter Property="BorderBrush" Value="Black" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Height" Value="45"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="FontWeight" Value="Bold"/>
