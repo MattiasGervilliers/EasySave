@@ -44,7 +44,7 @@ namespace BackupEngine.Cache
         private void Save()
         {
             string json = _cache.ToJson();
-            using (FileStream fs = File.Open(CACHE_PATH, FileMode.Open, FileAccess.Write, FileShare.None))
+            using (FileStream fs = File.Open(CACHE_PATH, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
             using (StreamWriter sw = new StreamWriter(fs))
             {
                 // indent the json for better readability

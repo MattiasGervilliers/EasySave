@@ -1,23 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-
-namespace BackupEngine.Job
+﻿namespace BackupEngine.Job
 {
     public class JobManager
     {
-        private List<Thread> JobsThreads { get; set; }
-
-        public JobManager()
-        {
-            JobsThreads = new List<Thread>();
-        }
+        private Dictionary<Job, Task> _jobs { get; } = new();
+        private Dictionary<Job, CancellationTokenSource> _cancellationTokens = new();
 
         public Job LaunchBackup(BackupConfiguration configuration)
         {
-            Job job = new Job(configuration);
-            Thread thread = new Thread(() => job.Run());
-            JobsThreads.Add(thread);
-            thread.Start();
+            CancellationTokenSource cts = new CancellationTokenSource();
+            Job job = new Job(configuration, cts.Token);
+            Task task = new Task(() => job.Run());
+            
+            _jobs.Add(job, task);
+            _cancellationTokens.Add(job, cts);
+
+            task.Start();
             return job;
         }
 
@@ -31,9 +28,27 @@ namespace BackupEngine.Job
             return jobs;
         }
 
-        void StopJob(Job job)
+        void PauseJob(Job job)
         {
-            
+            // Pause the task
+            _jobs[job]?.Wait();
+        }
+
+        void ResumeJob(Job job)
+        {
+            // Resume the task
+            _jobs[job]?.Start();
+        }
+
+        void CancelJob(Job job)
+        {
+            if (_jobs.ContainsKey(job) && _cancellationTokens.ContainsKey(job))
+            {
+                _cancellationTokens[job].Cancel(); // Request cancellation
+                _jobs[job].Wait(); // Wait for the task to complete
+                _jobs.Remove(job);
+                _cancellationTokens.Remove(job);
+            }
         }
     }
 }

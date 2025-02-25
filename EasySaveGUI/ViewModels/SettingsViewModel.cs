@@ -8,7 +8,8 @@ using LogLib;
 using Microsoft.WindowsAPICodePack.Dialogs;  // Nécessaire pour le FolderPicker
 using System.IO;
 using MaterialDesignThemes.Wpf; // Import pour Snackbar
-
+using System.Windows;
+using System.Collections;
 
 namespace EasySaveGUI.ViewModels
 {
@@ -35,7 +36,6 @@ namespace EasySaveGUI.ViewModels
                 OnPropertyChanged(nameof(IsSnackbarActive));
             }
         }
-
 
         // Propriétés de données
         public string Language
@@ -149,6 +149,44 @@ namespace EasySaveGUI.ViewModels
             LogType = _settingsModel.GetLogType();  // Charge correctement le type de log
         }
 
+        public void SetTheme()
+        {
+            string toChangeTheme = _theme;
+            if (toChangeTheme == "Dark")
+            {
+                ResourceDictionary Theme = new ResourceDictionary() { Source = new Uri("../assets/DarkTheme.xaml", UriKind.Relative) };
+                App.Current.Resources.MergedDictionaries.Add(Theme);
+            }
+            else if (toChangeTheme == "Light")
+            {
+                ResourceDictionary Theme = new ResourceDictionary() { Source = new Uri("../assets/LightTheme.xaml", UriKind.Relative) };
+                App.Current.Resources.MergedDictionaries.Add(Theme);
+            }
+            else
+            {
+                throw new InvalidOperationException("name theme problem");
+            }
+        }
+
+        public void SetLanguage()
+        {
+            string toChangeLanguage = _language;
+            if (toChangeLanguage == "French")
+            {
+                ResourceDictionary Langue = new ResourceDictionary() { Source = new Uri("../assets/fr.xaml", UriKind.Relative) };
+                App.Current.Resources.MergedDictionaries.Add(Langue);
+            }
+            else if (toChangeLanguage == "English")
+            {
+                ResourceDictionary Langue = new ResourceDictionary() { Source = new Uri("../assets/en.xaml", UriKind.Relative) };
+                App.Current.Resources.MergedDictionaries.Add(Langue);
+            }
+            else
+            {
+                throw new InvalidOperationException("name language problem");
+            }
+        }
+
         private void SaveSettings()
         {
             _settingsModel.UpdateLanguage(Language);
@@ -169,6 +207,8 @@ namespace EasySaveGUI.ViewModels
 
             // Désactiver le Snackbar après un délai
             Task.Delay(3000).ContinueWith(_ => IsSnackbarActive = false);
+            SetTheme();
+            SetLanguage();
         }
     }
 }
