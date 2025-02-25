@@ -49,6 +49,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
     </UserControl.Resources>
 
     <Grid>
@@ -64,7 +65,7 @@
         </Grid.RowDefinitions>
         <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="0">
             <TextBlock FontSize="32" Text="{DynamicResource TitleHome}" Foreground="{DynamicResource Text}" FontWeight="Bold"/>
-            <TextBlock Margin="0,5,0,0" Text="{DynamicResource LittleTitleHome}" Foreground="{DynamicResource Text}" FontSize="14"/>
+            <TextBlock Margin="0,5,0,0" Text="{DynamicResource LittleTitleHome}" Foreground="{DynamicResource Text}" FontSize="15"/>
         </StackPanel>
             
             <!-- ListBox to display BackupConfigurations -->
@@ -138,10 +139,10 @@
                         Style="{DynamicResource ClassicButtonStyle}"
                         Background="{DynamicResource List}"
                         BorderBrush="{DynamicResource Card}"
-                        Foreground="{DynamicResource Text}"
+                        Foreground="{DynamicResource Text}"                        
                         Content="{DynamicResource LaunchButtonHome}"
                         Padding="10,5"
-                        FontSize="14"
+                        FontSize="16"
                         HorizontalAlignment="Right"/>
         </Grid>
     </Grid>

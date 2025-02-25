@@ -8,12 +8,12 @@
 
     <!-- HomeView -->
     <sys:String x:Key="TitleHome">Sauvegardes</sys:String>
-    <sys:String x:Key="LittleTitleHome">Listes des sauvegardes</sys:String>
+    <sys:String x:Key="LittleTitleHome">Liste des configurations de sauvegarde</sys:String>
     <sys:String x:Key="CreateButtonHome">+ Créer une configuration</sys:String>
     <sys:String x:Key="LaunchButtonHome">Lancer les configurations sélectionnées</sys:String>
     
     <!-- CreateView -->
-    <sys:String x:Key="TitleCreate">Création d'une nouvelle Sauvegarde</sys:String>
+    <sys:String x:Key="TitleCreate">Création d'une nouvelle de config de Sauvegarde</sys:String>
     <sys:String x:Key="NameTitleCaseCreate">Nom :</sys:String>
     
     <!-- SettingsView -->
