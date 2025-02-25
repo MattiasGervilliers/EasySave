@@ -44,9 +44,9 @@ jobs:
         with:
           name: EasySave-Apps
           path: |
-            EasySaveConsole/bin/Release/net6.0/publish/
-            EasySaveGUI/bin/Release/net6.0/publish/
-            CryptoSoft/bin/Release/net6.0/publish/
+            EasySaveConsole/publish/
+            EasySaveGUI/publish/
+            CryptoSoft/publish/
 
   release:
     needs: build
@@ -72,9 +72,12 @@ jobs:
         run: npm install -g semantic-release @semantic-release/changelog @semantic-release/git
 
       - name: Exécuter semantic-release
+        id: semantic_release  # Add an ID to access outputs
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the default GITHUB_TOKEN
-        run: npx semantic-release
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx semantic-release | tee release-output.txt
+          echo "RELEASE_TAG=$(grep -o 'v[0-9]*\.[0-9]*\.[0-9]*[-a-z0-9]*' release-output.txt | head -1)" >> $GITHUB_ENV
 
       - name: Télécharger l'artefact du build
         uses: actions/download-artifact@v4
@@ -85,10 +88,7 @@ jobs:
       - name: Créer une Release GitHub
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            package/EasySaveConsole/bin/Release/net6.0/publish/**/*
-            package/EasySaveGUI/bin/Release/net6.0/publish/**/*
-            package/CryptoSoft/bin/Release/net6.0/publish/**/*
-          tag_name: ${{ steps.semantic-release.outputs.release_tag }}  # Use the tag created by semantic-release
+          files: package/**
+          tag_name: ${{ env.RELEASE_TAG }}  # Use the captured tag
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the default GITHUB_TOKEN
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
