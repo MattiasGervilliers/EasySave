@@ -19,9 +19,10 @@
     <!-- SettingsView -->
     <sys:String x:Key="TitleSettings">Paramètres</sys:String>
     <sys:String x:Key="LanguageTitleCaseSettings">Nom :</sys:String>
-    <sys:String x:Key="LogTitleCaseSettings">Chemin Log:</sys:String>
+    <sys:String x:Key="LogTitleCaseSettings">Chemin Log :</sys:String>
     <sys:String x:Key="StateTitleCaseSettings">Chemin temps réel :</sys:String>
-    <sys:String x:Key="LogTypeTitleCaseSettings">Type de Log:</sys:String>
+    <sys:String x:Key="LogTypeTitleCaseSettings">Type de Log :</sys:String>
     <sys:String x:Key="ThemeTitleCaseSettings">Thème :</sys:String>
     <sys:String x:Key="SaveButtonSettings">Sauvegarder</sys:String>
+    <sys:String x:Key="AlertSaveSettings">Paramètres sauvegardés avec succès !</sys:String>
 </ResourceDictionary>

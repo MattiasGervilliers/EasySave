@@ -21,7 +21,8 @@
     <sys:String x:Key="LanguageTitleCaseSettings">Name:</sys:String>
     <sys:String x:Key="LogTitleCaseSettings">Log Path:</sys:String>
     <sys:String x:Key="StateTitleCaseSettings">Reel State Path:</sys:String>
-    <sys:String x:Key="LogTypeTitleCaseSettings">State Path:</sys:String>
-    <sys:String x:Key="ThemeTitleCaseSettings">State Path:</sys:String>
+    <sys:String x:Key="LogTypeTitleCaseSettings">Log Type:</sys:String>
+    <sys:String x:Key="ThemeTitleCaseSettings">Theme:</sys:String>
     <sys:String x:Key="SaveButtonSettings">Save</sys:String>
+    <sys:String x:Key="AlertSaveSettings">Settings saved succesfully !</sys:String>
 </ResourceDictionary>

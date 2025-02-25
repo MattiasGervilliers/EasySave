@@ -201,14 +201,16 @@ namespace EasySaveGUI.ViewModels
             OnPropertyChanged(nameof(StatePath));
             OnPropertyChanged(nameof(LogType));
 
+            SetTheme();
+            SetLanguage();
+
             // Activer le Snackbar
+            var message = (string)Application.Current.Resources["AlertSaveSettings"];
+            MessageQueue.Enqueue(message);
             IsSnackbarActive = true;
-            MessageQueue.Enqueue("Paramètres sauvegardés avec succès !");
 
             // Désactiver le Snackbar après un délai
             Task.Delay(3000).ContinueWith(_ => IsSnackbarActive = false);
-            SetTheme();
-            SetLanguage();
         }
     }
 }
