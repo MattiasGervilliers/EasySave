@@ -14,7 +14,8 @@
     
     <!-- CreateView -->
     <sys:String x:Key="TitleCreate">Create a new Backup Configuration</sys:String>
-    <sys:String x:Key="NameTitleCaseCreate">Name:</sys:String>    
+    <sys:String x:Key="NameTitleCaseCreate">Name:</sys:String>
+    <sys:String x:Key="CreateButtonFinal">Create</sys:String>
 
     <!-- SettingsView -->
     <sys:String x:Key="TitleSettings">Settings</sys:String>

@@ -55,6 +55,8 @@
                 VerticalAlignment="Bottom" 
                 Margin="0,0,0,20" 
                 Width="100"
+                FontSize="16"
+                Style="{DynamicResource ClassicButtonStyle}"
                 Command="{Binding SaveCommand}" />
     </Grid>
 </UserControl>
