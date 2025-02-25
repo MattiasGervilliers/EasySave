@@ -1,71 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.XPath;
+using System.IO;
 
 namespace BackupEngine.Backup
 {
+    /// <summary>
+    /// Strategy for encrypting files before transfer.
+    /// </summary>
     internal class CryptStrategy : ITransferStrategy
     {
-        private string _extensionsToCrypt;
-        private string _extensionsPriority;
-        public CryptStrategy(HashSet<string> extensions, HashSet<string> ExtensionPriority)
+        /// <summary>
+        /// Set of file extensions that need to be encrypted.
+        /// </summary>
+        private HashSet<string> _extensionsToCrypt;
+        /// <summary>
+        /// Initializes a new instance of the CryptStrategy class with specified extensions to encrypt.
+        /// </summary>
+        public CryptStrategy(HashSet<string> extensions, HashSet<string> extensionPriority)
         {
-            //convert HashSet into string
-            if (extensions == null)
-            {
-                _extensionsToCrypt =  "";
-            }
-            _extensionsToCrypt = string.Join(", ", extensions);
-            if (ExtensionPriority == null)
-            {
-                _extensionsPriority = "";
-            }
-            _extensionsPriority = string.Join(", ", ExtensionPriority);
+            _extensionsToCrypt = extensions ?? new HashSet<string>();
         }
+        /// <summary>
+        /// Transfers a file from source to destination, applying encryption if required.
+        /// </summary>
         public void TransferFile(string source, string destination)
         {
-            bool encrypt = true;
-            //Only launch cryptosoft if the source file extension is in configuration.extension hashset
-            if (_extensionsToCrypt.Contains(Path.GetExtension(source).ToLower()))
+            string extension = Path.GetExtension(source).ToLower();
+            if (_extensionsToCrypt.Contains(extension))
             {
-                LaunchCryptoSoft(source, destination, encrypt);
+                LaunchCryptoSoft(source, destination);
+            }
+            else
+            {
+                File.Copy(source, destination, true);
             }
         }
-        public void UpdateExtensions(string extensions)
-        {
-            this._extensionsToCrypt = extensions;
-        }
-        public void LaunchCryptoSoft(string source, string destination, bool encrypt)
+        /// <summary>
+        /// Launches the CryptoSoft executable to encrypt a file.
+        /// </summary>
+        private void LaunchCryptoSoft(string source, string destination)
         {
             try
             {
                 ProcessStartInfo psi = new ProcessStartInfo
                 {
-                    FileName = "\"C:\\Users\\Nino\\source\\repos\\EasySave\\CryptoSoft\\bin\\Debug\\net8.0\\CryptoSoft.exe\"",
-                    Arguments = $"\"{source}\" \"{destination}\" {encrypt}",
+                    FileName = "C:\\Users\\Nino\\source\\repos\\EasySave\\CryptoSoft\\bin\\Debug\\net8.0\\CryptoSoft.exe",
+                    Arguments = $"\"{source}\" \"{destination}\" True",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
                     CreateNoWindow = true
                 };
+
+                Console.WriteLine($"Lancement de CryptoSoft avec : {psi.Arguments}");
                 using (Process process = new Process { StartInfo = psi })
                 {
                     process.Start();
-
                     string output = process.StandardOutput.ReadToEnd();
                     string error = process.StandardError.ReadToEnd();
+                    process.WaitForExit();
 
-                    process.WaitForExit(); 
                     if (!string.IsNullOrEmpty(error))
                     {
-                        Console.WriteLine($"Erreurs : {error}");
+                        Console.WriteLine($"Erreur CryptoSoft : {error}");
                     }
                 }
             }
@@ -74,9 +72,5 @@ namespace BackupEngine.Backup
                 Console.WriteLine($"Erreur lors du lancement de CryptoSoft : {e.Message}");
             }
         }
-
     }
-
 }
-
-    

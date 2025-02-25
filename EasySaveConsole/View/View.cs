@@ -153,6 +153,8 @@ namespace EasySaveConsole.View
                                 else
                                 {
                                     ConfigNotFound();
+                                    configLaunch = Console.ReadLine()?.Trim() ?? "";
+
                                 }
                             }
                         }
