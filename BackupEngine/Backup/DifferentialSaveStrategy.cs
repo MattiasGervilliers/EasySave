@@ -1,5 +1,6 @@
 ﻿using BackupEngine.State;
 using BackupEngine.Log;
+using BackupEngine.Progress;
 using BackupEngine.Settings;
 using System.Diagnostics;
 using System.Collections.Concurrent;
@@ -54,6 +55,7 @@ namespace BackupEngine.Backup
             FullSaveStrategy fullSaveStrategy = new FullSaveStrategy(Configuration);
             fullSaveStrategy.Transfer += (sender, e) => OnTransfer(e);
             fullSaveStrategy.StateUpdated += (sender, e) => OnStateUpdated(e);
+            fullSaveStrategy.Progress += (sender, e) => OnProgress(e);
             fullSaveStrategy.Save(uniqueDestinationPath);
         }
 
@@ -81,10 +83,16 @@ namespace BackupEngine.Backup
             long remainingSize = totalSize;
 
             OnStateUpdated(new StateEvent("Differential Backup", "Active", totalFiles, totalSize, remainingFiles, remainingSize, "", ""));
+            OnProgress(new ProgressEvent(totalSize, remainingSize));
 
             List<Task> tasks = new List<Task>();
 
             WaitForBusinessSoftwareToClose();
+
+            OnProgress(new ProgressEvent(
+                totalSize,
+                remainingSize
+            ));
 
             foreach (string file in files)
             {
@@ -121,6 +129,7 @@ namespace BackupEngine.Backup
             _cryptoTask.Wait();
 
             OnStateUpdated(new StateEvent("Differential Backup", "Completed", totalFiles, totalSize, 0, 0, "", ""));
+            OnProgress(new ProgressEvent(totalSize, 0));
             Console.WriteLine($"Differential backup completed in: {uniqueDestinationPath}");
         }
 
@@ -143,7 +152,8 @@ namespace BackupEngine.Backup
                 remainingSize -= fileInfo.Length;
 
                 OnStateUpdated(new StateEvent("Differential Backup", "Active", remainingFiles, remainingSize, remainingFiles, remainingSize, file, destFile));
-
+                OnProgress(new ProgressEvent(totalSize, remainingSize));
+                
                 TransferEvent transferEvent = new TransferEvent(Configuration, duration, fileInfo, new FileInfo(destFile));
                 OnTransfer(transferEvent);
             }

@@ -10,8 +10,7 @@
       d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" Text="{DynamicResource TitleCreate}" Foreground="{DynamicResource Text}"/>
-
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" Text="Create a new Backup Configuration" Foreground="{DynamicResource Text}"/>
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,100,0,0" Text="{DynamicResource NameTitleCaseCreate}" Foreground="{DynamicResource Text}"/>
         <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,100,0,0" Text="{Binding Name, Mode=TwoWay}" Width="200" Height="23"/>
 
@@ -44,6 +43,7 @@
         <Button Content="{DynamicResource CreateButtonFinal}"
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Bottom"
+                Style="{DynamicResource HoverButtonStyle}"
                 Margin="0,0,0,20"
                 Width="100"
                 FontSize="16"

@@ -47,5 +47,9 @@
     <Resource Include="assets\poubelle.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Converters\" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties fr_1json__JsonSchema="json" /></VisualStudio></ProjectExtensions>
 </Project>

@@ -1,3 +1,4 @@
+﻿using BackupEngine.Progress;
 ﻿using System;
 using System.IO;
 using System.Linq;
@@ -63,8 +64,14 @@ namespace BackupEngine.Backup
             long remainingSize = totalSize;
 
             OnStateUpdated(new StateEvent("Full Backup", "Active", totalFiles, totalSize, remainingFiles, remainingSize, "", ""));
+            OnProgress(new ProgressEvent(
+                totalSize,
+                remainingSize
+            ));
+            
             List<Task> tasks = new List<Task>();
             WaitForBusinessSoftwareToClose();
+            
             foreach (string file in files)
             {
                 string relativePath = file.Substring(sourcePath.Length + 1);
@@ -84,7 +91,7 @@ namespace BackupEngine.Backup
                     }));
                 }
             }
-
+            
             _cryptoTask = Task.Run(() =>
             {
                 WaitForBusinessSoftwareToClose(); 
@@ -95,6 +102,7 @@ namespace BackupEngine.Backup
             _cryptoTask.Wait();
 
             OnStateUpdated(new StateEvent("Full Backup", "Completed", totalFiles, totalSize, 0, 0, "", ""));
+            OnProgress(new ProgressEvent(totalSize,0));
             Console.WriteLine($"Full backup completed in: {uniqueDestinationPath}");
         }
 
@@ -126,7 +134,8 @@ namespace BackupEngine.Backup
                 remainingSize -= fileInfo.Length;
 
                 OnStateUpdated(new StateEvent("Full Backup", "Active", remainingFiles, remainingSize, remainingFiles, remainingSize, file, destFile));
-
+                OnProgress(new ProgressEvent(totalSize,remainingSize));
+                
                 TransferEvent transferEvent = new TransferEvent(Configuration, duration, fileInfo, new FileInfo(destFile));
                 OnTransfer(transferEvent);
             }
