@@ -1,3 +1,12 @@
+# [2.1.0-beta.3](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.2...v2.1.0-beta.3) (2025-02-26)
+
+
+### Bug Fixes
+
+* merge ([101c5d3](https://github.com/MattiasGervilliers/EasySave/commit/101c5d3b6e325cf2f9f00c46b9145df37fb1472d))
+* workflow file 10 ([dd471d4](https://github.com/MattiasGervilliers/EasySave/commit/dd471d4aebd535af8a4eb072e9fc14898251fb9a))
+* workflow file 11 ([05c9204](https://github.com/MattiasGervilliers/EasySave/commit/05c9204120c432bfe4202ed2661fabe64973af00))
+
 # [2.1.0-beta.2](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.1...v2.1.0-beta.2) (2025-02-26)
 
 
