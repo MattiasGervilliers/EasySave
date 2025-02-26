@@ -1,3 +1,22 @@
+# [2.1.0-beta.1](https://github.com/MattiasGervilliers/EasySave/compare/v2.0.1-beta.10...v2.1.0-beta.1) (2025-02-26)
+
+
+### Bug Fixes
+
+* background color of backup items ([b2bd537](https://github.com/MattiasGervilliers/EasySave/commit/b2bd537cebd7777e8df806adf1e1cd5119d07274))
+* change the style of the launch button + correction on "fr" and "en" ressources dictionnary ([61ed8eb](https://github.com/MattiasGervilliers/EasySave/commit/61ed8ebd7b5483bf72e74502fe578a180ac34772))
+* improved style of create and save button + add create button content to ressource dictionnaries ([67e190f](https://github.com/MattiasGervilliers/EasySave/commit/67e190f0245ed9ff5ff7aa9cf615edbd9defa434))
+* save alert translation ([b117c5a](https://github.com/MattiasGervilliers/EasySave/commit/b117c5a6b7164ba3038285e3b23f09190457d200))
+* size of the launch button ([00aa8d2](https://github.com/MattiasGervilliers/EasySave/commit/00aa8d22f199b7934ad27bcf388b8567d8f9129b))
+* workflow file 6 ([58aa28c](https://github.com/MattiasGervilliers/EasySave/commit/58aa28c3a59942406be35f1f9f7f7b35bbe34781))
+* workflow file 6& ([0aa4d55](https://github.com/MattiasGervilliers/EasySave/commit/0aa4d552a53173b78ab7634fcdd6978ba48eb147))
+* workflow file 8 ([604636d](https://github.com/MattiasGervilliers/EasySave/commit/604636d694923a427309f9e43ce231076de51d4e))
+
+
+### Features
+
+* toasted alert when parameters are saved ([728b93e](https://github.com/MattiasGervilliers/EasySave/commit/728b93e2580545f3ef21567ce0ae6f3c73a6c5d4))
+
 ## [2.0.1-beta.10](https://github.com/MattiasGervilliers/EasySave/compare/v2.0.1-beta.9...v2.0.1-beta.10) (2025-02-25)
 
 
