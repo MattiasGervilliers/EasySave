@@ -80,7 +80,6 @@ namespace EasySaveGUI.Models
                 SourcePath = new CustomPath(SourcePath),
                 DestinationPath = new CustomPath(DestinationPath),
                 BackupType = backupType,
-                EncryptionKey = EncryptionKey
             };
         }
     }

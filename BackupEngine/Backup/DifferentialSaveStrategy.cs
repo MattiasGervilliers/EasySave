@@ -1,14 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using BackupEngine.State;
+﻿using BackupEngine.State;
 using BackupEngine.Log;
 using BackupEngine.Settings;
 using System.Diagnostics;
 using System.Collections.Concurrent;
+using BackupEngine.Cache;
 
 namespace BackupEngine.Backup
 {
@@ -18,6 +13,7 @@ namespace BackupEngine.Backup
     public class DifferentialSaveStrategy : SaveStrategy
     {
         private SettingsRepository _settingsRepository = new SettingsRepository();
+        private DifferentialBackupCacheRepository _cacheRepository = new DifferentialBackupCacheRepository();
         private static readonly string _mutexName = "Global\\CryptoSoft_Mutex";
         private readonly ConcurrentQueue<(string, string)> _cryptoQueue = new ConcurrentQueue<(string, string)>();
         private Task _cryptoTask;
@@ -222,6 +218,23 @@ namespace BackupEngine.Backup
                     }
                 }
             }
+        }
+
+        private bool PreviousSaveExists()
+        {
+            CachedConfiguration? cached = _cacheRepository.GetCachedConfiguration(Configuration);
+            return cached != null;
+        }
+
+        private string PreviousSavePath()
+        {
+            CachedConfiguration? cached = _cacheRepository.GetCachedConfiguration(Configuration);
+            return cached!.Backups.OrderByDescending(b => b.Date).First().DirectoryName;
+        }
+
+        private void UpdateCache(string uniqueDestinationPath)
+        {
+            _cacheRepository.AddBackup(Configuration, DateTime.Now, uniqueDestinationPath);
         }
 
         /// <summary>

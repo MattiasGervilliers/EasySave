@@ -36,18 +36,7 @@ namespace BackupEngine.Backup
                 File.Copy(source, destination, true);
             }  
         }
-        
-        public void UpdateKey(string key)
-        {
-            _key = new NetworkCredential("", key).SecurePassword;
-        }
-        
-        internal string GetKeyToString()
-        {
-            string theString = new NetworkCredential("", _key).Password;
-            return theString;
-        }
-        
+
         /// <summary>
         /// Launches the CryptoSoft executable to encrypt a file.
         /// </summary>
