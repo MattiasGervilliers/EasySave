@@ -21,7 +21,7 @@ namespace BackupEngine.Settings
             Language = Language.English;
             LogPath = new CustomPath("logs");
             LogFormat = LogType.Json;
-            StatePath = new CustomPath("logs/state.json");
+            StatePath = new CustomPath("logs");
             ExtensionPriority = new HashSet<string>() { ".txt", ".pdf" };// Pour l'instant la priorité des extensions est set ici
             BusinessSoftwareList = new List<string> { "CalculatorApp", "msedge" };//idem pour les logitiels metiers
             Theme = Theme.Light;
