@@ -1,6 +1,5 @@
 ﻿using BackupEngine;
 using BackupEngine.Job;
-using System.Diagnostics;
 
 namespace EasySaveGUI.Models
 {

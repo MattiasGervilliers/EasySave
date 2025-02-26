@@ -87,7 +87,7 @@ namespace BackupEngine.Backup
                     tasks.Add(Task.Run(() =>
                     {
                         WaitForBusinessSoftwareToClose(); 
-                        TransferFile(file, destFile, ref remainingFiles, ref remainingSize);
+                        TransferFile(file, destFile, ref totalSize, ref remainingFiles, ref remainingSize);
                     }));
                 }
             }
@@ -109,7 +109,7 @@ namespace BackupEngine.Backup
         /// <summary>
         /// Transfers a file and updates the backup state.
         /// </summary>
-        private void TransferFile(string file, string destFile, ref int remainingFiles, ref long remainingSize)
+        private void TransferFile(string file, string destFile, ref long totalSize, ref int remainingFiles, ref long remainingSize)
         {
             FileInfo fileInfo = new FileInfo(file);
             bool isLargeFile = fileInfo.Length > _koLimit * 1024;
