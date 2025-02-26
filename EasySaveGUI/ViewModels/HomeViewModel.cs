@@ -22,6 +22,8 @@ namespace EasySaveGUI.ViewModels
         public RelayCommand NavigateCreateCommand { get; }
         public RelayCommand ToggleSelectionCommand { get; }
 
+        private List<BackupConfiguration> _pausedConfigurations = [];
+
         private ObservableCollection<KeyValuePair<BackupConfiguration, double>> _progress;
         public ObservableCollection<KeyValuePair<BackupConfiguration, double>> Progress
         {
@@ -52,6 +54,12 @@ namespace EasySaveGUI.ViewModels
             DeleteConfigurationCommand = new RelayCommand(obj => DeleteConfiguration((BackupConfiguration)obj));
         }
 
+        private void PauseBackup(BackupConfiguration configuration)
+        {
+            _pausedConfigurations.Add(configuration);
+            _backupModel.PauseBackup(configuration);
+        }
+
         private void OnProgressUpdated(BackupConfiguration configuration, double progress)
         {
             // Find the existing entry
@@ -65,7 +73,7 @@ namespace EasySaveGUI.ViewModels
 
                 OnPropertyChanged(nameof(Progress));
 
-                // if progress >= 100, remove the entry
+                // If backup is completed, remove from the list to allow re-launch
                 if (progress >= 100)
                 {
                     _progress.Remove(existingEntry);
@@ -105,6 +113,18 @@ namespace EasySaveGUI.ViewModels
         {
             if (backupConfiguration is BackupConfiguration configuration)
             {
+                if (Progress.Any(kvp => kvp.Key == configuration))
+                {
+                    if (!_pausedConfigurations.Contains(configuration))
+                    {
+                        PauseBackup(configuration);
+                        return;
+                    }
+
+                    _backupModel.ResumeBackup(configuration);
+                    return;
+                }
+
                 _backupModel.LaunchBackup(configuration);
             }
         }
@@ -117,5 +137,14 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
+        public bool IsLaunched(BackupConfiguration configuration)
+        {
+            return Progress.Any(kvp => kvp.Key == configuration);
+        }
+
+        public bool IsPaused(BackupConfiguration configuration)
+        {
+            return _pausedConfigurations.Contains(configuration);
+        }
     }
 }
