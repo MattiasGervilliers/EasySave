@@ -1,12 +1,5 @@
-﻿using System;
-using System.IO;
-using BackupEngine.State;
-using System.Linq;
+﻿using BackupEngine.Progress;
 using BackupEngine.Log;
-using System.Text;
-using System.Diagnostics;
-using BackupEngine.Settings;
-
 namespace BackupEngine.Backup
 {
     public class FullSaveStrategy : SaveStrategy
@@ -48,6 +41,11 @@ namespace BackupEngine.Backup
                 ""
             ));
 
+            OnProgress(new ProgressEvent(
+                totalSize,
+                remainingSize
+            ));
+
             // Parcourir chaque fichier et copier
             foreach (string file in files)
             {
@@ -78,6 +76,11 @@ namespace BackupEngine.Backup
                         destFile
                     ));
 
+                    OnProgress(new ProgressEvent(
+                totalSize,
+                remainingSize
+            ));
+
                     // Créer l'événement de transfert (logique existante)
                     TransferEvent transferEvent = new TransferEvent(Configuration, duration, new FileInfo(file), new FileInfo(destFile));
                     OnTransfer(transferEvent);
@@ -100,6 +103,11 @@ namespace BackupEngine.Backup
                 0,
                 "",
                 ""
+            ));
+
+            OnProgress(new ProgressEvent(
+                totalSize,
+                0
             ));
 
             Console.WriteLine($"Sauvegarde complète effectuée dans : {uniqueDestinationPath}");

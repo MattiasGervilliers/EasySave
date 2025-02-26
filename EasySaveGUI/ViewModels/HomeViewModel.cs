@@ -22,6 +22,17 @@ namespace EasySaveGUI.ViewModels
         public RelayCommand NavigateCreateCommand { get; }
         public RelayCommand ToggleSelectionCommand { get; }
 
+        private Dictionary<BackupConfiguration, int> _progress = new();
+        public Dictionary<BackupConfiguration, int> Progress
+        {
+            get => _progress;
+            set
+            {
+                _progress = value;
+                OnPropertyChanged(nameof(Progress));
+            }
+        }
+
         public HomeViewModel(NavigationService navigationService)
         {
             BackupConfigurations = new ObservableCollection<BackupConfiguration>(_settingsModel.GetConfigurations());
@@ -34,6 +45,23 @@ namespace EasySaveGUI.ViewModels
             LaunchConfigurationsCommand = new RelayCommand(_ => LaunchConfigurations());
             LaunchConfigurationCommand = new RelayCommand(backupConfiguration => LaunchConfiguration(backupConfiguration));
             NavigateCreateCommand = new RelayCommand(_ => navigationService.Navigate(new CreateViewModel()));
+
+            _backupModel.ProgressUpdated += OnProgressUpdated;
+
+            // Initialize progress dictionary
+            foreach (var config in BackupConfigurations)
+            {
+                Progress[config] = 0;
+            }
+        }
+
+        private void OnProgressUpdated(BackupConfiguration configuration, int progress)
+        {
+            if (Progress.ContainsKey(configuration))
+            {
+                Progress[configuration] = progress;
+                OnPropertyChanged(nameof(Progress));
+            }
         }
 
         private void ToggleSelection(BackupConfiguration item)

@@ -1,7 +1,7 @@
 ﻿using BackupEngine.Settings;
 using System.Text.Json;
 
-namespace BackupEngine.State
+namespace BackupEngine.Progress
 {
     public class StateManager
     {

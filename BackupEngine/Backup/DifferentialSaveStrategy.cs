@@ -1,6 +1,6 @@
 ﻿using BackupEngine.Cache;
 using BackupEngine.Log;
-using BackupEngine.State;
+using BackupEngine.Progress;
 
 namespace BackupEngine.Backup
 {

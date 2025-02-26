@@ -1,13 +1,14 @@
 ﻿using BackupEngine.Backup;
-using Newtonsoft.Json.Linq;
 
 namespace BackupEngine.Job
 {
     public class Job
     {
-        private BackupConfiguration Configuration { get; }
+        public BackupConfiguration Configuration { get; }
         private FileManager FileManager { get; }
         private readonly CancellationToken _ct;
+        public int Progress = 0;
+        public event EventHandler<int> ProgressChanged;
 
         public Job(BackupConfiguration configuration, CancellationToken Token)
         {
@@ -33,7 +34,11 @@ namespace BackupEngine.Job
             {
                 return;
             }
-
+            FileManager.SubscribeProgress((sender, e) =>
+            {
+                Progress = (int)(e.RemainingSize / e.TotalSize);
+                ProgressChanged?.Invoke(this, Progress);
+            });
             FileManager.Save(Configuration);
         }
     }

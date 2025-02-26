@@ -28,19 +28,19 @@
             return jobs;
         }
 
-        void PauseJob(Job job)
+        public void PauseJob(Job job)
         {
             // Pause the task
             _jobs[job]?.Wait();
         }
 
-        void ResumeJob(Job job)
+        public void ResumeJob(Job job)
         {
             // Resume the task
             _jobs[job]?.Start();
         }
 
-        void CancelJob(Job job)
+        public void CancelJob(Job job)
         {
             if (_jobs.ContainsKey(job) && _cancellationTokens.ContainsKey(job))
             {

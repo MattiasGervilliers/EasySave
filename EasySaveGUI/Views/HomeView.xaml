@@ -67,9 +67,9 @@
             <TextBlock FontSize="32" Text="{DynamicResource TitleHome}" Foreground="{DynamicResource Text}" FontWeight="Bold"/>
             <TextBlock Margin="0,5,0,0" Text="{DynamicResource LittleTitleHome}" Foreground="{DynamicResource Text}" FontSize="14"/>
         </StackPanel>
-            
-            <!-- ListBox to display BackupConfigurations -->
-            <ListBox ItemsSource="{Binding BackupConfigurations}"
+
+        <!-- ListBox to display BackupConfigurations -->
+        <ListBox ItemsSource="{Binding BackupConfigurations}"
                      Style="{StaticResource CustomListBoxStyle}"
                      ItemContainerStyle="{StaticResource CustomListBoxItemStyle}"
                      SelectionMode="Multiple"
@@ -79,47 +79,59 @@
                      ScrollViewer.CanContentScroll="False"
                      Background="{DynamicResource List}"
                      SelectionChanged="ListBox_SelectionChanged">
-                <!-- Bind selected items -->
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="60" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+            <!-- Bind selected items -->
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="60" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
                             <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                                       VerticalAlignment="Center"
                                       Margin="0,0,7,0"
                                       Command="{Binding DataContext.ToggleSelectionCommand, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
                                       CommandParameter="{Binding}"/>
                             <StackPanel>
-                                    <TextBlock Text="{Binding Name}" FontWeight="ExtraBlack" FontSize="24px"/>
-                                    <TextBlock Text="{Binding BackupType}" FontWeight="DemiBold" />
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Source:" Margin="0,0,7,0" />
-                                        <TextBlock Text="{Binding SourcePath}" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Destination:" Margin="0,0,7,0" />
-                                        <TextBlock Text="{Binding DestinationPath}" />
-                                    </StackPanel>
+                                <TextBlock Text="{Binding Name}" FontWeight="ExtraBlack" FontSize="24px"/>
+                                <TextBlock Text="{Binding BackupType}" FontWeight="DemiBold" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Source:" Margin="0,0,7,0" />
+                                    <TextBlock Text="{Binding SourcePath}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Destination:" Margin="0,0,7,0" />
+                                    <TextBlock Text="{Binding DestinationPath}" />
                                 </StackPanel>
                             </StackPanel>
-                            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Content="▶️"
+                        </StackPanel>
+
+                        <ProgressBar 
+                            Grid.Column="1"
+                            Value="{Binding DataContext.Progress[name], RelativeSource={RelativeSource AncestorType=ListBox}}"
+                            Minimum="0" Maximum="100"
+                            Height="10"
+                            Foreground="Green"
+                            Background="LightGray"
+                            Margin="0,5,0,0"/>
+
+
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="▶️"
                                         Style="{DynamicResource HoverButtonStyle}"
                                         Command="{Binding DataContext.LaunchConfigurationCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                         CommandParameter="{Binding}" 
                                         Height="30"
                                         Width="30"
                                         HorizontalAlignment="Right">
-                                </Button>
-                            </StackPanel>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
         <Grid Margin="0,15,0,0" Grid.Column="1" Grid.Row="2">
             <Grid.ColumnDefinitions>

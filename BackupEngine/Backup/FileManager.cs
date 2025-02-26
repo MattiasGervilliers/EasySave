@@ -1,8 +1,6 @@
 ﻿using BackupEngine.Log;
-using BackupEngine.State;
+using BackupEngine.Progress;
 using BackupEngine.Settings;
-using System;
-using System.IO;
 
 namespace BackupEngine.Backup
 {
@@ -49,6 +47,11 @@ namespace BackupEngine.Backup
 
             // Lancer la sauvegarde avec le bon dossier
             _saveStrategy.Save(uniqueDestinationPath);
+        }
+
+        public void SubscribeProgress(EventHandler<ProgressEvent> handler)
+        {
+            _saveStrategy.Progress += handler;
         }
     }
 }

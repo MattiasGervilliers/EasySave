@@ -1,5 +1,5 @@
 ﻿using BackupEngine.Log;
-using BackupEngine.State;
+using BackupEngine.Progress;
 
 namespace BackupEngine.Backup
 {
@@ -7,6 +7,7 @@ namespace BackupEngine.Backup
     {
         public event EventHandler<TransferEvent> Transfer;
         public event EventHandler<StateEvent> StateUpdated;
+        public event EventHandler<ProgressEvent> Progress;
         protected readonly BackupConfiguration Configuration = configuration;
         public ITransferStrategy TransferStrategy;
 
@@ -20,6 +21,11 @@ namespace BackupEngine.Backup
         protected void OnStateUpdated(StateEvent state)
         {
             StateUpdated?.Invoke(this, state);
+        }
+
+        protected void OnProgress(ProgressEvent progress)
+        {
+            Progress?.Invoke(this, progress);
         }
     }
 }
