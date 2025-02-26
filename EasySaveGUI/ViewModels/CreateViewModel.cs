@@ -2,6 +2,7 @@
 using EasySaveGUI.Models;
 using EasySaveGUI.ViewModels.Base;
 using BackupEngine;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace EasySaveGUI.ViewModels
 {
@@ -46,26 +47,6 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
-        public bool Encrypted
-        {
-            get => _encrypted;
-            set
-            {
-                _encrypted = value;
-                OnPropertyChanged(nameof(Encrypted));
-            }
-        }
-
-        public string EncryptionKey
-        {
-            get => _encryptionKey;
-            set
-            {
-                _encryptionKey = value;
-                OnPropertyChanged(nameof(EncryptionKey));
-            }
-        }
-
         public BackupType BackupType
         {
             get => _backupType;
@@ -76,13 +57,62 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
+        public string EncryptionKey
+        {
+            get => _encryptionKey;
+            set
+            {
+                _encryptionKey = value;
+            }
+        }
+
+
+        // Liste des types de backup disponibles
+        public List<string> AvailableBackupTypes { get; } = new List<string>
+        {
+            "Full", "Differential"
+        };
+
         public ICommand CreateCommand { get; }
+        public ICommand BrowseSourcePathCommand { get; }
+        public ICommand BrowseDestPathCommand { get; }
 
         public CreateViewModel()
         {
             _settingsModel = new SettingsModel();
 
+            BrowseSourcePathCommand = new RelayCommand(_ => BrowseSourcePath());
+            BrowseDestPathCommand = new RelayCommand(_ => BrowseDestPath());
+
+            BackupType = BackupType.Differential;
+
             CreateCommand = new RelayCommand(_ => CreateConfiguration());
+        }
+
+        private void BrowseSourcePath()
+        {
+            var dialog = new CommonOpenFileDialog
+            {
+                IsFolderPicker = true
+            };
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                SourcePath = dialog.FileName;
+            }
+        }
+
+        private void BrowseDestPath()
+        {
+            var dialog = new CommonOpenFileDialog
+            {
+                IsFolderPicker = true
+            };
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                DestinationPath = dialog.FileName;
+            }
         }
 
         void CreateConfiguration()

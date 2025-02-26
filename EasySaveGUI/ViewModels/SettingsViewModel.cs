@@ -24,8 +24,6 @@ namespace EasySaveGUI.ViewModels
 
         public SnackbarMessageQueue MessageQueue { get; } = new SnackbarMessageQueue();
 
-        public string WelcomeMessage { get; } = "Settings";
-
         private bool _isSnackbarActive;
         public bool IsSnackbarActive
         {

@@ -15,6 +15,10 @@
     <!-- CreateView -->
     <sys:String x:Key="TitleCreate">Create a new Backup Configuration</sys:String>
     <sys:String x:Key="NameTitleCaseCreate">Name:</sys:String>
+    <sys:String x:Key="SourcePathTitleCaseCreate">Source path:</sys:String>
+    <sys:String x:Key="DestPathTitleCaseCreate">Destination path:</sys:String>
+    <sys:String x:Key="BackupTypeTitleCaseCreate">Backup type:</sys:String>
+    <sys:String x:Key="EncryptionTitleCaseCreate">Encrypt:</sys:String>
     <sys:String x:Key="CreateButtonFinal">Create</sys:String>
 
     <!-- SettingsView -->
