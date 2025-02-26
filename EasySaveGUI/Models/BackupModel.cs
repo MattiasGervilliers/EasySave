@@ -25,6 +25,10 @@ namespace EasySaveGUI.Models
 
         private void OnProgressChange(BackupConfiguration configuration, double progress)
         {
+            if (progress >= 100)
+            {
+                _jobs.Remove(configuration);
+            }
             ProgressUpdated?.Invoke(configuration, progress);
         }
 

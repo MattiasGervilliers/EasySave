@@ -60,7 +60,14 @@ namespace EasySaveGUI.ViewModels
                 // Update progress in-place
                 int index = _progress.IndexOf(existingEntry);
                 _progress[index] = new KeyValuePair<BackupConfiguration, double>(configuration, progress);
+
                 OnPropertyChanged(nameof(Progress));
+
+                // if progress >= 100, remove the entry
+                if (progress >= 100)
+                {
+                    _progress.Remove(existingEntry);
+                }
             }
             else
             {
