@@ -1,6 +1,7 @@
 ﻿using BackupEngine.Progress;
 using BackupEngine.State;
 using BackupEngine.Log;
+using System.Diagnostics;
 
 namespace BackupEngine.Backup
 {
@@ -16,7 +17,7 @@ namespace BackupEngine.Backup
         /// <summary>
         /// Executes the full backup process.
         /// </summary>
-        public override void Save(string uniqueDestinationPath)
+        public override void Save(string uniqueDestinationPath, EventWaitHandle waitHandle)
         {
             if (Configuration.ExtensionsToSave != null)
             {
@@ -50,6 +51,7 @@ namespace BackupEngine.Backup
             
             foreach (string file in files)
             {
+                waitHandle.WaitOne();
                 string relativePath = file.Substring(sourcePath.Length + 1);
                 string destFile = Path.Combine(uniqueDestinationPath, relativePath);
                 Directory.CreateDirectory(Path.GetDirectoryName(destFile));
@@ -63,7 +65,7 @@ namespace BackupEngine.Backup
                     tasks.Add(Task.Run(() =>
                     {
                         WaitForBusinessSoftwareToClose(); 
-                        TransferFile(file, destFile, ref totalSize, ref remainingFiles, ref remainingSize);
+                        TransferFile(file, destFile, ref totalSize, ref remainingFiles, ref remainingSize, ref waitHandle);
                     }));
                 }
             }
@@ -85,7 +87,7 @@ namespace BackupEngine.Backup
         /// <summary>
         /// Transfers a file and updates the backup state.
         /// </summary>
-        private void TransferFile(string file, string destFile, ref long totalSize, ref int remainingFiles, ref long remainingSize)
+        private void TransferFile(string file, string destFile, ref long totalSize, ref int remainingFiles, ref long remainingSize, ref EventWaitHandle waitHandle)
         {
             FileInfo fileInfo = new FileInfo(file);
             bool isLargeFile = fileInfo.Length > _koLimit * 1024;
@@ -100,6 +102,9 @@ namespace BackupEngine.Backup
                     Console.WriteLine($"Waiting to transfer large file: {file}");
                     _largeFileSemaphore.Wait(); // Assure un seul fichier volumineux à la fois
                 }
+
+                // Check for pausing
+                waitHandle.WaitOne();
 
                 DateTime start = DateTime.Now;
                 TransferStrategy.TransferFile(file, destFile);

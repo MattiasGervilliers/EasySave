@@ -25,7 +25,7 @@ namespace BackupEngine.Backup
             _saveStrategy = newStrategy;
         }
 
-        public void Save(BackupConfiguration configuration)
+        public void Save(BackupConfiguration configuration, EventWaitHandle waitHandle)
         {
             string destinationBasePath = configuration.DestinationPath.GetAbsolutePath();
 
@@ -47,7 +47,7 @@ namespace BackupEngine.Backup
             _saveStrategy.StateUpdated += _stateManager.OnStateUpdated;
 
             // Lancer la sauvegarde avec le bon dossier
-            _saveStrategy.Save(uniqueDestinationPath);
+            _saveStrategy.Save(uniqueDestinationPath, waitHandle);
         }
 
         public void SubscribeProgress(EventHandler<ProgressEvent> handler)
