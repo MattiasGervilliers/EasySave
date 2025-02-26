@@ -85,10 +85,11 @@ jobs:
           name: EasySave-Apps
           path: package/
 
-      - name: Créer une Release GitHub
-        uses: softprops/action-gh-release@v1
+      - name: Ajout des fichiers à la release
+        uses: svenstaro/upload-release-action@v2
         with:
-          files: package/**
-          tag_name: ${{ env.RELEASE_TAG }}  # Use the captured tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          file: package/**
+          tag: ${{ env.RELEASE_TAG }} 
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          overwrite: true
+          asset_name: "EasySave-Apps"
