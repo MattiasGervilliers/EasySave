@@ -8,136 +8,136 @@ using LogLib;
 namespace EasySaveGUI.ViewModels
 {
     /// <summary>
-    /// ViewModel responsable de la gestion des paramètres dans l'application.
-    /// Il permet de charger et de sauvegarder les paramètres de l'application comme la langue, 
-    /// le chemin des fichiers de log, le chemin d'état et le type de log.
+    /// ViewModel responsible for managing the settings in the application.
+    /// It allows loading and saving the application's settings such as language, 
+    /// log file path, state path, and log type.
     /// </summary>
     public class SettingsViewModel : ViewModelBase
     {
-        // Repository pour accéder et mettre à jour les paramètres.
+        // Repository to access and update settings.
         private readonly SettingsRepository _settingsRepository;
 
-        // Variables privées pour stocker les valeurs des paramètres.
+        // Private variables to store the settings values.
         private string _language;
         private string _logPath;
         private string _statePath;
         private string _logType;
 
         /// <summary>
-        /// Message d'accueil affiché sur la page des paramètres.
+        /// Welcome message displayed on the settings page.
         /// </summary>
         public string WelcomeMessage { get; } = "Settings";
 
         /// <summary>
-        /// Propriété qui représente la langue sélectionnée dans l'interface.
-        /// Elle est liée à la langue stockée dans le repository.
+        /// Property representing the selected language in the interface.
+        /// It is bound to the language stored in the repository.
         /// </summary>
         public string Language
         {
-            get => _language;  // Retourne la langue actuelle
+            get => _language;  // Returns the current language
             set
             {
-                _language = value;  // Modifie la langue sélectionnée
-                OnPropertyChanged(nameof(Language));  // Notifie le changement de propriété
+                _language = value;  // Modifies the selected language
+                OnPropertyChanged(nameof(Language));  // Notifies the property change
 
-                // Convertit la chaîne de langue en énumération Language et met à jour le repository.
+                // Converts the language string to an enum Language and updates the repository.
                 if (Enum.TryParse(value, out Language lang))
                 {
-                    _settingsRepository.UpdateLanguage(lang);  // Met à jour la langue dans les paramètres
+                    _settingsRepository.UpdateLanguage(lang);  // Updates the language in the settings
                 }
             }
         }
 
         /// <summary>
-        /// Propriété pour le chemin du fichier de log.
-        /// Permet de modifier et de notifier le changement de valeur.
+        /// Property for the log file path.
+        /// Allows modifying and notifying the value change.
         /// </summary>
         public string LogPath
         {
-            get => _logPath;  // Retourne le chemin du fichier de log
+            get => _logPath;  // Returns the log file path
             set
             {
-                _logPath = value;  // Modifie le chemin du fichier de log
-                OnPropertyChanged(nameof(LogPath));  // Notifie le changement de propriété
+                _logPath = value;  // Modifies the log file path
+                OnPropertyChanged(nameof(LogPath));  // Notifies the property change
             }
         }
 
         /// <summary>
-        /// Propriété pour le chemin d'état du fichier de configuration.
-        /// Permet de modifier et de notifier le changement de valeur.
+        /// Property for the state file path of the configuration.
+        /// Allows modifying and notifying the value change.
         /// </summary>
         public string StatePath
         {
-            get => _statePath;  // Retourne le chemin d'état
+            get => _statePath;  // Returns the state file path
             set
             {
-                _statePath = value;  // Modifie le chemin d'état
-                OnPropertyChanged(nameof(StatePath));  // Notifie le changement de propriété
+                _statePath = value;  // Modifies the state path
+                OnPropertyChanged(nameof(StatePath));  // Notifies the property change
             }
         }
 
         /// <summary>
-        /// Propriété pour le type de log (par exemple JSON, TXT, etc.).
-        /// Permet de modifier et de notifier le changement de valeur.
+        /// Property for the log type (e.g., JSON, TXT, etc.).
+        /// Allows modifying and notifying the value change.
         /// </summary>
         public string LogType
         {
-            get => _logType;  // Retourne le type de log
+            get => _logType;  // Returns the log type
             set
             {
-                _logType = value;  // Modifie le type de log
-                OnPropertyChanged(nameof(LogType));  // Notifie le changement de propriété
+                _logType = value;  // Modifies the log type
+                OnPropertyChanged(nameof(LogType));  // Notifies the property change
             }
         }
 
         /// <summary>
-        /// Commande qui est exécutée pour sauvegarder les paramètres modifiés.
+        /// Command executed to save the modified settings.
         /// </summary>
         public ICommand SaveCommand { get; }
 
         /// <summary>
-        /// Constructeur qui initialise le repository des paramètres et charge les paramètres actuels.
-        /// Il crée également la commande SaveCommand pour sauvegarder les paramètres.
+        /// Constructor that initializes the settings repository and loads the current settings.
+        /// It also creates the SaveCommand to save the settings.
         /// </summary>
         public SettingsViewModel()
         {
-            _settingsRepository = new SettingsRepository();  // Initialise le repository des paramètres
-            LoadSettings();  // Charge les paramètres actuels depuis le repository
+            _settingsRepository = new SettingsRepository();  // Initializes the settings repository
+            LoadSettings();  // Loads the current settings from the repository
 
-            // Initialise la commande pour sauvegarder les paramètres.
+            // Initializes the command to save the settings.
             SaveCommand = new CommandHandler(() => SaveSettings(), true);
         }
 
         /// <summary>
-        /// Charge les paramètres actuels depuis le repository et les affecte aux propriétés.
+        /// Loads the current settings from the repository and assigns them to the properties.
         /// </summary>
         private void LoadSettings()
         {
-            // Charge la langue depuis les paramètres
+            // Loads the language from the settings
             var language = _settingsRepository.GetLanguage();
             Language = language.ToString();
 
-            // Charge les autres paramètres depuis le repository
+            // Loads other settings from the repository
             LogPath = _settingsRepository.GetLogPath().ToString();
             StatePath = _settingsRepository.GetStatePath().ToString();
             LogType = _settingsRepository.GetLogType().ToString();
         }
 
         /// <summary>
-        /// Sauvegarde les paramètres modifiés dans le repository.
-        /// Met à jour la langue, le chemin du log, le chemin d'état et le type de log.
+        /// Saves the modified settings in the repository.
+        /// Updates the language, log path, state path, and log type.
         /// </summary>
         private void SaveSettings()
         {
-            // Convertit et met à jour la langue
+            // Converts and updates the language
             _settingsRepository.UpdateLanguage((Language)Enum.Parse(typeof(Language), Language));
 
-            // Met à jour les autres paramètres
+            // Updates the other settings
             _settingsRepository.UpdateLogPath(new CustomPath(LogPath));
             _settingsRepository.UpdateStatePath(StatePath);
             _settingsRepository.UpdateLogType((LogType)Enum.Parse(typeof(LogType), LogType));
 
-            // Notifie le changement des propriétés après la sauvegarde
+            // Notifies the property change after saving
             OnPropertyChanged(nameof(Language));
             OnPropertyChanged(nameof(LogPath));
             OnPropertyChanged(nameof(StatePath));
@@ -146,35 +146,36 @@ namespace EasySaveGUI.ViewModels
     }
 
     /// <summary>
-    /// Implémentation de ICommand pour gérer l'exécution d'une commande avec une logique personnalisée.
+    /// Implementation of ICommand to handle the execution of a command with custom logic.
     /// </summary>
     public class CommandHandler : ICommand
     {
-        private readonly Action _execute;  // Action à exécuter lors de la commande
-        private readonly bool _canExecute;  // Détermine si la commande peut être exécutée
+        private readonly Action _execute;  // Action to execute when the command is triggered
+        private readonly bool _canExecute;  // Determines if the command can be executed
 
         /// <summary>
-        /// Constructeur qui initialise la commande avec l'action à exécuter et la condition d'exécution.
+        /// Constructor that initializes the command with the action to execute and the execution condition.
         /// </summary>
         public CommandHandler(Action execute, bool canExecute)
         {
-            _execute = execute;  // Action à exécuter
-            _canExecute = canExecute;  // Condition d'exécution
+            _execute = execute;  // Action to execute
+            _canExecute = canExecute;  // Execution condition
         }
 
         /// <summary>
-        /// Retourne si la commande peut être exécutée en fonction de la condition.
+        /// Returns whether the command can be executed based on the condition.
         /// </summary>
         public bool CanExecute(object parameter) => _canExecute;
 
         /// <summary>
-        /// Exécute l'action associée à la commande.
+        /// Executes the action associated with the command.
         /// </summary>
         public void Execute(object parameter) => _execute();
 
         /// <summary>
-        /// Événement pour notifier les changements sur la condition d'exécution.
+        /// Event to notify changes on the execution condition.
         /// </summary>
         public event EventHandler CanExecuteChanged;
     }
 }
+

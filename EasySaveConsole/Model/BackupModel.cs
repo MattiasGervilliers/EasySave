@@ -5,108 +5,108 @@ using BackupEngine.Settings;
 namespace EasySaveConsole.Model
 {
     /// <summary>
-    /// La classe BackupModel gère les opérations liées à la configuration et à l'exécution des sauvegardes.
-    /// Elle interagit avec le JobManager pour lancer les sauvegardes et avec le SettingsRepository pour gérer
-    /// les configurations de sauvegarde.
+    /// The BackupModel class manages operations related to backup configuration and execution.
+    /// It interacts with the JobManager to start backups and with the SettingsRepository to manage
+    /// backup configurations.
     /// </summary>
     public static class BackupModel
     {
-        // Le gestionnaire de jobs pour gérer les sauvegardes
+        // The job manager to manage backups
         private static readonly JobManager JobManager;
 
-        // Le dépôt de paramètres pour accéder et manipuler les configurations de sauvegarde
+        // The settings repository to access and manipulate backup configurations
         private static readonly SettingsRepository SettingsRepository;
 
         /// <summary>
-        /// Constructeur statique de la classe BackupModel. Il initialise les instances de JobManager et de SettingsRepository.
+        /// Static constructor for the BackupModel class. It initializes the instances of JobManager and SettingsRepository.
         /// </summary>
         static BackupModel()
         {
-            JobManager = new JobManager();  // Initialisation du gestionnaire de jobs
-            SettingsRepository = new SettingsRepository();  // Initialisation du dépôt des paramètres
+            JobManager = new JobManager();  // Initializes the job manager
+            SettingsRepository = new SettingsRepository();  // Initializes the settings repository
         }
 
         /// <summary>
-        /// Ajoute une nouvelle configuration de sauvegarde au dépôt des paramètres.
+        /// Adds a new backup configuration to the settings repository.
         /// </summary>
-        /// <param name="backupConfiguration">La configuration de sauvegarde à ajouter.</param>
+        /// <param name="backupConfiguration">The backup configuration to add.</param>
         public static void AddConfig(BackupConfiguration backupConfiguration)
         {
-            SettingsRepository.AddConfiguration(backupConfiguration);  // Ajout de la configuration
+            SettingsRepository.AddConfiguration(backupConfiguration);  // Adds the configuration
         }
 
         /// <summary>
-        /// Supprime une configuration de sauvegarde du dépôt des paramètres.
+        /// Deletes a backup configuration from the settings repository.
         /// </summary>
-        /// <param name="backupConfiguration">La configuration de sauvegarde à supprimer.</param>
+        /// <param name="backupConfiguration">The backup configuration to delete.</param>
         public static void DeleteConfig(BackupConfiguration backupConfiguration)
         {
-            SettingsRepository.DeleteConfiguration(backupConfiguration);  // Suppression de la configuration
+            SettingsRepository.DeleteConfiguration(backupConfiguration);  // Deletes the configuration
         }
 
         /// <summary>
-        /// Lance une sauvegarde pour une configuration donnée.
+        /// Starts a backup for a given configuration.
         /// </summary>
-        /// <param name="backupConfiguration">La configuration de sauvegarde à exécuter.</param>
+        /// <param name="backupConfiguration">The backup configuration to execute.</param>
         public static void LaunchConfig(BackupConfiguration backupConfiguration)
         {
-            JobManager.LaunchBackup(backupConfiguration);  // Lancement de la sauvegarde
+            JobManager.LaunchBackup(backupConfiguration);  // Starts the backup
         }
 
         /// <summary>
-        /// Lance une sauvegarde pour plusieurs configurations.
+        /// Starts backups for multiple configurations.
         /// </summary>
-        /// <param name="backupConfigurations">La liste des configurations de sauvegarde à exécuter.</param>
+        /// <param name="backupConfigurations">The list of backup configurations to execute.</param>
         public static void LaunchConfigs(List<BackupConfiguration> backupConfigurations)
         {
-            JobManager.LaunchBackup(backupConfigurations);  // Lancement de la sauvegarde pour plusieurs configurations
+            JobManager.LaunchBackup(backupConfigurations);  // Starts backups for multiple configurations
         }
 
         /// <summary>
-        /// Récupère la liste des configurations de sauvegarde enregistrées dans le dépôt des paramètres.
+        /// Retrieves the list of backup configurations stored in the settings repository.
         /// </summary>
-        /// <returns>La liste des configurations de sauvegarde.</returns>
+        /// <returns>The list of backup configurations.</returns>
         public static List<BackupConfiguration> GetConfigs()
         {
-            return SettingsRepository.GetConfigurations();  // Retourne les configurations
+            return SettingsRepository.GetConfigurations();  // Returns the configurations
         }
 
         /// <summary>
-        /// Recherche une configuration de sauvegarde par son nom.
+        /// Searches for a backup configuration by its name.
         /// </summary>
-        /// <param name="name">Le nom de la configuration de sauvegarde à trouver.</param>
-        /// <returns>La configuration de sauvegarde correspondant au nom spécifié, ou null si non trouvée.</returns>
+        /// <param name="name">The name of the backup configuration to find.</param>
+        /// <returns>The backup configuration corresponding to the specified name, or null if not found.</returns>
         public static BackupConfiguration? FindConfig(string name)
         {
-            return SettingsRepository.GetConfiguration(name);  // Recherche la configuration par nom
+            return SettingsRepository.GetConfiguration(name);  // Searches for the configuration by name
         }
 
         /// <summary>
-        /// Recherche une configuration de sauvegarde par son identifiant.
+        /// Searches for a backup configuration by its ID.
         /// </summary>
-        /// <param name="id">L'identifiant de la configuration de sauvegarde à trouver.</param>
-        /// <returns>La configuration de sauvegarde correspondant à l'identifiant, ou null si non trouvée.</returns>
+        /// <param name="id">The ID of the backup configuration to find.</param>
+        /// <returns>The backup configuration corresponding to the ID, or null if not found.</returns>
         public static BackupConfiguration? FindConfig(int id)
         {
-            return SettingsRepository.GetConfigurationById(id);  // Recherche la configuration par identifiant
+            return SettingsRepository.GetConfigurationById(id);  // Searches for the configuration by ID
         }
 
         /// <summary>
-        /// Récupère la langue actuellement définie dans les paramètres.
+        /// Retrieves the currently defined language in the settings.
         /// </summary>
-        /// <returns>La langue actuellement définie.</returns>
+        /// <returns>The currently defined language.</returns>
         public static Language? GetLanguage()
         {
-            return SettingsRepository.GetLanguage();  // Retourne la langue définie dans les paramètres
+            return SettingsRepository.GetLanguage();  // Returns the language set in the settings
         }
 
         /// <summary>
-        /// Met à jour la langue des paramètres.
+        /// Updates the language in the settings.
         /// </summary>
-        /// <param name="language">La nouvelle langue à définir.</param>
+        /// <param name="language">The new language to set.</param>
         public static void UpdateLanguage(Language language)
         {
-            SettingsRepository.UpdateLanguage(language);  // Mise à jour de la langue dans les paramètres
+            SettingsRepository.UpdateLanguage(language);  // Updates the language in the settings
         }
     }
 }

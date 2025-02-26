@@ -5,24 +5,24 @@ using Newtonsoft.Json;
 namespace BackupEngine.Settings
 {
     /// <summary>
-    /// La classe SettingsRepository gère la sauvegarde, le chargement, et la modification des paramètres de configuration de l'application.
-    /// Elle permet de manipuler le fichier de configuration JSON et de gérer les différentes configurations de sauvegarde.
+    /// The SettingsRepository class manages the saving, loading, and modification of application configuration settings.
+    /// It allows manipulation of the JSON configuration file and management of various backup configurations.
     /// </summary>
     public class SettingsRepository
     {
         /// <summary>
-        /// Le chemin du fichier de paramètres de configuration.
+        /// The path of the configuration settings file.
         /// </summary>
         private static readonly string _settingsPath = "settings.json";
 
         /// <summary>
-        /// L'objet Settings qui contient toutes les informations de configuration.
+        /// The Settings object that contains all the configuration information.
         /// </summary>
         private Settings Settings { get; set; }
 
         /// <summary>
-        /// Constructeur de la classe SettingsRepository.
-        /// Il charge les paramètres de configuration à partir du fichier settings.json.
+        /// Constructor for the SettingsRepository class.
+        /// It loads the configuration settings from the settings.json file.
         /// </summary>
         public SettingsRepository()
         {
@@ -30,11 +30,11 @@ namespace BackupEngine.Settings
         }
 
         /// <summary>
-        /// Charge les paramètres depuis le fichier JSON.
-        /// Si le fichier existe, il désérialise le contenu JSON en un objet Settings.
-        /// Sinon, il crée un nouveau fichier de paramètres.
+        /// Loads the settings from the JSON file.
+        /// If the file exists, it deserializes the JSON content into a Settings object.
+        /// Otherwise, it creates a new settings file.
         /// </summary>
-        /// <returns>L'objet Settings contenant les données chargées depuis le fichier JSON.</returns>
+        /// <returns>The Settings object containing data loaded from the JSON file.</returns>
         Settings Load()
         {
             if (File.Exists(_settingsPath))
@@ -52,7 +52,7 @@ namespace BackupEngine.Settings
         }
 
         /// <summary>
-        /// Crée un fichier vide settings.json si le fichier n'existe pas.
+        /// Creates an empty settings.json file if the file does not exist.
         /// </summary>
         private void CreateFile()
         {
@@ -61,7 +61,7 @@ namespace BackupEngine.Settings
         }
 
         /// <summary>
-        /// Sauvegarde les paramètres actuels dans le fichier settings.json en format JSON indenté.
+        /// Saves the current settings in the settings.json file in indented JSON format.
         /// </summary>
         private void SaveSettings()
         {
@@ -70,10 +70,10 @@ namespace BackupEngine.Settings
         }
 
         /// <summary>
-        /// Ajoute une nouvelle configuration de sauvegarde à la liste des configurations.
-        /// Si le nombre de configurations dépasse 5, une exception est lancée.
+        /// Adds a new backup configuration to the list of configurations.
+        /// If the number of configurations exceeds 5, an exception is thrown.
         /// </summary>
-        /// <param name="configuration">La configuration à ajouter.</param>
+        /// <param name="configuration">The configuration to add.</param>
         public void AddConfiguration(BackupConfiguration configuration)
         {
             if (Settings.Configurations.Count >= 5)
@@ -85,9 +85,9 @@ namespace BackupEngine.Settings
         }
 
         /// <summary>
-        /// Supprime une configuration de sauvegarde existante.
+        /// Deletes an existing backup configuration.
         /// </summary>
-        /// <param name="configuration">La configuration à supprimer.</param>
+        /// <param name="configuration">The configuration to delete.</param>
         public void DeleteConfiguration(BackupConfiguration configuration)
         {
             Settings.Configurations.Remove(configuration);
@@ -95,10 +95,10 @@ namespace BackupEngine.Settings
         }
 
         /// <summary>
-        /// Met à jour une configuration de sauvegarde existante.
-        /// Si la configuration n'est pas trouvée, une exception est lancée.
+        /// Updates an existing backup configuration.
+        /// If the configuration is not found, an exception is thrown.
         /// </summary>
-        /// <param name="configuration">La nouvelle configuration de sauvegarde.</param>
+        /// <param name="configuration">The new backup configuration.</param>
         public void UpdateConfiguration(BackupConfiguration configuration)
         {
             int index = Settings.Configurations.FindIndex(c => c.Name == configuration.Name);
@@ -111,18 +111,18 @@ namespace BackupEngine.Settings
         }
 
         /// <summary>
-        /// Retourne toutes les configurations de sauvegarde.
+        /// Returns all backup configurations.
         /// </summary>
-        /// <returns>La liste des configurations de sauvegarde.</returns>
+        /// <returns>The list of backup configurations.</returns>
         public List<BackupConfiguration> GetConfigurations()
         {
             return Settings.Configurations;
         }
 
         /// <summary>
-        /// Met à jour la langue de l'application et sauvegarde les paramètres.
+        /// Updates the application's language and saves the settings.
         /// </summary>
-        /// <param name="language">La nouvelle langue à appliquer.</param>
+        /// <param name="language">The new language to apply.</param>
         public void UpdateLanguage(Language language)
         {
             Settings.Language = language;
@@ -130,9 +130,9 @@ namespace BackupEngine.Settings
         }
 
         /// <summary>
-        /// Met à jour le chemin des logs et sauvegarde les paramètres.
+        /// Updates the log path and saves the settings.
         /// </summary>
-        /// <param name="logPath">Le nouveau chemin des logs.</param>
+        /// <param name="logPath">The new log path.</param>
         public void UpdateLogPath(CustomPath logPath)
         {
             Settings.LogPath = logPath;
@@ -140,56 +140,56 @@ namespace BackupEngine.Settings
         }
 
         /// <summary>
-        /// Retourne le chemin des logs actuel.
+        /// Returns the current log path.
         /// </summary>
-        /// <returns>Le chemin des logs.</returns>
+        /// <returns>The log path.</returns>
         public CustomPath GetLogPath()
         {
             return Settings.LogPath;
         }
 
         /// <summary>
-        /// Retourne la langue actuellement utilisée dans les paramètres.
+        /// Returns the language currently used in the settings.
         /// </summary>
-        /// <returns>La langue actuelle.</returns>
+        /// <returns>The current language.</returns>
         public Language GetLanguage()
         {
             return Settings.Language;
         }
 
         /// <summary>
-        /// Recherche une configuration de sauvegarde par son nom.
+        /// Searches for a backup configuration by its name.
         /// </summary>
-        /// <param name="name">Le nom de la configuration à rechercher.</param>
-        /// <returns>La configuration de sauvegarde correspondante ou null si elle n'est pas trouvée.</returns>
+        /// <param name="name">The name of the configuration to search for.</param>
+        /// <returns>The corresponding backup configuration, or null if not found.</returns>
         public BackupConfiguration? GetConfiguration(string name)
         {
             return Settings.Configurations.Find(c => c.Name == name);
         }
 
         /// <summary>
-        /// Recherche une configuration de sauvegarde par son ID dans la liste des configurations.
+        /// Searches for a backup configuration by its ID in the list of configurations.
         /// </summary>
-        /// <param name="id">L'ID de la configuration à rechercher.</param>
-        /// <returns>La configuration de sauvegarde correspondante.</returns>
+        /// <param name="id">The ID of the configuration to search for.</param>
+        /// <returns>The corresponding backup configuration.</returns>
         public BackupConfiguration? GetConfigurationById(int id)
         {
             return Settings.Configurations[id];
         }
 
         /// <summary>
-        /// Retourne le chemin actuel du fichier d'état de l'application.
+        /// Returns the current application state file path.
         /// </summary>
-        /// <returns>Le chemin du fichier d'état.</returns>
+        /// <returns>The state file path.</returns>
         public CustomPath GetStatePath()
         {
             return Settings.StatePath;
         }
 
         /// <summary>
-        /// Met à jour le chemin du fichier d'état et sauvegarde les paramètres.
+        /// Updates the state file path and saves the settings.
         /// </summary>
-        /// <param name="statePath">Le nouveau chemin pour le fichier d'état.</param>
+        /// <param name="statePath">The new state file path.</param>
         public void UpdateStatePath(string statePath)
         {
             Settings.StatePath = new CustomPath(statePath);
@@ -197,18 +197,18 @@ namespace BackupEngine.Settings
         }
 
         /// <summary>
-        /// Retourne le format actuel des logs.
+        /// Returns the current log format.
         /// </summary>
-        /// <returns>Le type de format de log actuel.</returns>
+        /// <returns>The current log format type.</returns>
         public LogType GetLogType()
         {
             return Settings.LogFormat;
         }
 
         /// <summary>
-        /// Met à jour le format des logs et sauvegarde les paramètres.
+        /// Updates the log format and saves the settings.
         /// </summary>
-        /// <param name="logType">Le nouveau format des logs.</param>
+        /// <param name="logType">The new log format.</param>
         public void UpdateLogType(LogType logType)
         {
             Settings.LogFormat = logType;

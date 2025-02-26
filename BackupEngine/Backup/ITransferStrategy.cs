@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 namespace BackupEngine.Cache
 {
     /// <summary>
-    /// Interface qui définit la méthode pour transférer un fichier d'un chemin source vers un chemin de destination.
+    /// Interface that defines the method for transferring a file from a source path to a destination path.
     /// </summary>
     public interface ITransferStrategy
     {
         /// <summary>
-        /// Méthode pour transférer un fichier de la source vers la destination.
+        /// Method to transfer a file from the source to the destination.
         /// </summary>
-        public void TransferFile(string cheminSource, string cheminDestination);
+        public void TransferFile(string sourcePath, string destinationPath);
     }
 }

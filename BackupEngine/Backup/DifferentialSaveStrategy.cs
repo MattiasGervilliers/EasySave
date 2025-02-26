@@ -4,21 +4,21 @@ using BackupEngine.State;
 
 namespace BackupEngine.Backup
 {
-    // La classe DifferentialSaveStrategy hérite de la classe SaveStrategy et implémente une stratégie de sauvegarde différentielle
-    // Elle permet de réaliser une sauvegarde uniquement des fichiers qui ont changé depuis la dernière sauvegarde
+    // The DifferentialSaveStrategy class inherits from the SaveStrategy class and implements a differential backup strategy
+    // It performs a backup of only the files that have changed since the last backup
     public class DifferentialSaveStrategy : SaveStrategy
     {
         private DifferentialBackupCacheRepository _cacheRepository = new DifferentialBackupCacheRepository();
 
-        // Méthode principale de la stratégie de sauvegarde différentielle
+        // Main method of the differential backup strategy
         public override void Save(string uniqueDestinationPath)
         {
-            // Si une sauvegarde précédente existe, on effectue une sauvegarde différentielle
+            // If a previous backup exists, perform a differential backup
             if (PreviousSaveExists())
             {
                 string previousSavePath = PreviousSavePath();
 
-                // Si la sauvegarde précédente n'existe pas (dossier manquant), effectuer une sauvegarde complète
+                // If the previous backup does not exist (missing folder), perform a full backup
                 if (!Directory.Exists(previousSavePath))
                 {
                     PerformFullSave(uniqueDestinationPath);
@@ -26,33 +26,33 @@ namespace BackupEngine.Backup
                 }
                 else
                 {
-                    // Si la sauvegarde précédente existe, effectuer une sauvegarde différentielle
+                    // If the previous backup exists, perform a differential backup
                     DifferentialSave(uniqueDestinationPath, previousSavePath);
                 }
             }
             else
             {
-                // Si aucune sauvegarde précédente n'existe, effectuer une sauvegarde complète
+                // If no previous backup exists, perform a full backup
                 PerformFullSave(uniqueDestinationPath);
                 UpdateCache(uniqueDestinationPath);
             }
         }
 
-        // Effectuer une sauvegarde complète en appelant la stratégie de sauvegarde complète
+        // Perform a full backup by calling the full backup strategy
         private void PerformFullSave(string uniqueDestinationPath)
         {
             FullSaveStrategy fullSaveStrategy = new FullSaveStrategy(Configuration);
-            // Abonnement aux événements de transfert et de mise à jour de l'état
+            // Subscribe to the transfer and state update events
             fullSaveStrategy.Transfer += (sender, e) => OnTransfer(e);
             fullSaveStrategy.StateUpdated += (sender, e) => OnStateUpdated(e);
-            // Exécution de la sauvegarde complète
+            // Execute the full backup
             fullSaveStrategy.Save(uniqueDestinationPath);
         }
 
-        // Effectuer une sauvegarde différentielle en comparant les fichiers avec la sauvegarde précédente
+        // Perform a differential backup by comparing files with the previous backup
         private void DifferentialSave(string uniqueDestinationPath, string previousSavePath)
         {
-            // Choisir la stratégie de transfert en fonction de la configuration (cryptage ou copie)
+            // Choose the transfer strategy based on the configuration (encryption or copy)
             if (Configuration.Encrypt)
             {
                 TransferStrategy = new CryptStrategy();
@@ -62,26 +62,26 @@ namespace BackupEngine.Backup
                 TransferStrategy = new CopyStrategy();
             }
 
-            // Obtenir le chemin absolu du dossier source
+            // Get the absolute path of the source folder
             string sourcePath = Configuration.SourcePath.GetAbsolutePath();
 
-            // Vérifier que le dossier source existe
+            // Check if the source folder exists
             if (!Directory.Exists(sourcePath))
             {
-                throw new DirectoryNotFoundException($"Le dossier source '{sourcePath}' n'existe pas.");
+                throw new DirectoryNotFoundException($"The source folder '{sourcePath}' does not exist.");
             }
 
-            // Créer le dossier de destination si nécessaire
+            // Create the destination folder if necessary
             Directory.CreateDirectory(uniqueDestinationPath);
 
-            // Récupérer la liste de tous les fichiers dans le dossier source
+            // Retrieve the list of all files in the source folder
             string[] files = Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories);
             int totalFiles = files.Length;
             long totalSize = files.Sum(file => new FileInfo(file).Length);
             int remainingFiles = totalFiles;
             long remainingSize = totalSize;
 
-            // Mise à jour de l'état avec les informations initiales de la sauvegarde
+            // Update the state with initial backup information
             OnStateUpdated(new StateEvent(
                 "Differential Backup",
                 "Active",
@@ -93,33 +93,33 @@ namespace BackupEngine.Backup
                 ""
             ));
 
-            // Traitement de chaque fichier dans le dossier source
+            // Process each file in the source folder
             foreach (string file in files)
             {
                 string relativePath = file.Substring(sourcePath.Length + 1);
                 string prevFile = Path.Combine(previousSavePath, relativePath);
                 string destFile = Path.Combine(uniqueDestinationPath, relativePath);
 
-                // Créer les sous-dossiers nécessaires dans le dossier de destination
+                // Create the necessary subdirectories in the destination folder
                 Directory.CreateDirectory(Path.GetDirectoryName(destFile));
 
-                // Vérifier si le fichier a changé depuis la dernière sauvegarde
+                // Check if the file has changed since the last backup
                 bool fileDoesNotExistInPrevious = !File.Exists(prevFile);
                 bool fileHasChanged = fileDoesNotExistInPrevious || File.GetLastWriteTimeUtc(file) > File.GetLastWriteTimeUtc(prevFile);
 
                 if (fileHasChanged)
                 {
                     DateTime start = DateTime.Now;
-                    // Transférer le fichier si nécessaire
+                    // Transfer the file if necessary
                     TransferStrategy.TransferFile(file, destFile);
                     DateTime end = DateTime.Now;
                     TimeSpan duration = end - start;
 
-                    // Mise à jour de l'état avec les informations du fichier en cours de transfert
+                    // Update the state with the information of the file being transferred
                     remainingFiles--;
                     remainingSize -= new FileInfo(file).Length;
 
-                    // Envoi de l'événement d'état pour ce fichier
+                    // Send the state event for this file
                     OnStateUpdated(new StateEvent(
                         "Differential Backup",
                         "Active",
@@ -131,13 +131,13 @@ namespace BackupEngine.Backup
                         destFile
                     ));
 
-                    // Créer et envoyer l'événement de transfert
+                    // Create and send the transfer event
                     TransferEvent transferEvent = new TransferEvent(Configuration, duration, new FileInfo(file), new FileInfo(destFile));
                     OnTransfer(transferEvent);
                 }
             }
 
-            // Mise à jour de l'état à la fin de la sauvegarde
+            // Update the state at the end of the backup
             OnStateUpdated(new StateEvent(
                 "Differential Backup",
                 "Completed",
@@ -149,28 +149,28 @@ namespace BackupEngine.Backup
                 ""
             ));
 
-            // Affichage d'un message de confirmation dans la console
-            Console.WriteLine($"Sauvegarde différentielle effectuée dans : {uniqueDestinationPath}");
-            // Mise à jour du cache (commenté ici)
+            // Display a confirmation message in the console
+            Console.WriteLine($"Differential backup completed in: {uniqueDestinationPath}");
+            // Update the cache (commented here)
             //UpdateCache(uniqueDestinationPath);
         }
 
-        // Vérifier si une sauvegarde précédente existe en utilisant le cache
+        // Check if a previous backup exists using the cache
         private bool PreviousSaveExists()
         {
             CachedConfiguration? cached = _cacheRepository.GetCachedConfiguration(Configuration);
             return cached != null;
         }
 
-        // Récupérer le chemin de la dernière sauvegarde effectuée à partir du cache
+        // Retrieve the path of the last backup from the cache
         private string PreviousSavePath()
         {
             CachedConfiguration? cached = _cacheRepository.GetCachedConfiguration(Configuration);
-            // Récupère le dernier répertoire de sauvegarde
+            // Get the last backup directory
             return cached!.Backups.OrderByDescending(b => b.Date).First().DirectoryName;
         }
 
-        // Mettre à jour le cache avec les informations de la nouvelle sauvegarde
+        // Update the cache with the information of the new backup
         private void UpdateCache(string uniqueDestinationPath)
         {
             _cacheRepository.AddBackup(Configuration, DateTime.Now, uniqueDestinationPath);

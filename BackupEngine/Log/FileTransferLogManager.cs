@@ -4,64 +4,64 @@ using BackupEngine.Settings;
 namespace BackupEngine.Log
 {
     /// <summary>
-    /// La classe FileTransferLogManager est responsable de la gestion des logs liés au transfert de fichiers.
-    /// Elle utilise un LogWriter pour enregistrer les événements de transfert dans des fichiers de log.
+    /// The FileTransferLogManager class is responsible for managing logs related to file transfers.
+    /// It uses a LogWriter to record transfer events in log files.
     /// </summary>
     internal class FileTransferLogManager
     {
         /// <summary>
-        /// Instance de LogWriter qui est utilisée pour écrire les logs dans le fichier de log spécifié.
+        /// Instance of LogWriter used to write logs into the specified log file.
         /// </summary>
         private readonly LogWriter _logWriter;
 
         /// <summary>
-        /// Constructeur de la classe FileTransferLogManager.
-        /// Initialisation de LogWriter avec le chemin du répertoire des logs et le type de log spécifié.
+        /// Constructor of the FileTransferLogManager class.
+        /// Initializes LogWriter with the specified log directory path and log type.
         /// </summary>
-        /// <param name="logDirectoryPath">Chemin du répertoire où les logs seront stockés.</param>
-        /// <param name="logType">Type de log (par exemple, fichier texte ou autre format).</param>
+        /// <param name="logDirectoryPath">Path to the directory where logs will be stored.</param>
+        /// <param name="logType">Log type (e.g., text file or other format).</param>
         public FileTransferLogManager(string logDirectoryPath, LogType logType)
         {
             /// <summary>
-            /// Création d'une instance de LogWriter en lui passant le répertoire de logs et le type de log.
+            /// Creates an instance of LogWriter by passing the log directory and log type.
             /// </summary>
             _logWriter = new LogWriter(logDirectoryPath, logType);
         }
 
         /// <summary>
-        /// Méthode qui est appelée lors du transfert d'un fichier pour enregistrer les détails de ce transfert dans un log.
+        /// Method called when a file is transferred to log the details of the transfer.
         /// </summary>
-        /// <param name="sender">L'objet émetteur de l'événement (habituellement l'objet déclencheur du transfert).</param>
-        /// <param name="transferEvent">L'événement qui contient les informations relatives au transfert (comme les chemins, taille, durée, etc.).</param>
+        /// <param name="sender">The sender of the event (typically the object triggering the transfer).</param>
+        /// <param name="transferEvent">The event containing information related to the transfer (e.g., paths, size, duration, etc.).</param>
         public void OnTransfer(object sender, TransferEvent transferEvent)
         {
             /// <summary>
-            /// Récupère le chemin complet du fichier source transféré.
+            /// Retrieves the full path of the source file being transferred.
             /// </summary>
             string sourcePath = transferEvent.File.FullName;
 
             /// <summary>
-            /// Récupère le chemin complet du fichier de destination du transfert.
+            /// Retrieves the full path of the destination file of the transfer.
             /// </summary>
             string destinationPath = transferEvent.NewFile.FullName;
 
             /// <summary>
-            /// Récupère la taille du fichier transféré en octets.
+            /// Retrieves the size of the transferred file in bytes.
             /// </summary>
             long size = transferEvent.File.Length;
 
             /// <summary>
-            /// Récupère la durée du transfert en millisecondes.
+            /// Retrieves the transfer duration in milliseconds.
             /// </summary>
             int duration = transferEvent.TransferDuration.Milliseconds;
 
             /// <summary>
-            /// Récupère le nom de la configuration de la sauvegarde associée au transfert.
+            /// Retrieves the name of the backup configuration associated with the transfer.
             /// </summary>
             string backupName = transferEvent.Configuration.Name;
 
             /// <summary>
-            /// Crée un objet FileTransferLog avec les informations du transfert et écrit ce log dans le fichier à l'aide du LogWriter.
+            /// Creates a FileTransferLog object with the transfer details and writes the log to the file using LogWriter.
             /// </summary>
             _logWriter.WriteLog(new FileTransferLog(
                     sourcePath,
@@ -74,4 +74,3 @@ namespace BackupEngine.Log
         }
     }
 }
-

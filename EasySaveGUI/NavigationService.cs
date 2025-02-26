@@ -4,25 +4,25 @@ using System.Windows.Controls;
 namespace EasySaveGUI
 {
     /// <summary>
-    /// Service de navigation qui permet de changer la vue active dans l'application.
-    /// Il permet de naviguer entre différents ViewModels et de mettre à jour l'interface utilisateur en conséquence.
+    /// Navigation service that allows changing the active view in the application.
+    /// It allows navigating between different ViewModels and updating the user interface accordingly.
     /// </summary>
     public class NavigationService
     {
-        // Action qui prend un ViewModel et permet de mettre à jour la vue en conséquence.
+        // Action that takes a ViewModel and updates the view accordingly.
         private Action<ViewModelBase>? _navigate;
 
         /// <summary>
-        /// Configure le service de navigation en lui fournissant une méthode pour mettre à jour la vue.
-        /// Cette méthode sera appelée chaque fois qu'une navigation est effectuée.
+        /// Configures the navigation service by providing a method to update the view.
+        /// This method will be called whenever a navigation is performed.
         /// </summary>
-        /// <param name="navigate">Action qui prend un ViewModel et met à jour la vue.</param>
+        /// <param name="navigate">Action that takes a ViewModel and updates the view.</param>
         public void Configure(Action<ViewModelBase> navigate) => _navigate = navigate;
 
         /// <summary>
-        /// Navigue vers un nouveau ViewModel, ce qui déclenche la mise à jour de la vue.
+        /// Navigates to a new ViewModel, triggering the view update.
         /// </summary>
-        /// <param name="viewModel">Le ViewModel vers lequel naviguer.</param>
+        /// <param name="viewModel">The ViewModel to navigate to.</param>
         public void Navigate(ViewModelBase viewModel) => _navigate?.Invoke(viewModel);
     }
 }

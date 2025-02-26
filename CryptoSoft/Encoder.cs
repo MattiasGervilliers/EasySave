@@ -6,163 +6,163 @@ using System.Text;
 namespace CryptoSoft
 {
     /// <summary>
-    /// La classe Encoder est responsable de l'encodage et du décodage des fichiers en utilisant une méthode XOR avec une clé définie.
-    /// Elle permet de chiffrer et déchiffrer des fichiers via des flux de données.
+    /// The Encoder class is responsible for encoding and decoding files using an XOR method with a defined key.
+    /// It allows for encryption and decryption of files through data streams.
     /// </summary>
     internal class Encoder
     {
         /// <summary>
-        /// La clé utilisée pour l'encryptage et le décryptage des fichiers.
+        /// The key used for encrypting and decrypting files.
         /// </summary>
         public static string key = "azertyuiopaze";
 
         /// <summary>
-        /// La clé binaire, initialement vide, destinée à contenir la version binaire de la clé (non utilisée dans ce code).
+        /// The binary key, initially empty, meant to contain the binary version of the key (not used in this code).
         /// </summary>
         public static string binaryKey = "";
 
         /// <summary>
-        /// Constructeur de la classe Encoder. Il initialise la classe sans effet spécifique.
+        /// Constructor of the Encoder class. It initializes the class without any specific effect.
         /// </summary>
         public Encoder()
         {
         }
 
         /// <summary>
-        /// Méthode statique permettant de chiffrer un fichier en utilisant la méthode XOR avec une clé donnée.
-        /// Le fichier source est lu, les données sont chiffrées, et écrites dans un fichier de destination.
+        /// Static method to encrypt a file using the XOR method with a given key.
+        /// The source file is read, the data is encrypted, and written to a destination file.
         /// </summary>
-        /// <param name="source">Le chemin du fichier source à chiffrer.</param>
-        /// <param name="destination">Le chemin du fichier de destination où les données chiffrées seront écrites.</param>
+        /// <param name="source">The path of the source file to encrypt.</param>
+        /// <param name="destination">The path of the destination file where the encrypted data will be written.</param>
         public static void Encrypt(string source, string destination)
         {
-            byte[] keyBytes = Encoding.UTF8.GetBytes(key); // Conversion de la clé en tableau d'octets
-            int keyLength = keyBytes.Length; // Longueur de la clé
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key); // Convert the key to a byte array
+            int keyLength = keyBytes.Length; // Length of the key
 
             try
             {
-                // Ouvrir les streams en mode lecture (source) et écriture (destination)
+                // Open the streams in read (source) and write (destination) mode
                 using (FileStream sourceStream = new FileStream(source, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 using (FileStream destStream = new FileStream(destination, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    byte[] buffer = new byte[4096]; // Taille de buffer pour lecture/écriture par blocs
+                    byte[] buffer = new byte[4096]; // Buffer size for block-based reading/writing
                     int bytesRead;
                     int keyIndex = 0;
 
-                    // Lecture du fichier source par blocs
+                    // Read the source file in blocks
                     while ((bytesRead = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
-                        // Appliquer XOR sur chaque byte du buffer avec la clé
+                        // Apply XOR on each byte of the buffer with the key
                         for (int i = 0; i < bytesRead; i++)
                         {
-                            buffer[i] ^= keyBytes[keyIndex % keyLength]; // XOR avec la clé
-                            keyIndex++; // Incrémenter l'indice de la clé pour les prochains bytes
+                            buffer[i] ^= keyBytes[keyIndex % keyLength]; // XOR with the key
+                            keyIndex++; // Increment the key index for the next bytes
                         }
 
-                        // Écrire les données chiffrées dans le fichier de destination
+                        // Write the encrypted data to the destination file
                         destStream.Write(buffer, 0, bytesRead);
                     }
                 }
 
-                Console.WriteLine($"Fichier chiffré avec succès : {destination}");
+                Console.WriteLine($"File successfully encrypted: {destination}");
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Erreur lors du chiffrement : {e.Message}");
+                Console.WriteLine($"Error during encryption: {e.Message}");
             }
         }
 
         /// <summary>
-        /// Méthode statique permettant de chiffrer les données d'un fichier à partir de flux de fichiers source et destination.
-        /// Cette méthode fonctionne avec des FileStream ouverts pour effectuer un chiffrement en temps réel.
+        /// Static method to encrypt file data from source and destination file streams.
+        /// This method works with open FileStream objects to perform real-time encryption.
         /// </summary>
-        /// <param name="sourceStream">Le flux de lecture du fichier source à chiffrer.</param>
-        /// <param name="destStream">Le flux d'écriture pour enregistrer les données chiffrées.</param>
+        /// <param name="sourceStream">The read stream of the source file to encrypt.</param>
+        /// <param name="destStream">The write stream to save the encrypted data.</param>
         public static void EEncrypt(FileStream sourceStream, FileStream destStream)
         {
-            byte[] keyBytes = Encoding.UTF8.GetBytes(key); // Conversion de la clé en tableau d'octets
-            int keyLength = keyBytes.Length; // Longueur de la clé
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key); // Convert the key to a byte array
+            int keyLength = keyBytes.Length; // Length of the key
 
             try
             {
-                // Ouvrir les streams en mode lecture (source) et écriture (destination)
+                // Open the streams in read (source) and write (destination) mode
                 using (sourceStream)
                 using (destStream)
                 {
-                    byte[] buffer = new byte[4096]; // Taille de buffer pour lecture/écriture par blocs
+                    byte[] buffer = new byte[4096]; // Buffer size for block-based reading/writing
                     int bytesRead;
                     int keyIndex = 0;
 
-                    // Lecture du fichier source par blocs
+                    // Read the source file in blocks
                     while ((bytesRead = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
-                        // Appliquer XOR sur chaque byte du buffer avec la clé
+                        // Apply XOR on each byte of the buffer with the key
                         for (int i = 0; i < bytesRead; i++)
                         {
-                            buffer[i] ^= keyBytes[keyIndex % keyLength]; // XOR avec la clé
-                            keyIndex++; // Incrémenter l'indice de la clé pour les prochains bytes
+                            buffer[i] ^= keyBytes[keyIndex % keyLength]; // XOR with the key
+                            keyIndex++; // Increment the key index for the next bytes
                         }
 
-                        // Écrire les données chiffrées dans le flux de destination
+                        // Write the encrypted data to the destination stream
                         destStream.Write(buffer, 0, bytesRead);
                     }
                 }
 
-                Console.WriteLine($"Fichier chiffré avec succès ");
+                Console.WriteLine($"File successfully encrypted");
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Erreur lors du chiffrement : {e.Message}");
+                Console.WriteLine($"Error during encryption: {e.Message}");
             }
         }
 
         /// <summary>
-        /// Méthode statique permettant de déchiffrer un fichier en utilisant la méthode XOR avec la même clé.
-        /// Le fichier source est lu, les données sont déchiffrées, et écrites dans un fichier de destination.
+        /// Static method to decrypt a file using the XOR method with the same key.
+        /// The source file is read, the data is decrypted, and written to a destination file.
         /// </summary>
-        /// <param name="source">Le chemin du fichier source à déchiffrer.</param>
-        /// <param name="destination">Le chemin du fichier de destination où les données déchiffrées seront écrites.</param>
+        /// <param name="source">The path of the source file to decrypt.</param>
+        /// <param name="destination">The path of the destination file where the decrypted data will be written.</param>
         public static void Decrypt(string source, string destination)
         {
             if (!File.Exists(source))
             {
-                Console.WriteLine($"Erreur : le fichier source '{source}' n'existe pas.");
+                Console.WriteLine($"Error: source file '{source}' does not exist.");
                 return;
             }
 
-            byte[] keyBytes = Encoding.UTF8.GetBytes(key); // Conversion de la clé en tableau d'octets
-            int keyLength = keyBytes.Length; // Longueur de la clé
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key); // Convert the key to a byte array
+            int keyLength = keyBytes.Length; // Length of the key
 
             try
             {
-                // Ouvrir les streams en mode lecture (source) et écriture (destination)
+                // Open the streams in read (source) and write (destination) mode
                 using (FileStream sourceStream = new FileStream(source, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 using (FileStream destStream = new FileStream(destination, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    byte[] buffer = new byte[4096]; // Taille de buffer pour lecture/écriture par blocs
+                    byte[] buffer = new byte[4096]; // Buffer size for block-based reading/writing
                     int bytesRead;
                     int keyIndex = 0;
 
-                    // Lecture du fichier source par blocs
+                    // Read the source file in blocks
                     while ((bytesRead = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
-                        // Appliquer XOR sur chaque byte du buffer avec la clé pour déchiffrer
+                        // Apply XOR on each byte of the buffer with the key to decrypt
                         for (int i = 0; i < bytesRead; i++)
                         {
-                            buffer[i] ^= keyBytes[keyIndex % keyLength]; // XOR avec la clé
-                            keyIndex++; // Incrémenter l'indice de la clé pour les prochains bytes
+                            buffer[i] ^= keyBytes[keyIndex % keyLength]; // XOR with the key
+                            keyIndex++; // Increment the key index for the next bytes
                         }
 
-                        // Écrire les données déchiffrées dans le fichier de destination
+                        // Write the decrypted data to the destination file
                         destStream.Write(buffer, 0, bytesRead);
                     }
                 }
 
-                Console.WriteLine($"Fichier déchiffré avec succès : {destination}");
+                Console.WriteLine($"File successfully decrypted: {destination}");
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Erreur lors du déchiffrement : {e.Message}");
+                Console.WriteLine($"Error during decryption: {e.Message}");
             }
         }
     }

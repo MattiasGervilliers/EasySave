@@ -3,31 +3,31 @@
 namespace BackupEngine.Job
 {
     /// <summary>
-    /// La classe Job est responsable de la gestion de la sauvegarde.
-    /// Elle configure le type de sauvegarde à utiliser (complète ou différentielle) et lance la sauvegarde via le FileManager.
+    /// The Job class is responsible for managing the backup.
+    /// It configures the type of backup to use (full or differential) and initiates the backup via the FileManager.
     /// </summary>
     public class Job
     {
         /// <summary>
-        /// Propriétés privées :
-        /// Configuration : Contient la configuration de la sauvegarde, spécifiant les détails comme le type de sauvegarde.
-        /// FileManager : Permet de gérer la sauvegarde en fonction de la configuration.
-        /// CryptStrategy : Stratégie de cryptage utilisée pour le transfert sécurisé des fichiers. Instanciée par défaut.
+        /// Private properties:
+        /// Configuration: Contains the backup configuration, specifying details like the backup type.
+        /// FileManager: Manages the backup based on the configuration.
+        /// CryptStrategy: Encryption strategy used for secure file transfer. Instantiated by default.
         /// </summary>
         private BackupConfiguration Configuration { get; set; }
         private FileManager FileManager { get; set; }
         private CryptStrategy _cryptStrategy = new CryptStrategy();
 
         /// <summary>
-        /// Constructeur de la classe Job. Accepte une configuration de sauvegarde.
-        /// Selon le type de sauvegarde spécifié dans la configuration, il initialise le FileManager avec la stratégie appropriée.
+        /// Constructor of the Job class. Accepts a backup configuration.
+        /// Depending on the backup type specified in the configuration, it initializes the FileManager with the appropriate strategy.
         /// </summary>
         public Job(BackupConfiguration configuration)
         {
             Configuration = configuration;
 
             /// <summary>
-            /// Selon le type de sauvegarde, instancie un FileManager avec la bonne stratégie de sauvegarde.
+            /// Depending on the backup type, instantiate a FileManager with the correct backup strategy.
             /// </summary>
             switch (Configuration.BackupType)
             {
@@ -39,19 +39,19 @@ namespace BackupEngine.Job
                     break;
                 default:
                     /// <summary>
-                    /// Si le type de sauvegarde est invalide, on lance une exception.
+                    /// If the backup type is invalid, an exception is thrown.
                     /// </summary>
                     throw new Exception("Invalid backup type");
             }
         }
 
         /// <summary>
-        /// Méthode publique Run() qui déclenche la sauvegarde via le FileManager.
+        /// Public method Run() that triggers the backup via the FileManager.
         /// </summary>
         public void Run()
         {
             /// <summary>
-            /// Appelle la méthode Save du FileManager pour effectuer la sauvegarde avec la configuration fournie.
+            /// Calls the Save method of the FileManager to perform the backup with the provided configuration.
             /// </summary>
             FileManager.Save(Configuration);
         }

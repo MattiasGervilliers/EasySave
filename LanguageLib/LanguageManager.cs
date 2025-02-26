@@ -3,65 +3,65 @@ using System.Text.Json;
 
 public class LanguageManager
 {
-    // Dictionnaire contenant les traductions de la langue actuelle.
+    // Dictionary containing translations for the current language.
     private Dictionary<string, string>? _translations;
 
-    // Dossier contenant les fichiers de langue (au format JSON).
+    // Folder containing language files (in JSON format).
     private readonly string _languageFolder = "Languages"; // Folder containing JSON files
 
-    // La langue actuelle sélectionnée.
+    // The currently selected language.
     private Language _currentLanguage;
 
     /// <summary>
-    /// Constructeur pour initialiser le gestionnaire de langue avec la langue sélectionnée.
-    /// Charge également le fichier de langue correspondant.
+    /// Constructor to initialize the language manager with the selected language.
+    /// Also loads the corresponding language file.
     /// </summary>
-    /// <param name="language">Langue sélectionnée pour les traductions.</param>
+    /// <param name="language">The selected language for translations.</param>
     public LanguageManager(Language language)
     {
         _currentLanguage = language;
-        LoadLanguageFile(); // Charge le fichier de langue correspondant.
+        LoadLanguageFile(); // Loads the corresponding language file.
     }
 
     /// <summary>
-    /// Charge le fichier JSON correspondant à la langue actuelle et deserialise les traductions.
+    /// Loads the corresponding JSON language file and deserializes the translations.
     /// </summary>
     private void LoadLanguageFile()
     {
-        // Génère le nom du fichier basé sur la langue actuelle (par exemple : "English.json").
+        // Generates the file name based on the current language (e.g., "English.json").
         string fileName = _currentLanguage.ToString() + ".json";
 
-        // Crée le chemin complet vers le fichier de langue.
+        // Creates the full path to the language file.
         string filePath = Path.Combine(_languageFolder, fileName);
 
-        // Vérifie si le fichier de langue existe à cet emplacement.
+        // Checks if the language file exists at this location.
         if (File.Exists(filePath))
         {
-            // Lit le contenu du fichier JSON.
+            // Reads the content of the JSON file.
             string json = File.ReadAllText(filePath);
 
-            // Désérialise le contenu JSON dans un dictionnaire de traductions (clé = texte original, valeur = traduction).
+            // Deserializes the JSON content into a dictionary of translations (key = original text, value = translation).
             _translations = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
         }
         else
         {
-            // Si le fichier n'est pas trouvé, lève une exception pour indiquer l'erreur.
+            // If the file is not found, throws an exception to indicate the error.
             throw new FileNotFoundException($"Language file '{filePath}' not found.");
         }
     }
 
     /// <summary>
-    /// Récupère la traduction d'une clé spécifiée, avec la possibilité d'inclure des valeurs de remplacement.
+    /// Retrieves the translation for a specified key, with the option to include placeholder values.
     /// </summary>
-    /// <param name="key">Clé pour laquelle la traduction est demandée.</param>
-    /// <param name="placeholders">Dictionnaire optionnel contenant des paires de clés/valeurs à remplacer dans la traduction.</param>
-    /// <returns>La traduction correspondant à la clé, avec les remplacements effectués, ou la clé elle-même si la traduction est introuvable.</returns>
+    /// <param name="key">The key for which the translation is requested.</param>
+    /// <param name="placeholders">An optional dictionary containing key/value pairs to be replaced in the translation.</param>
+    /// <returns>The translation corresponding to the key, with replacements made, or the key itself if the translation is not found.</returns>
     public string GetTranslation(string key, Dictionary<string, string>? placeholders = null)
     {
-        // Tente de récupérer la valeur de traduction pour la clé donnée.
+        // Attempts to retrieve the translation value for the given key.
         if (_translations.TryGetValue(key, out string value))
         {
-            // Si des espaces réservés sont fournis, les remplace dans la traduction.
+            // If placeholders are provided, replace them in the translation.
             if (placeholders != null)
             {
                 foreach (var placeholder in placeholders)
@@ -70,11 +70,11 @@ public class LanguageManager
                 }
             }
 
-            // Retourne la traduction avec les remplacements effectués (si applicable).
+            // Returns the translation with replacements made (if applicable).
             return value;
         }
 
-        // Si la clé n'est pas trouvée, retourne la clé elle-même comme valeur par défaut.
+        // If the key is not found, returns the key itself as a default value.
         return key;
     }
 }

@@ -5,55 +5,55 @@ using System.Windows.Controls;
 namespace EasySaveGUI.ViewModels
 {
     /// <summary>
-    /// ViewModel principal pour la fenêtre principale de l'application.
-    /// Il gère les vues à afficher dans la fenêtre et les commandes de navigation entre les vues.
+    /// Main ViewModel for the application's main window.
+    /// It manages the views to display in the window and the navigation commands between the views.
     /// </summary>
     public class MainWindowViewModel : ViewModelBase
     {
-        // Propriété pour stocker la vue actuellement affichée.
+        // Property to store the currently displayed view.
         private ViewModelBase? _currentView;
 
         /// <summary>
-        /// Propriété qui expose la vue actuelle de l'application.
-        /// Notifie le changement de propriété lorsque la vue change.
+        /// Property that exposes the current view of the application.
+        /// Notifies the property change when the view changes.
         /// </summary>
         public ViewModelBase? CurrentView
         {
-            get => _currentView;  // Retourne la vue actuelle
+            get => _currentView;  // Returns the current view
             set
             {
-                _currentView = value;  // Change la vue actuelle
-                OnPropertyChanged(nameof(CurrentView));  // Notifie le changement de propriété
+                _currentView = value;  // Changes the current view
+                OnPropertyChanged(nameof(CurrentView));  // Notifies the property change
             }
         }
 
-        // Commandes pour la navigation vers différentes vues
+        // Commands for navigating to different views
         public RelayCommand NavigateHomeCommand { get; }
         public RelayCommand NavigateSettingsCommand { get; }
 
-        // Service de navigation pour gérer les transitions entre les vues
+        // Navigation service to handle transitions between views
         private readonly NavigationService _navigationService;
 
         /// <summary>
-        /// Constructeur de la classe MainWindowViewModel.
-        /// Initialise le service de navigation et les commandes de navigation.
-        /// Configure les commandes pour naviguer entre les vues.
-        /// Définit la vue par défaut à afficher (HomeViewModel).
+        /// Constructor for the MainWindowViewModel class.
+        /// Initializes the navigation service and navigation commands.
+        /// Configures commands to navigate between views.
+        /// Sets the default view to display (HomeViewModel).
         /// </summary>
         public MainWindowViewModel()
         {
-            _navigationService = new NavigationService();  // Initialisation du service de navigation
+            _navigationService = new NavigationService();  // Initializes the navigation service
 
-            // Configuration du service de navigation : lorsque la vue change, mettre à jour CurrentView
+            // Configures the navigation service: when the view changes, update CurrentView
             _navigationService.Configure(vm => CurrentView = vm);
 
-            // Commande pour naviguer vers la vue Home
+            // Command to navigate to the Home view
             NavigateHomeCommand = new RelayCommand(_ => _navigationService.Navigate(new HomeViewModel()));
 
-            // Commande pour naviguer vers la vue Settings
+            // Command to navigate to the Settings view
             NavigateSettingsCommand = new RelayCommand(_ => _navigationService.Navigate(new SettingsViewModel()));
 
-            // Navigation initiale vers la vue Home (vue par défaut)
+            // Initial navigation to the Home view (default view)
             _navigationService.Navigate(new HomeViewModel());
         }
     }

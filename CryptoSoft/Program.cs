@@ -5,46 +5,49 @@ using System.Text;
 namespace CryptoSoft
 {
     /// <summary>
-    /// La classe Program est responsable de l'exécution principale du programme. Elle utilise la classe Encoder pour
-    /// effectuer des opérations de chiffrement en fonction des arguments passés en ligne de commande.
+    /// The Program class is responsible for the main execution of the program. It uses the Encoder class to
+    /// perform encryption operations based on command-line arguments.
     /// </summary>
     class Program
     {
         /// <summary>
-        /// Méthode principale du programme. Elle reçoit des arguments de ligne de commande pour décider s'il faut
-        /// chiffrer ou déchiffrer un fichier et affiche le temps écoulé pour l'exécution de l'opération.
+        /// The main method of the program. It receives command-line arguments to decide whether to
+        /// encrypt or decrypt a file and displays the elapsed time for the operation.
         /// </summary>
-        /// <param name="args">Tableau des arguments passés en ligne de commande.</param>
-        /// <returns>Retourne 0 en cas de succès, -1 en cas d'erreur.</returns>
+        /// <param name="args">Array of arguments passed in the command line.</param>
+        /// <returns>Returns 0 on success, -1 on error.</returns>
         static int Main(string[] args)
         {
-            int returnValue = 0;  // Code de retour par défaut (succès)
-            Stopwatch stopWatch = new Stopwatch();  // Stopwatch pour mesurer le temps d'exécution
-            stopWatch.Start();  // Démarre le chronomètre
+            int returnValue = 0;  // Default return code (success)
+            Stopwatch stopWatch = new Stopwatch();  // Stopwatch to measure execution time
+            stopWatch.Start();  // Starts the stopwatch
 
             try
             {
-                // Vérifie si le troisième argument (args[2]) est "True" pour décider d'encrypter ou de décrypter
+                // Checks if the third argument (args[2]) is "True" to decide whether to encrypt or decrypt
                 if (args[2] == "True")
                 {
-                    // Appelle la méthode Encrypt de la classe Encoder pour chiffrer le fichier
+                    // Calls the Encrypt method of the Encoder class to encrypt the file
                     Encoder.Encrypt(args[0], args[1]);
                 }
                 else
                 {
-                    // Si ce n'était pas "True", la méthode Decrypt pourrait être appelée ici, mais elle est commentée
+                    // If it wasn't "True", the Decrypt method could be called here, but it is commented out
                     // Encoder.Decrypt(args[0]);
                 }
             }
             catch (Exception e)
             {
-                // En cas d'exception (par exemple si les arguments sont mal fournis ou le fichier est introuvable),
-                // on retourne -1 pour signaler une erreur
+                // In case of an exception (for example, if the arguments are wrong or the file is not found),
+                // return -1 to signal an error
                 return -1;
             }
 
-            // Arrête le chronomètre après l'exécution de l'opération
+            // Stops the stopwatch after the operation has been executed
             stopWatch.Stop();
-            int elapsedTime = (int)stopWatch.ElapsedMilliseconds;  // Temps écoulé en millisecondes
-            Console.WriteLine(elapsedTime);  // Affiche le temps d'exécution dans la console
-            return returnValue;  // Retourne 0 pour indiquer que l'exécution s
+            int elapsedTime = (int)stopWatch.ElapsedMilliseconds;  // Elapsed time in milliseconds
+            Console.WriteLine(elapsedTime);  // Displays the execution time in the console
+            return returnValue;  // Returns 0 to indicate successful execution
+        }
+    }
+}

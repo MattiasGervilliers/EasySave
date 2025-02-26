@@ -8,72 +8,71 @@ using System.Threading.Tasks;
 namespace BackupEngine.Backup
 {
 
-    // La classe CryptStrategy implémente l'interface ITransferStrategy
-    // Elle utilise un processus externe (CryptoSoft) pour effectuer des opérations de cryptage ou de décryptage
+    // The CryptStrategy class implements the ITransferStrategy interface
+    // It uses an external process (CryptoSoft) to perform encryption or decryption operations
     internal class CryptStrategy : ITransferStrategy
     {
-        // Méthode qui transfère un fichier en le cryptant ou décryptant via CryptoSoft
+        // Method that transfers a file by encrypting or decrypting it via CryptoSoft
         public void TransferFile(string source, string destination)
         {
-            // La variable 'encrypt' détermine si le fichier doit être crypté ou décrypté
-            bool encrypt = true; // Ici, on définit 'true' pour indiquer qu'il s'agit d'un cryptage
-            // Appel à la méthode LaunchCryptoSoft pour lancer le processus de cryptage
+            // The 'encrypt' variable determines whether the file should be encrypted or decrypted
+            bool encrypt = true; // Here, we set 'true' to indicate encryption
+            // Call the LaunchCryptoSoft method to start the encryption process
             LaunchCryptoSoft(source, destination, encrypt);
         }
 
-        // Méthode statique qui lance le processus CryptoSoft pour crypter ou décrypter un fichier
+        // Static method that launches the CryptoSoft process to encrypt or decrypt a file
         public static void LaunchCryptoSoft(string source, string destination, bool encrypt)
         {
             try
             {
-                // Configuration des informations pour démarrer le processus externe (CryptoSoft)
+                // Set up the information to start the external process (CryptoSoft)
                 ProcessStartInfo psi = new ProcessStartInfo
                 {
-                    // Spécifie le chemin de l'exécutable CryptoSoft
+                    // Specifies the path to the CryptoSoft executable
                     FileName = "C:\\Users\\Nino\\source\\repos\\EasySave\\CryptoSoft\\bin\\Debug\\net8.0\\CryptoSoft.exe",
-                    // Arguments pour le programme : source, destination, et le mode (cryptage ou décryptage)
+                    // Arguments for the program: source, destination, and the mode (encryption or decryption)
                     Arguments = $"\"{source}\" \"{destination}\" {encrypt}",
-                    // Rediriger les sorties standard (utile pour lire les résultats ou erreurs)
+                    // Redirect standard output (useful for reading results or errors)
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    // Ne pas utiliser le shell pour démarrer le processus
+                    // Don't use the shell to start the process
                     UseShellExecute = false,
-                    // Créer sans fenêtre
+                    // Create without a window
                     CreateNoWindow = true
                 };
 
-                // Lancement du processus externe
+                // Start the external process
                 using (Process process = new Process { StartInfo = psi })
                 {
-                    // Démarre le processus
+                    // Start the process
                     process.Start();
 
-                    // Lire la sortie du programme (utile pour le débogage ou la journalisation)
+                    // Read the output from the program (useful for debugging or logging)
                     string output = process.StandardOutput.ReadToEnd();
                     string error = process.StandardError.ReadToEnd();
 
-                    // Attendre que le processus se termine
+                    // Wait for the process to exit
                     process.WaitForExit();
 
-                    // (Commenté) Affichage de la sortie et du code de sortie pour le débogage
+                    // (Commented) Display the output and exit code for debugging
                     /*
-                    Console.WriteLine($"CryptoSoft terminé avec code {process.ExitCode}");
-                    Console.WriteLine($"Sortie : {output}");
+                    Console.WriteLine($"CryptoSoft finished with code {process.ExitCode}");
+                    Console.WriteLine($"Output: {output}");
                     */
 
-                    // Si des erreurs sont présentes, on les affiche dans la console
+                    // If there are any errors, display them in the console
                     if (!string.IsNullOrEmpty(error))
                     {
-                        Console.WriteLine($"Erreurs : {error}");
+                        Console.WriteLine($"Errors: {error}");
                     }
                 }
             }
             catch (Exception e)
             {
-                // En cas d'exception, afficher l'erreur dans la console
-                Console.WriteLine($"Erreur lors du lancement de CryptoSoft : {e.Message}");
+                // In case of an exception, display the error in the console
+                Console.WriteLine($"Error while launching CryptoSoft: {e.Message}");
             }
         }
     }
 }
-

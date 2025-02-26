@@ -10,41 +10,41 @@ using System.Threading.Tasks;
 namespace BackupEngine.Backup
 {
     /// <summary>
-    /// La classe CopyStrategy implémente l'interface ITransferStrategy.
-    /// Elle définit la méthode pour transférer des fichiers en les copiant, sans verrouillage de fichier, à l'aide de FileStream.
+    /// The CopyStrategy class implements the ITransferStrategy interface.
+    /// It defines the method to transfer files by copying them without file locking, using FileStream.
     /// </summary>
     public class CopyStrategy : ITransferStrategy
     {
         /// <summary>
-        /// Constructeur de la classe CopyStrategy.
-        /// Il initialise l'objet CopyStrategy sans paramètres spécifiques.
+        /// Constructor of the CopyStrategy class.
+        /// It initializes the CopyStrategy object without specific parameters.
         /// </summary>
         public CopyStrategy()
         {
         }
 
         /// <summary>
-        /// Méthode qui effectue le transfert d'un fichier source vers un fichier de destination.
-        /// Utilise un FileStream pour éviter les blocages sur le fichier source.
+        /// Method that performs the transfer of a source file to a destination file.
+        /// It uses a FileStream to avoid locking the source file.
         /// </summary>
-        /// <param name="file">Le chemin du fichier source à transférer.</param>
-        /// <param name="destFile">Le chemin du fichier de destination où le fichier sera copié.</param>
+        /// <param name="file">The path of the source file to transfer.</param>
+        /// <param name="destFile">The path of the destination file where the file will be copied.</param>
         public void TransferFile(string file, string destFile)
         {
             /// <summary>
-            /// Ouvre un flux de lecture pour le fichier source en mode FileAccess.Read et FileShare.ReadWrite
-            /// afin de permettre l'accès en lecture au fichier source sans le verrouiller.
+            /// Opens a read stream for the source file in FileAccess.Read and FileShare.ReadWrite mode
+            /// to allow reading access to the source file without locking it.
             /// </summary>
             using (FileStream sourceStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 /// <summary>
-                /// Ouvre un flux d'écriture pour le fichier de destination en mode FileMode.Create pour créer un nouveau fichier.
-                /// FileAccess.Write est utilisé pour l'écriture et FileShare.None pour éviter les accès concurrents au fichier de destination.
+                /// Opens a write stream for the destination file in FileMode.Create to create a new file.
+                /// FileAccess.Write is used for writing, and FileShare.None is used to prevent concurrent access to the destination file.
                 /// </summary>
                 using (FileStream destStream = new FileStream(destFile, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     /// <summary>
-                    /// Copie le contenu du fichier source dans le fichier de destination à l'aide de la méthode CopyTo.
+                    /// Copies the content from the source file to the destination file using the CopyTo method.
                     /// </summary>
                     sourceStream.CopyTo(destStream);
                 }

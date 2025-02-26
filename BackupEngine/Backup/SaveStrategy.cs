@@ -4,34 +4,34 @@ using BackupEngine.State;
 namespace BackupEngine.Backup
 {
     /// <summary>
-    /// Classe abstraite SaveStrategy qui définit la base pour les stratégies de sauvegarde (complète, différentielle, etc.).
-    /// Elle inclut des événements pour signaler l'état de la sauvegarde et les transferts de fichiers.
+    /// Abstract class SaveStrategy that defines the base for backup strategies (full, differential, etc.).
+    /// It includes events to report the state of the backup and file transfers.
     /// </summary>
     public abstract class SaveStrategy
     {
         /// <summary>
-        /// Événements pour notifier les informations de transfert et d'état pendant la sauvegarde.
+        /// Events to notify transfer and state information during the backup.
         /// </summary>
         public event EventHandler<TransferEvent> Transfer;
         public event EventHandler<StateEvent> StateUpdated;
 
         /// <summary>
-        /// Configuration de la sauvegarde, inclut des informations comme le chemin source et destination, les options de cryptage, etc.
+        /// Backup configuration, includes information such as source and destination paths, encryption options, etc.
         /// </summary>
         protected readonly BackupConfiguration Configuration;
 
         /// <summary>
-        /// Stratégie de transfert utilisée pour effectuer le transfert des fichiers.
+        /// Transfer strategy used to perform the file transfer.
         /// </summary>
         public ITransferStrategy TransferStrategy;
 
         /// <summary>
-        /// Méthode abstraite pour la sauvegarde. Chaque stratégie de sauvegarde doit implémenter cette méthode.
+        /// Abstract method for the backup. Each backup strategy must implement this method.
         /// </summary>
         public abstract void Save(string uniqueDestinationPath);
 
         /// <summary>
-        /// Méthode protégée pour notifier un événement de transfert.
+        /// Protected method to notify a transfer event.
         /// </summary>
         protected void onTransfer(TransferEvent e)
         {
@@ -39,7 +39,7 @@ namespace BackupEngine.Backup
         }
 
         /// <summary>
-        /// Méthode protégée pour notifier un événement de mise à jour d'état.
+        /// Protected method to notify a state update event.
         /// </summary>
         protected void onStateUpdated(StateEvent state)
         {

@@ -5,41 +5,41 @@ using LogLib;
 namespace BackupEngine.Settings
 {
     /// <summary>
-    /// La classe Settings représente les paramètres de configuration pour l'application.
-    /// Elle inclut la langue, les chemins de log et d'état, ainsi qu'une liste de configurations de sauvegarde.
-    /// Elle implémente également l'interface IJsonSerializable pour faciliter la sérialisation et la désérialisation au format JSON.
+    /// The Settings class represents the configuration settings for the application.
+    /// It includes the language, log and state paths, as well as a list of backup configurations.
+    /// It also implements the IJsonSerializable interface to facilitate serialization and deserialization in JSON format.
     /// </summary>
     public class Settings : IJsonSerializable
     {
         /// <summary>
-        /// La langue choisie pour l'application (par exemple, English, Français).
+        /// The language chosen for the application (e.g., English, French).
         /// </summary>
         public Language Language { get; set; }
 
         /// <summary>
-        /// Le chemin du dossier où les fichiers de log sont stockés.
+        /// The path to the folder where log files are stored.
         /// </summary>
         public CustomPath LogPath { get; set; }
 
         /// <summary>
-        /// Le chemin du fichier d'état de l'application (par exemple, pour stocker l'état des sauvegardes).
+        /// The path to the application state file (e.g., to store backup states).
         /// </summary>
         public CustomPath StatePath { get; set; }
 
         /// <summary>
-        /// Une liste de configurations de sauvegarde définissant les différents types de sauvegarde et leurs paramètres.
+        /// A list of backup configurations defining different types of backups and their parameters.
         /// </summary>
         public List<BackupConfiguration> Configurations { get; set; }
 
         /// <summary>
-        /// Le format de log utilisé (par exemple, JSON ou texte).
+        /// The log format used (e.g., JSON or text).
         /// </summary>
         public LogType LogFormat { get; set; }
 
         /// <summary>
-        /// Constructeur de la classe Settings qui initialise les paramètres par défaut.
-        /// La langue est définie sur l'anglais, les chemins de logs et d'état sont définis par défaut,
-        /// et le format de log est JSON.
+        /// Constructor for the Settings class that initializes the default settings.
+        /// The language is set to English, the log and state paths are set by default,
+        /// and the log format is JSON.
         /// </summary>
         public Settings()
         {
@@ -51,16 +51,16 @@ namespace BackupEngine.Settings
         }
 
         /// <summary>
-        /// Désérialise une chaîne JSON pour initialiser les propriétés de l'objet Settings.
+        /// Deserializes a JSON string to initialize the properties of the Settings object.
         /// </summary>
-        /// <param name="json">La chaîne JSON à désérialiser.</param>
+        /// <param name="json">The JSON string to deserialize.</param>
         public void FromJson(string json)
         {
-            // Désérialise le JSON dans un objet Settings
+            // Deserialize the JSON into a Settings object
             Settings jsonSettings = JsonConvert.DeserializeObject<Settings>(json);
             if (jsonSettings != null)
             {
-                // Copie les propriétés de l'objet désérialisé dans l'objet actuel
+                // Copy the properties from the deserialized object into the current object
                 Language = jsonSettings.Language;
                 LogPath = jsonSettings.LogPath;
                 StatePath = jsonSettings.StatePath;
@@ -70,12 +70,12 @@ namespace BackupEngine.Settings
         }
 
         /// <summary>
-        /// Sérialise l'objet Settings en une chaîne JSON.
+        /// Serializes the Settings object into a JSON string.
         /// </summary>
-        /// <returns>La chaîne JSON représentant l'objet Settings.</returns>
+        /// <returns>The JSON string representing the Settings object.</returns>
         public string ToJson()
         {
-            // Sérialise l'objet actuel en JSON avec une mise en forme indentée pour la lisibilité
+            // Serialize the current object into JSON with indented formatting for readability
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
     }

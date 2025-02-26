@@ -4,47 +4,47 @@ using Newtonsoft.Json;
 namespace BackupEngine
 {
     /// <summary>
-    /// Représente la configuration d'une sauvegarde, incluant le nom, les chemins source et destination,
-    /// le type de sauvegarde, et si la sauvegarde doit être cryptée ou non.
+    /// Represents the configuration of a backup, including the name, source and destination paths,
+    /// the type of backup, and whether the backup should be encrypted or not.
     /// </summary>
     public class BackupConfiguration : IJsonSerializable
     {
         /// <summary>
-        /// Le nom de la configuration de sauvegarde.
+        /// The name of the backup configuration.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Le chemin source de la sauvegarde, où les fichiers sont récupérés.
+        /// The source path of the backup, where the files are retrieved from.
         /// </summary>
         public CustomPath SourcePath { get; set; }
 
         /// <summary>
-        /// Le chemin de destination de la sauvegarde, où les fichiers seront sauvegardés.
+        /// The destination path of the backup, where the files will be saved.
         /// </summary>
         public CustomPath DestinationPath { get; set; }
 
         /// <summary>
-        /// Le type de sauvegarde (par exemple, complète, différentielle, etc.).
+        /// The type of backup (for example, full, differential, etc.).
         /// </summary>
         public BackupType BackupType { get; set; }
 
         /// <summary>
-        /// Indique si les fichiers doivent être cryptés lors de la sauvegarde.
+        /// Indicates whether the files should be encrypted during the backup.
         /// </summary>
         public bool Encrypt { get; set; }
 
         /// <summary>
-        /// Désérialise un objet JSON en une instance de la classe BackupConfiguration.
-        /// Cette méthode remplit les propriétés de l'objet BackupConfiguration avec les données provenant du JSON.
+        /// Deserializes a JSON object into an instance of the BackupConfiguration class.
+        /// This method fills the properties of the BackupConfiguration object with data from the JSON.
         /// </summary>
-        /// <param name="json">Le JSON à désérialiser en une instance de BackupConfiguration.</param>
+        /// <param name="json">The JSON to deserialize into a BackupConfiguration instance.</param>
         public void FromJson(string json)
         {
-            // Désérialisation du JSON en un objet BackupConfiguration
+            // Deserialize the JSON into a BackupConfiguration object
             BackupConfiguration jsonConfiguration = JsonConvert.DeserializeObject<BackupConfiguration>(json);
 
-            // Si la désérialisation réussit, on assigne les valeurs des propriétés de l'objet.
+            // If deserialization is successful, assign the values of the object's properties.
             if (jsonConfiguration != null)
             {
                 Name = jsonConfiguration.Name;
@@ -56,13 +56,13 @@ namespace BackupEngine
         }
 
         /// <summary>
-        /// Sérialise l'objet BackupConfiguration en une chaîne JSON.
-        /// Cette méthode convertit l'objet actuel en une représentation JSON.
+        /// Serializes the BackupConfiguration object into a JSON string.
+        /// This method converts the current object into a JSON representation.
         /// </summary>
-        /// <returns>Une chaîne JSON représentant la configuration de la sauvegarde.</returns>
+        /// <returns>A JSON string representing the backup configuration.</returns>
         public string ToJson()
         {
-            // Sérialisation de l'objet en JSON avec la méthode ToJson de JsonConvert
+            // Serialize the object into JSON using JsonConvert's ToJson method
             return JsonConvert.SerializeObject(this);
         }
     }

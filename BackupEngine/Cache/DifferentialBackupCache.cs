@@ -5,18 +5,18 @@ using System.Text.Json.Serialization;
 namespace BackupEngine.Cache
 {
     /// <summary>
-    /// Classe représentant un cache de sauvegardes différentielles.
-    /// Permet de sérialiser et désérialiser les configurations de sauvegarde depuis/vers un format JSON.
+    /// Class representing a differential backup cache.
+    /// Allows serializing and deserializing backup configurations from/to a JSON format.
     /// </summary>
     internal class DifferentialBackupCache : IJsonSerializable
     {
         /// <summary>
-        /// Liste des configurations de sauvegarde mises en cache.
+        /// List of cached backup configurations.
         /// </summary>
         public List<CachedConfiguration> _configurations { get; set; }
 
         /// <summary>
-        /// Constructeur par défaut initialisant la liste de configurations.
+        /// Default constructor initializing the list of configurations.
         /// </summary>
         public DifferentialBackupCache()
         {
@@ -24,7 +24,7 @@ namespace BackupEngine.Cache
         }
 
         /// <summary>
-        /// Méthode pour désérialiser les données JSON et peupler la liste des configurations.
+        /// Method to deserialize JSON data and populate the list of configurations.
         /// </summary>
         public void FromJson(string json)
         {
@@ -32,7 +32,7 @@ namespace BackupEngine.Cache
         }
 
         /// <summary>
-        /// Méthode pour sérialiser la liste des configurations en format JSON.
+        /// Method to serialize the list of configurations into JSON format.
         /// </summary>
         public string ToJson()
         {
@@ -41,7 +41,7 @@ namespace BackupEngine.Cache
     }
 
     /// <summary>
-    /// Classe représentant une configuration de sauvegarde mise en cache.
+    /// Class representing a cached backup configuration.
     /// </summary>
     internal class CachedConfiguration
     {
@@ -53,7 +53,7 @@ namespace BackupEngine.Cache
     }
 
     /// <summary>
-    /// Classe représentant une sauvegarde spécifique avec la date et le nom du répertoire.
+    /// Class representing a specific backup with the date and directory name.
     /// </summary>
     public class Backup
     {

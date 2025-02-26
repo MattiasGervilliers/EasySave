@@ -7,8 +7,8 @@ using System.IO;
 namespace BackupEngine.Backup
 {
     /// <summary>
-    /// La classe FileManager est responsable de la gestion de la sauvegarde.
-    /// Elle configure et utilise une stratégie de sauvegarde, tout en loguant les événements et en mettant à jour l'état.
+    /// The FileManager class is responsible for managing the backup.
+    /// It configures and uses a backup strategy, while logging events and updating the state.
     /// </summary>
     public class FileManager
     {
@@ -18,7 +18,7 @@ namespace BackupEngine.Backup
         private readonly StateManager _stateManager;
 
         /// <summary>
-        /// Constructeur de la classe FileManager. Il prend en paramètre une stratégie de sauvegarde et initialise les autres composants.
+        /// Constructor of the FileManager class. It takes a backup strategy as a parameter and initializes the other components.
         /// </summary>
         public FileManager(SaveStrategy saveStrategy)
         {
@@ -29,7 +29,7 @@ namespace BackupEngine.Backup
         }
 
         /// <summary>
-        /// Méthode pour changer la stratégie de sauvegarde utilisée par le FileManager.
+        /// Method to change the backup strategy used by the FileManager.
         /// </summary>
         public void SetSaveStrategy(SaveStrategy newStrategy)
         {
@@ -37,7 +37,7 @@ namespace BackupEngine.Backup
         }
 
         /// <summary>
-        /// Méthode qui lance la sauvegarde en créant un dossier de destination unique et en utilisant la stratégie de sauvegarde définie.
+        /// Method that starts the backup by creating a unique destination folder and using the defined backup strategy.
         /// </summary>
         public void Save(BackupConfiguration configuration)
         {
@@ -49,25 +49,25 @@ namespace BackupEngine.Backup
             }
 
             /// <summary>
-            /// Générer un nom unique pour le dossier de sauvegarde en utilisant un timestamp.
+            /// Generate a unique name for the backup folder using a timestamp.
             /// </summary>
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
             string uniqueDestinationPath = Path.Combine(destinationBasePath, $"{timestamp}_{configuration.Name}");
 
             /// <summary>
-            /// Créer le dossier de sauvegarde.
+            /// Create the backup folder.
             /// </summary>
             Directory.CreateDirectory(uniqueDestinationPath);
 
             _saveStrategy.Transfer += _logManager.OnTransfer;
 
             /// <summary>
-            /// Ajouter un écouteur pour l'événement StateUpdated.
+            /// Add a listener for the StateUpdated event.
             /// </summary>
             _saveStrategy.StateUpdated += _stateManager.OnStateUpdated;
 
             /// <summary>
-            /// Lancer la sauvegarde avec le bon dossier.
+            /// Start the backup with the correct folder.
             /// </summary>
             _saveStrategy.Save(uniqueDestinationPath);
         }

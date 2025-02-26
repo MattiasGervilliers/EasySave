@@ -3,49 +3,49 @@
 namespace BackupEngine.Cache
 {
     /// <summary>
-    /// La classe DifferentialBackupCacheRepository est responsable de la gestion du cache pour les sauvegardes différentielles.
-    /// Elle permet de charger, enregistrer, et mettre à jour le cache des sauvegardes différentielles.
+    /// The DifferentialBackupCacheRepository class is responsible for managing the cache for differential backups.
+    /// It allows loading, saving, and updating the cache of differential backups.
     /// </summary>
     internal class DifferentialBackupCacheRepository
     {
         /// <summary>
-        /// Chemin du fichier cache où les informations de sauvegarde sont stockées.
+        /// Path to the cache file where backup information is stored.
         /// </summary>
         private const string CACHE_PATH = ".differentiel_cache.json";
 
         /// <summary>
-        /// Instance de DifferentialBackupCache qui contient les configurations des sauvegardes différentielles.
+        /// Instance of DifferentialBackupCache that contains the configurations for differential backups.
         /// </summary>
         private readonly DifferentialBackupCache _cache;
 
         /// <summary>
-        /// Constructeur de la classe DifferentialBackupCacheRepository.
-        /// Il charge les informations de cache à partir du fichier de cache ou crée un nouveau cache si le fichier n'existe pas.
+        /// Constructor of the DifferentialBackupCacheRepository class.
+        /// It loads cache information from the cache file or creates a new cache if the file does not exist.
         /// </summary>
         public DifferentialBackupCacheRepository()
         {
             /// <summary>
-            /// Chargement du cache depuis le fichier ou création d'un nouveau cache vide.
+            /// Loading the cache from the file or creating a new empty cache.
             /// </summary>
             _cache = Load();
         }
 
         /// <summary>
-        /// Méthode pour charger les données du cache à partir du fichier.
-        /// Si le fichier de cache n'existe pas, elle crée un fichier vide et retourne un cache vide.
+        /// Method to load cache data from the file.
+        /// If the cache file does not exist, it creates an empty file and returns an empty cache.
         /// </summary>
-        /// <returns>Retourne une instance de DifferentialBackupCache contenant les données du cache.</returns>
+        /// <returns>Returns an instance of DifferentialBackupCache containing the cache data.</returns>
         private DifferentialBackupCache Load()
         {
             /// <summary>
-            /// Vérifie si le fichier de cache existe.
+            /// Checks if the cache file exists.
             /// </summary>
             if (File.Exists(CACHE_PATH))
             {
                 DifferentialBackupCache cache = new DifferentialBackupCache();
 
                 /// <summary>
-                /// Si le fichier de cache existe, ouvre le fichier en lecture et charge les données JSON dans l'objet cache.
+                /// If the cache file exists, opens the file for reading and loads the JSON data into the cache object.
                 /// </summary>
                 using (FileStream fs = File.Open(CACHE_PATH, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
@@ -59,7 +59,7 @@ namespace BackupEngine.Cache
             else
             {
                 /// <summary>
-                /// Si le fichier de cache n'existe pas, crée un nouveau fichier de cache et retourne un cache vide.
+                /// If the cache file does not exist, creates a new cache file and returns an empty cache.
                 /// </summary>
                 CreateFile();
                 return new DifferentialBackupCache();
@@ -67,68 +67,68 @@ namespace BackupEngine.Cache
         }
 
         /// <summary>
-        /// Méthode pour créer un fichier vide de cache si celui-ci n'existe pas.
+        /// Method to create an empty cache file if it does not exist.
         /// </summary>
         private void CreateFile()
         {
             /// <summary>
-            /// Crée le fichier de cache vide.
+            /// Creates the empty cache file.
             /// </summary>
             FileStream fs = File.Create(CACHE_PATH);
             fs.Close();
         }
 
         /// <summary>
-        /// Méthode pour sauvegarder le cache actuel dans le fichier de cache.
-        /// Elle sérialise l'objet cache en JSON et l'écrit dans le fichier avec une indentation pour la lisibilité.
+        /// Method to save the current cache to the cache file.
+        /// It serializes the cache object to JSON and writes it to the file with indentation for readability.
         /// </summary>
         private void Save()
         {
             /// <summary>
-            /// Sérialise le cache en format JSON.
+            /// Serializes the cache to JSON format.
             /// </summary>
             string json = _cache.ToJson();
 
             /// <summary>
-            /// Ouvre le fichier de cache en mode écriture et sauvegarde le JSON formaté.
+            /// Opens the cache file for writing and saves the formatted JSON.
             /// </summary>
             using (FileStream fs = File.Open(CACHE_PATH, FileMode.Open, FileAccess.Write, FileShare.None))
             using (StreamWriter sw = new StreamWriter(fs))
             {
-                // Indente le JSON pour une meilleure lisibilité
+                // Indents the JSON for better readability
                 sw.Write(JsonConvert.SerializeObject(JsonConvert.DeserializeObject(json), Formatting.Indented));
             }
         }
 
         /// <summary>
-        /// Recherche et retourne la configuration de sauvegarde mise en cache pour une configuration donnée.
+        /// Searches and returns the cached backup configuration for a given configuration.
         /// </summary>
-        /// <param name="configuration">La configuration de sauvegarde pour laquelle nous cherchons une entrée dans le cache.</param>
-        /// <returns>Retourne une instance de CachedConfiguration correspondant à la configuration donnée, ou null si elle n'existe pas.</returns>
+        /// <param name="configuration">The backup configuration for which we are looking for an entry in the cache.</param>
+        /// <returns>Returns an instance of CachedConfiguration corresponding to the given configuration, or null if it does not exist.</returns>
         public CachedConfiguration? GetCachedConfiguration(BackupConfiguration configuration)
         {
             /// <summary>
-            /// Recherche dans le cache la configuration correspondant au nom de la configuration donnée.
+            /// Searches the cache for the configuration matching the given configuration name.
             /// </summary>
             return _cache._configurations.Find(c => c.Name == configuration.Name);
         }
 
         /// <summary>
-        /// Ajoute une nouvelle sauvegarde dans le cache pour une configuration donnée.
-        /// Si la configuration n'existe pas dans le cache, elle est ajoutée.
+        /// Adds a new backup to the cache for a given configuration.
+        /// If the configuration does not exist in the cache, it is added.
         /// </summary>
-        /// <param name="configuration">La configuration de sauvegarde associée à la nouvelle sauvegarde.</param>
-        /// <param name="date">La date et l'heure de la sauvegarde.</param>
-        /// <param name="directoryName">Le nom du répertoire où la sauvegarde a été effectuée.</param>
+        /// <param name="configuration">The backup configuration associated with the new backup.</param>
+        /// <param name="date">The date and time of the backup.</param>
+        /// <param name="directoryName">The name of the directory where the backup was performed.</param>
         public void AddBackup(BackupConfiguration configuration, DateTime date, string directoryName)
         {
             /// <summary>
-            /// Cherche la configuration dans le cache.
+            /// Searches for the configuration in the cache.
             /// </summary>
             CachedConfiguration? cachedConfiguration = GetCachedConfiguration(configuration);
 
             /// <summary>
-            /// Si la configuration n'existe pas dans le cache, une nouvelle entrée est créée.
+            /// If the configuration does not exist in the cache, a new entry is created.
             /// </summary>
             if (cachedConfiguration == null)
             {
@@ -141,12 +141,12 @@ namespace BackupEngine.Cache
             }
 
             /// <summary>
-            /// Ajoute la nouvelle sauvegarde à la configuration existante.
+            /// Adds the new backup to the existing configuration.
             /// </summary>
             cachedConfiguration.Backups.Add(new Backup(date, directoryName));
 
             /// <summary>
-            /// Sauvegarde le cache après l'ajout de la nouvelle sauvegarde.
+            /// Saves the cache after adding the new backup.
             /// </summary>
             Save();
         }
