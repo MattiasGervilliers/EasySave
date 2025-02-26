@@ -6,7 +6,7 @@ namespace BackupEngine.Log
     {
         /// <summary>
         /// CustomPath source du fichier transféré
-        /// </summary>
+        /// </summary> 
         public string? FileSourcePath { get; set; }
 
         /// <summary>
@@ -29,9 +29,7 @@ namespace BackupEngine.Log
         /// </summary>
         public string? BackupName { get; set; }
 
-        /// <summary>
-        /// Constructeur sans paramètre requis pour la sérialisation XML
-        /// </summary>
+
         public FileTransferLog() : base(LogLevel.INFO, "")
         {
         }
