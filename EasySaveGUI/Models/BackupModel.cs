@@ -1,5 +1,6 @@
 ﻿using BackupEngine;
 using BackupEngine.Job;
+using System.Diagnostics;
 
 namespace EasySaveGUI.Models
 {
@@ -14,10 +15,11 @@ namespace EasySaveGUI.Models
         {
             List<Job> jobs = _jobManager.LaunchBackup(configurations);
            
-            for (int i = 0; i < configurations.Count-1; i++)
+            for (int i = 0; i < configurations.Count; ++i)
             {
                 _jobs.Add(configurations[i], jobs[i]);
-                jobs[i].ProgressChanged += (sender, progress) => OnProgressChange(configurations[i], progress);
+                BackupConfiguration conf = configurations[i];
+                jobs[i].ProgressChanged += (sender, progress) => OnProgressChange(conf, progress);
             }
         }
 
