@@ -88,8 +88,7 @@ jobs:
       - name: Ajout des fichiers à la release
         uses: svenstaro/upload-release-action@v2
         with:
-          files: package/**
+          file: package/*
           tag: ${{ env.RELEASE_TAG }} 
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           overwrite: true
-          asset_name: "EasySave-Apps"
