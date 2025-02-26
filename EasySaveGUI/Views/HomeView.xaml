@@ -10,6 +10,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <local:ProgressLookupConverter x:Key="ProgressLookupConvert" />
+        <local:RunningStateConverter x:Key="RunningStateConvert" />
 
         <!-- Custom Style for ListBox -->
         <Style x:Key="CustomListBoxStyle" TargetType="ListBox">
@@ -127,14 +128,20 @@
                         </ProgressBar>
 
                         <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Button Content="▶️"
-                                        Style="{DynamicResource HoverButtonStyle}"
-                                        Command="{Binding DataContext.LaunchConfigurationCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                        CommandParameter="{Binding}" 
-                                        Height="30"
-                                        Width="30"
-                                        HorizontalAlignment="Right">
+                            <Button Height="30"
+                                Width="30"
+                                HorizontalAlignment="Right"
+                                Style="{DynamicResource HoverButtonStyle}"
+                                Command="{Binding DataContext.LaunchConfigurationCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                CommandParameter="{Binding}">
+                                <Button.Content>
+                                    <MultiBinding Converter="{StaticResource RunningStateConvert}">
+                                        <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=ListBox}"/>
+                                        <Binding Mode="OneWay" />
+                                    </MultiBinding>
+                                </Button.Content>
                             </Button>
+
                             <Button 
                                 Style="{DynamicResource HoverButtonStyle}"
                                 Height="30"

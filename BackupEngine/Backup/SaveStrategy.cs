@@ -30,7 +30,7 @@ namespace BackupEngine.Backup
         /// </summary>
         protected Task _cryptoTask;
 
-        public abstract void Save(string uniqueDestinationPath);
+        public abstract void Save(string uniqueDestinationPath, EventWaitHandle waitHandle);
 
         protected void OnTransfer(TransferEvent e)
         {

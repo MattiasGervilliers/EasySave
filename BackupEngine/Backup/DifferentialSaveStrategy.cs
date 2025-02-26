@@ -20,7 +20,7 @@ namespace BackupEngine.Backup
         /// <summary>
         /// Executes the differential backup process.
         /// </summary>
-        public override void Save(string uniqueDestinationPath)
+        public override void Save(string uniqueDestinationPath, EventWaitHandle waitHandle)
         {
             if (PreviousSaveExists())
             {
@@ -28,31 +28,31 @@ namespace BackupEngine.Backup
 
                 if (!Directory.Exists(previousSavePath))
                 {
-                    PerformFullSave(uniqueDestinationPath);
+                    PerformFullSave(uniqueDestinationPath, waitHandle);
                     UpdateCache(uniqueDestinationPath);
                 }
                 else
                 {
-                    DifferentialSave(uniqueDestinationPath, previousSavePath);
+                    DifferentialSave(uniqueDestinationPath, previousSavePath, waitHandle);
                 }
             }
             else
             {
-                PerformFullSave(uniqueDestinationPath);
+                PerformFullSave(uniqueDestinationPath, waitHandle);
                 UpdateCache(uniqueDestinationPath);
             }
         }
 
-        private void PerformFullSave(string uniqueDestinationPath)
+        private void PerformFullSave(string uniqueDestinationPath, EventWaitHandle waitHandle)
         {
             FullSaveStrategy fullSaveStrategy = new FullSaveStrategy(Configuration);
             fullSaveStrategy.Transfer += (sender, e) => OnTransfer(e);
             fullSaveStrategy.StateUpdated += (sender, e) => OnStateUpdated(e);
             fullSaveStrategy.Progress += (sender, e) => OnProgress(e);
-            fullSaveStrategy.Save(uniqueDestinationPath);
+            fullSaveStrategy.Save(uniqueDestinationPath, waitHandle);
         }
 
-        private void DifferentialSave(string uniqueDestinationPath, string previousSavePath)
+        private void DifferentialSave(string uniqueDestinationPath, string previousSavePath, EventWaitHandle waitHandle)
         {
             if (Configuration.ExtensionsToSave != null)
             {
@@ -89,6 +89,7 @@ namespace BackupEngine.Backup
 
             foreach (string file in files)
             {
+                waitHandle.WaitOne();
                 string relativePath = file.Substring(sourcePath.Length + 1);
                 string destFile = Path.Combine(uniqueDestinationPath, relativePath);
                 string previousFile = Path.Combine(previousSavePath, relativePath);
@@ -108,7 +109,7 @@ namespace BackupEngine.Backup
                     tasks.Add(Task.Run(() =>
                     {
                         WaitForBusinessSoftwareToClose();
-                        TransferFile(file, destFile, ref totalSize, ref remainingFiles, ref remainingSize);
+                        TransferFile(file, destFile, ref totalSize, ref remainingFiles, ref remainingSize, ref waitHandle);
                     }));
                 }
             }
@@ -130,13 +131,16 @@ namespace BackupEngine.Backup
         /// <summary>
         /// Transfers a file and updates the backup state.
         /// </summary>
-        private void TransferFile(string file, string destFile, ref long totalSize, ref int remainingFiles, ref long remainingSize)
+        private void TransferFile(string file, string destFile, ref long totalSize, ref int remainingFiles, ref long remainingSize, ref EventWaitHandle waitHandle)
         {
             FileInfo fileInfo = new FileInfo(file);
 
             try
             {
                 WaitForBusinessSoftwareToClose();
+
+                waitHandle.WaitOne();
+
                 DateTime start = DateTime.Now;
                 TransferStrategy.TransferFile(file, destFile);
                 DateTime end = DateTime.Now;

@@ -9,8 +9,9 @@ namespace BackupEngine.Job
         private readonly CancellationToken _ct;
         public double Progress = 0;
         public event EventHandler<double> ProgressChanged;
+        private readonly EventWaitHandle _waitHandle;
 
-        public Job(BackupConfiguration configuration, CancellationToken Token)
+        public Job(BackupConfiguration configuration, CancellationToken Token, EventWaitHandle waitHandle)
         {
             Configuration = configuration;
             _ct = Token;
@@ -25,6 +26,8 @@ namespace BackupEngine.Job
                 default:
                     throw new Exception("Invalid backup type");
             }
+
+            _waitHandle = waitHandle;
         }
 
         public void Run()
@@ -41,7 +44,7 @@ namespace BackupEngine.Job
                 double progress = progress1 * 100;
                 ProgressChanged?.Invoke(this, progress);
             });
-            FileManager.Save(Configuration);
+            FileManager.Save(Configuration, _waitHandle);
         }
     }
 }
