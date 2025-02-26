@@ -14,10 +14,10 @@ namespace EasySaveGUI.Models
         {
             List<Job> jobs = _jobManager.LaunchBackup(configurations);
            
-            for (int i = 0; i < configurations.Count; ++i)
+            for (int i = 0; i < configurations.Count-1; i++)
             {
                 _jobs.Add(configurations[i], jobs[i]);
-                jobs[i].ProgressChanged += (sender, progress) => OnProgressChange(configurations[i-1], progress);
+                jobs[i].ProgressChanged += (sender, progress) => OnProgressChange(configurations[i], progress);
             }
         }
 

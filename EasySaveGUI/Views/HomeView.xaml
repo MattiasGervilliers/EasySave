@@ -119,10 +119,9 @@
                             Margin="0,5,0,0">
                             <ProgressBar.Value>
                                 <MultiBinding Converter="{StaticResource ProgressLookupConvert}">
-                                    <!-- Pass the Progress dictionary from ListBox's DataContext -->
-                                    <Binding Path="DataContext.Progress" RelativeSource="{RelativeSource AncestorType=ListBox}"/>
-                                    <!-- Pass the current BackupConfiguration -->
-                                    <Binding Mode="OneWay" />
+                                    <!-- Use ObservableCollection instead of Dictionary -->
+                                    <Binding Path="DataContext.Progress" RelativeSource="{RelativeSource AncestorType=ListBox}" />
+                                    <Binding Path="." />
                                 </MultiBinding>
                             </ProgressBar.Value>
                         </ProgressBar>

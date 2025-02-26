@@ -3,7 +3,6 @@ using EasySaveGUI.Models;
 using EasySaveGUI.ViewModels.Base;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using System.Windows.Navigation;
 
 namespace EasySaveGUI.ViewModels
 {
@@ -22,8 +21,8 @@ namespace EasySaveGUI.ViewModels
         public RelayCommand NavigateCreateCommand { get; }
         public RelayCommand ToggleSelectionCommand { get; }
 
-        private Dictionary<BackupConfiguration, double> _progress = new();
-        public Dictionary<BackupConfiguration, double> Progress
+        private ObservableCollection<KeyValuePair<BackupConfiguration, double>> _progress;
+        public ObservableCollection<KeyValuePair<BackupConfiguration, double>> Progress
         {
             get => _progress;
             set
@@ -48,21 +47,28 @@ namespace EasySaveGUI.ViewModels
 
             _backupModel.ProgressUpdated += OnProgressUpdated;
 
-            // Initialize progress dictionary
-            foreach (var config in BackupConfigurations)
-            {
-                Progress[config] = 0;
-            }
+            _progress = new ObservableCollection<KeyValuePair<BackupConfiguration, double>>();
         }
 
         private void OnProgressUpdated(BackupConfiguration configuration, double progress)
         {
-            if (Progress.ContainsKey(configuration))
+            // Find the existing entry
+            var existingEntry = _progress.FirstOrDefault(kvp => kvp.Key == configuration);
+
+            if (!existingEntry.Equals(default(KeyValuePair<BackupConfiguration, double>)))
             {
-                Progress[configuration] = (double) progress;
+                // Update progress in-place
+                int index = _progress.IndexOf(existingEntry);
+                _progress[index] = new KeyValuePair<BackupConfiguration, double>(configuration, progress);
                 OnPropertyChanged(nameof(Progress));
             }
+            else
+            {
+                // Add new entry
+                _progress.Add(new KeyValuePair<BackupConfiguration, double>(configuration, progress));
+            }
         }
+
 
         private void ToggleSelection(BackupConfiguration item)
         {

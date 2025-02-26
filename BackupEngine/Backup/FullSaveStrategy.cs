@@ -76,10 +76,7 @@ namespace BackupEngine.Backup
                         destFile
                     ));
 
-                    OnProgress(new ProgressEvent(
-                totalSize,
-                remainingSize
-            ));
+                    OnProgress(new ProgressEvent(totalSize,remainingSize));
 
                     // Créer l'événement de transfert (logique existante)
                     TransferEvent transferEvent = new TransferEvent(Configuration, duration, new FileInfo(file), new FileInfo(destFile));
@@ -112,6 +109,6 @@ namespace BackupEngine.Backup
 
             Console.WriteLine($"Sauvegarde complète effectuée dans : {uniqueDestinationPath}");
         }
-        
+
     }
 }

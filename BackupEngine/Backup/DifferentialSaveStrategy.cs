@@ -37,6 +37,7 @@ namespace BackupEngine.Backup
             FullSaveStrategy fullSaveStrategy = new FullSaveStrategy(Configuration);
             fullSaveStrategy.Transfer += (sender, e) => OnTransfer(e);
             fullSaveStrategy.StateUpdated += (sender, e) => OnStateUpdated(e);
+            fullSaveStrategy.Progress += (sender, e) => OnProgress(e);
             fullSaveStrategy.Save(uniqueDestinationPath);
         }
 
@@ -78,6 +79,11 @@ namespace BackupEngine.Backup
                 ""
             ));
 
+            OnProgress(new ProgressEvent(
+                totalSize,
+                remainingSize
+            ));
+
             foreach (string file in files)
             {
                 string relativePath = file.Substring(sourcePath.Length + 1);
@@ -113,6 +119,8 @@ namespace BackupEngine.Backup
                         destFile
                     ));
 
+                    OnProgress(new ProgressEvent(totalSize, remainingSize));
+
                     TransferEvent transferEvent = new TransferEvent(Configuration, duration, new FileInfo(file), new FileInfo(destFile));
                     OnTransfer(transferEvent);
                 }
@@ -128,6 +136,11 @@ namespace BackupEngine.Backup
                 0,
                 "",
                 ""
+            ));
+
+            OnProgress(new ProgressEvent(
+                totalSize,
+                0
             ));
 
             Console.WriteLine($"Sauvegarde différentielle effectuée dans : {uniqueDestinationPath}");
