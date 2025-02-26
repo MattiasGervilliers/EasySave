@@ -72,16 +72,23 @@ namespace BackupEngine.Settings
         {
             return Settings.Configurations;
         }
-
+        public List<string> GetBusinessSoftwareList()
+        {
+            return Settings.BusinessSoftwareList;
+        }
         public void UpdateLanguage(Language language)
         {
             Settings.Language = language;
             SaveSettings();
         }
-        public void UpdateEncryptionKey(String key)
+        public void UpdateExtensionPriority(HashSet<string> extensionPriority)
         {
-            Settings._encryptionKey = key;
+            Settings.ExtensionPriority = extensionPriority;
             SaveSettings();
+        }
+        public HashSet<string> GetExtensionPriority()
+        {
+            return Settings.ExtensionPriority;
         }
 
         public void UpdateLogPath(CustomPath logPath)

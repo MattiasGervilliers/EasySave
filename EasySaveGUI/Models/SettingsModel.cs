@@ -80,8 +80,12 @@ namespace EasySaveGUI.Models
                 SourcePath = new CustomPath(SourcePath),
                 DestinationPath = new CustomPath(DestinationPath),
                 BackupType = backupType,
-                EncryptionKey = EncryptionKey
             };
+        }
+
+        public void DeleteConfiguration(BackupConfiguration configuration)
+        {
+            _settingsRepository.DeleteConfiguration(configuration);
         }
     }
 }

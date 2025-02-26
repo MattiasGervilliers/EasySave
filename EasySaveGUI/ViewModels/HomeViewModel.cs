@@ -18,6 +18,7 @@ namespace EasySaveGUI.ViewModels
         // Command to launch configurations
         public ICommand LaunchConfigurationsCommand { get; }
         public ICommand LaunchConfigurationCommand { get; }
+        public ICommand DeleteConfigurationCommand { get; }
         public RelayCommand NavigateCreateCommand { get; }
         public RelayCommand ToggleSelectionCommand { get; }
 
@@ -44,10 +45,11 @@ namespace EasySaveGUI.ViewModels
             LaunchConfigurationsCommand = new RelayCommand(_ => LaunchConfigurations());
             LaunchConfigurationCommand = new RelayCommand(backupConfiguration => LaunchConfiguration(backupConfiguration));
             NavigateCreateCommand = new RelayCommand(_ => navigationService.Navigate(new CreateViewModel()));
-
+            
             _backupModel.ProgressUpdated += OnProgressUpdated;
-
             _progress = new ObservableCollection<KeyValuePair<BackupConfiguration, double>>();
+            
+            DeleteConfigurationCommand = new RelayCommand(obj => DeleteConfiguration((BackupConfiguration)obj));
         }
 
         private void OnProgressUpdated(BackupConfiguration configuration, double progress)
@@ -106,5 +108,14 @@ namespace EasySaveGUI.ViewModels
                 _backupModel.LaunchBackup(configuration);
             }
         }
+        public void DeleteConfiguration(BackupConfiguration configuration)
+        {
+            if (configuration != null)
+            {
+                _settingsModel.DeleteConfiguration(configuration);  // Logic to remove from the model
+                BackupConfigurations.Remove(configuration);  // Logic to remove from the list (if binding is used)
+            }
+        }
+
     }
 }

@@ -8,20 +8,26 @@
 
     <!-- HomeView -->
     <sys:String x:Key="TitleHome">Backups</sys:String>
-    <sys:String x:Key="LittleTitleHome">Lists of backups</sys:String>
+    <sys:String x:Key="LittleTitleHome">List of backup configurations</sys:String>
     <sys:String x:Key="CreateButtonHome">+ Create a configuration</sys:String>
     <sys:String x:Key="LaunchButtonHome">Launch Selected Configurations</sys:String>
     
     <!-- CreateView -->
     <sys:String x:Key="TitleCreate">Create a new Backup Configuration</sys:String>
-    <sys:String x:Key="NameTitleCaseCreate">Name:</sys:String>    
+    <sys:String x:Key="NameTitleCaseCreate">Name:</sys:String>
+    <sys:String x:Key="SourcePathTitleCaseCreate">Source path:</sys:String>
+    <sys:String x:Key="DestPathTitleCaseCreate">Destination path:</sys:String>
+    <sys:String x:Key="BackupTypeTitleCaseCreate">Backup type:</sys:String>
+    <sys:String x:Key="EncryptionTitleCaseCreate">Encrypt:</sys:String>
+    <sys:String x:Key="CreateButtonFinal">Create</sys:String>
 
     <!-- SettingsView -->
     <sys:String x:Key="TitleSettings">Settings</sys:String>
     <sys:String x:Key="LanguageTitleCaseSettings">Name:</sys:String>
     <sys:String x:Key="LogTitleCaseSettings">Log Path:</sys:String>
     <sys:String x:Key="StateTitleCaseSettings">Reel State Path:</sys:String>
-    <sys:String x:Key="LogTypeTitleCaseSettings">State Path:</sys:String>
-    <sys:String x:Key="ThemeTitleCaseSettings">State Path:</sys:String>
+    <sys:String x:Key="LogTypeTitleCaseSettings">Log Type:</sys:String>
+    <sys:String x:Key="ThemeTitleCaseSettings">Theme:</sys:String>
     <sys:String x:Key="SaveButtonSettings">Save</sys:String>
+    <sys:String x:Key="AlertSaveSettings">Settings saved succesfully !</sys:String>
 </ResourceDictionary>

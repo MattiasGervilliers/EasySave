@@ -74,7 +74,7 @@
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,150,0,0" Text="{DynamicResource LogTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,150,0,0">
             <TextBox Text="{Binding LogPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
-            <Button Command="{Binding BrowseLogPathCommand}" Width="30" Height="30" Padding="0">
+            <Button Style="{DynamicResource ButtonStyle}" Command="{Binding BrowseLogPathCommand}" Width="30" Height="20" Padding="0">
                 <Image Source="../assets/folder-icon.png" Width="15" Height="15"/>
             </Button>
         </StackPanel>
@@ -82,7 +82,7 @@
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,200,0,0" Text="{DynamicResource StateTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,200,0,0">
             <TextBox Text="{Binding StatePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
-            <Button Command="{Binding BrowseStatePathCommand}" Width="30" Height="30" Padding="0">
+            <Button Style="{DynamicResource ButtonStyle}" Command="{Binding BrowseStatePathCommand}" Width="30" Height="20" Padding="0">
                 <Image Source="../assets/folder-icon.png" Width="15" Height="15"/>
             </Button>
         </StackPanel>
@@ -107,6 +107,8 @@
                 VerticalAlignment="Bottom" 
                 Margin="0,0,0,20" 
                 Width="100"
+                FontSize="16"
+                Style="{DynamicResource ClassicButtonStyle}"
                 Command="{Binding SaveCommand}" />
 
 

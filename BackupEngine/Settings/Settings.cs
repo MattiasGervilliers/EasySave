@@ -12,7 +12,8 @@ namespace BackupEngine.Settings
         public List<BackupConfiguration> Configurations { get; set; }
         public Theme Theme { get; set; }
         public LogType LogFormat { get; set; }
-        public string _encryptionKey { get; set; }
+        public HashSet<string> ExtensionPriority { get; set; }
+        public List<string> BusinessSoftwareList { get; set; }
 
         public Settings()
         {
@@ -20,11 +21,11 @@ namespace BackupEngine.Settings
             Language = Language.English;
             LogPath = new CustomPath("logs");
             LogFormat = LogType.Json;
-            StatePath = new CustomPath("logs/state.json");
+            StatePath = new CustomPath("logs");
+            ExtensionPriority = new HashSet<string>() { ".txt", ".pdf" };// Pour l'instant la priorité des extensions est set ici
+            BusinessSoftwareList = new List<string> { "CalculatorApp", "msedge" };//idem pour les logitiels metiers
             Theme = Theme.Light;
             Random random = new Random();   
-            _encryptionKey=  new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 10)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
         public void FromJson(string json)

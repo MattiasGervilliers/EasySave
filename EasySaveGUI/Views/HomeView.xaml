@@ -25,11 +25,10 @@
 
         <!-- Custom Style for ListBoxItem -->
         <Style x:Key="CustomListBoxItemStyle" TargetType="ListBoxItem">
-            <Setter Property="Background" Value="White" />
-            <Setter Property="BorderBrush" Value="{DynamicResource List}" />
-            <Setter Property="BorderThickness" Value="0 0 0 1" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Card}" />
+            <Setter Property="BorderThickness" Value="0 0 0 2" />
             <Setter Property="Padding" Value="10" />
-            <Setter Property="Foreground" Value="#333333" />
+            <Setter Property="Foreground" Value="{DynamicResource Text}" />
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -45,13 +44,14 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#E0E0E0" />
+                    <Setter Property="Background" Value="#959595" />
                 </Trigger>
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="#D0D0D0" />
+                    <Setter Property="Background" Value="#787878" />
                 </Trigger>
             </Style.Triggers>
         </Style>
+
     </UserControl.Resources>
 
     <Grid>
@@ -67,13 +67,13 @@
         </Grid.RowDefinitions>
         <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="0">
             <TextBlock FontSize="32" Text="{DynamicResource TitleHome}" Foreground="{DynamicResource Text}" FontWeight="Bold"/>
-            <TextBlock Margin="0,5,0,0" Text="{DynamicResource LittleTitleHome}" Foreground="{DynamicResource Text}" FontSize="14"/>
+            <TextBlock Margin="0,5,0,0" Text="{DynamicResource LittleTitleHome}" Foreground="{DynamicResource Text}" FontSize="15"/>
         </StackPanel>
 
         <!-- ListBox to display BackupConfigurations -->
         <ListBox ItemsSource="{Binding BackupConfigurations}"
                      Style="{StaticResource CustomListBoxStyle}"
-                     ItemContainerStyle="{StaticResource CustomListBoxItemStyle}"
+                     ItemContainerStyle="{DynamicResource CustomListBoxItemStyle}"
                      SelectionMode="Multiple"
                      ScrollViewer.VerticalScrollBarVisibility="Visible"
                      Grid.Column="1"
@@ -88,7 +88,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="120" />
-                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="90" />
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
                             <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
@@ -135,11 +135,32 @@
                                         Width="30"
                                         HorizontalAlignment="Right">
                             </Button>
+                            <Button 
+                                Style="{DynamicResource HoverButtonStyle}"
+                                Height="30"
+                                Width="30"
+                                HorizontalAlignment="Right">
+                                <Button.Content>
+                                    <Image Source="../assets/editer.png" Width="15" Height="15" />
+                                </Button.Content>
+                            </Button>
+                            <Button 
+                                Style="{DynamicResource HoverButtonStyle}"
+                                Height="30"
+                                Width="30"
+                                HorizontalAlignment="Right"
+                                Click="OnMenuButtonClick">
+                                <Button.Content>
+                                    <Image Source="../assets/poubelle.png" Width="15" Height="15" />
+                                </Button.Content>
+                            </Button>
+
                         </StackPanel>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
 
         <Grid Margin="0,15,0,0" Grid.Column="1" Grid.Row="2">
             <Grid.ColumnDefinitions>
@@ -159,10 +180,10 @@
                         Style="{DynamicResource ClassicButtonStyle}"
                         Background="{DynamicResource List}"
                         BorderBrush="{DynamicResource Card}"
-                        Foreground="{DynamicResource Text}"
+                        Foreground="{DynamicResource Text}"                        
                         Content="{DynamicResource LaunchButtonHome}"
                         Padding="10,5"
-                        FontSize="14"
+                        FontSize="16"
                         HorizontalAlignment="Right"/>
         </Grid>
     </Grid>

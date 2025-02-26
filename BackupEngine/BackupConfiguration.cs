@@ -12,7 +12,7 @@ namespace BackupEngine
         public CustomPath SourcePath { get; set; }
         public CustomPath DestinationPath { get; set; }
         public BackupType BackupType { get; set; }
-        public string? EncryptionKey { get; set; }
+        public HashSet<string>? ExtensionsToSave { get; set; }
 
         public void FromJson(string json)
         {
@@ -23,7 +23,7 @@ namespace BackupEngine
                 SourcePath = jsonConfiguration.SourcePath;
                 DestinationPath = jsonConfiguration.DestinationPath;
                 BackupType = jsonConfiguration.BackupType;
-                EncryptionKey = jsonConfiguration.EncryptionKey;
+                ExtensionsToSave = jsonConfiguration.ExtensionsToSave;
             }
         }
 

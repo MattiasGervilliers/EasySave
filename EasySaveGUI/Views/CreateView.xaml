@@ -11,42 +11,46 @@
 
     <Grid>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" Text="Create a new Backup Configuration" Foreground="{DynamicResource Text}"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,100,0,0" Text="{DynamicResource NameTitleCaseCreate}" Foreground="{DynamicResource Text}"/>
+        <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,100,0,0" Text="{Binding Name, Mode=TwoWay}" Width="200" Height="23"/>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,100,0,0" Text="Name: " Foreground="{DynamicResource Text}"/>
-        <TextBox HorizontalAlignment="Left" 
-                 VerticalAlignment="Top" 
-                 Margin="120,100,0,0" 
-                 Foreground="{DynamicResource Text}"
-                 Background="{DynamicResource Background}" 
-                 BorderBrush="{DynamicResource Text}"
-                 Text="{Binding Name, Mode=TwoWay}"
-                 Width="200"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,150,0,0" Text="{DynamicResource SourcePathTitleCaseCreate}" Foreground="{DynamicResource Text}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,150,0,0">
+            <TextBox Text="{Binding SourcePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+            <Button Style="{DynamicResource ButtonStyle}" Command="{Binding BrowseSourcePathCommand}" Width="30" Height="20" Padding="0">
+                <Image Source="../assets/folder-icon.png" Width="15" Height="15"/>
+            </Button>
+        </StackPanel>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,150,0,0" Text="Log Path: " Foreground="{DynamicResource Text}"/>
-        <TextBox HorizontalAlignment="Left"
-                 VerticalAlignment="Top"
-                 Margin="120,150,0,0" 
-                 Background="{DynamicResource Background}"  
-                 Foreground="{DynamicResource Text}"
-                 Text="{Binding SourcePath, Mode=TwoWay}"
-                 Width="200"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,200,0,0" Text="{DynamicResource DestPathTitleCaseCreate}" Foreground="{DynamicResource Text}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,200,0,0">
+            <TextBox Text="{Binding DestinationPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+            <Button Style="{DynamicResource ButtonStyle}" Command="{Binding BrowseDestPathCommand}" Width="30" Height="20" Padding="0">
+                <Image Source="../assets/folder-icon.png" Width="15" Height="15"/>
+            </Button>
+        </StackPanel>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,200,0,0" Text="State Path: " Foreground="{DynamicResource Text}"/>
-        <TextBox HorizontalAlignment="Left" 
-                 VerticalAlignment="Top"
-                 Margin="120,200,0,0" 
-                 Foreground="{DynamicResource Text}"
-                 Background="{DynamicResource Background}"
-                 Text="{Binding DestinationPath, Mode=TwoWay}"
-                 Width="200"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,250,0,0" Text="{DynamicResource BackupTypeTitleCaseCreate}" Foreground="{DynamicResource Text}"/>
+        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,250,0,0" 
+                  ItemsSource="{Binding AvailableBackupTypes}" 
+                  SelectedItem="{Binding BackupType, Mode=TwoWay}" 
+                  Width="200"/>
 
-        <!-- Bouton Save -->
-        <Button Content="Create"
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,300,0,0" Text="{DynamicResource EncryptionTitleCaseCreate}" Foreground="{DynamicResource Text}"/>
+        
+
+        <!-- Bouton Create -->
+        <Button Content="{DynamicResource CreateButtonFinal}"
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Bottom"
                 Style="{DynamicResource HoverButtonStyle}"
                 Margin="0,0,0,20"
                 Width="100"
+                FontSize="16"
+                Style="{DynamicResource ClassicButtonStyle}"
+                Background="{DynamicResource List}"
+                BorderBrush="{DynamicResource Card}"
+                Foreground="{DynamicResource Text}"
                 Command="{Binding CreateCommand}" />
     </Grid>
 </UserControl>

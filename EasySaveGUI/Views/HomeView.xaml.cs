@@ -1,5 +1,6 @@
 ﻿using BackupEngine;
 using EasySaveGUI.ViewModels;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace EasySaveGUI.Views
@@ -38,5 +39,20 @@ namespace EasySaveGUI.Views
             }
         }
 
+        private void OnMenuButtonClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var dataContext = button?.DataContext as BackupConfiguration;  // Récupérer le DataContext
+
+            // Afficher un message de confirmation
+            var result = MessageBox.Show("Êtes-vous sûr de vouloir supprimer cette configuration ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                // Vérifiez que le DataContext est un ViewModel et appelez la méthode DeleteConfiguration sur celui-ci
+                var viewModel = this.DataContext as HomeViewModel;  // Assurez-vous que vous obtenez le bon ViewModel
+                viewModel?.DeleteConfiguration(dataContext);  // Appeler la méthode de suppression
+            }
+        }
     }
 }

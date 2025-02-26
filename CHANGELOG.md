@@ -1,3 +1,52 @@
+# [2.1.0-beta.5](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.4...v2.1.0-beta.5) (2025-02-26)
+
+
+### Bug Fixes
+
+* add elements to create page + modify ressources dictionnaries ([c3c2030](https://github.com/MattiasGervilliers/EasySave/commit/c3c203071a3fda3e15ffdc89f672fc9a7f195ca7))
+
+# [2.1.0-beta.4](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.3...v2.1.0-beta.4) (2025-02-26)
+
+
+### Bug Fixes
+
+* change crypto soft to remove self contained ([f184a0b](https://github.com/MattiasGervilliers/EasySave/commit/f184a0b3351411fb96256c0ec953e668d5a7068f))
+
+# [2.1.0-beta.3](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.2...v2.1.0-beta.3) (2025-02-26)
+
+
+### Bug Fixes
+
+* merge ([101c5d3](https://github.com/MattiasGervilliers/EasySave/commit/101c5d3b6e325cf2f9f00c46b9145df37fb1472d))
+* workflow file 10 ([dd471d4](https://github.com/MattiasGervilliers/EasySave/commit/dd471d4aebd535af8a4eb072e9fc14898251fb9a))
+* workflow file 11 ([05c9204](https://github.com/MattiasGervilliers/EasySave/commit/05c9204120c432bfe4202ed2661fabe64973af00))
+
+# [2.1.0-beta.2](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.1...v2.1.0-beta.2) (2025-02-26)
+
+
+### Bug Fixes
+
+* workflow file 9 ([bf20676](https://github.com/MattiasGervilliers/EasySave/commit/bf206760c8d97066e918bdd2d714a3dba90f1f60))
+
+# [2.1.0-beta.1](https://github.com/MattiasGervilliers/EasySave/compare/v2.0.1-beta.10...v2.1.0-beta.1) (2025-02-26)
+
+
+### Bug Fixes
+
+* background color of backup items ([b2bd537](https://github.com/MattiasGervilliers/EasySave/commit/b2bd537cebd7777e8df806adf1e1cd5119d07274))
+* change the style of the launch button + correction on "fr" and "en" ressources dictionnary ([61ed8eb](https://github.com/MattiasGervilliers/EasySave/commit/61ed8ebd7b5483bf72e74502fe578a180ac34772))
+* improved style of create and save button + add create button content to ressource dictionnaries ([67e190f](https://github.com/MattiasGervilliers/EasySave/commit/67e190f0245ed9ff5ff7aa9cf615edbd9defa434))
+* save alert translation ([b117c5a](https://github.com/MattiasGervilliers/EasySave/commit/b117c5a6b7164ba3038285e3b23f09190457d200))
+* size of the launch button ([00aa8d2](https://github.com/MattiasGervilliers/EasySave/commit/00aa8d22f199b7934ad27bcf388b8567d8f9129b))
+* workflow file 6 ([58aa28c](https://github.com/MattiasGervilliers/EasySave/commit/58aa28c3a59942406be35f1f9f7f7b35bbe34781))
+* workflow file 6& ([0aa4d55](https://github.com/MattiasGervilliers/EasySave/commit/0aa4d552a53173b78ab7634fcdd6978ba48eb147))
+* workflow file 8 ([604636d](https://github.com/MattiasGervilliers/EasySave/commit/604636d694923a427309f9e43ce231076de51d4e))
+
+
+### Features
+
+* toasted alert when parameters are saved ([728b93e](https://github.com/MattiasGervilliers/EasySave/commit/728b93e2580545f3ef21567ce0ae6f3c73a6c5d4))
+
 ## [2.0.1-beta.10](https://github.com/MattiasGervilliers/EasySave/compare/v2.0.1-beta.9...v2.0.1-beta.10) (2025-02-25)
 
 
