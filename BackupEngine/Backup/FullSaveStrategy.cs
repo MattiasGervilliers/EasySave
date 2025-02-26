@@ -1,15 +1,6 @@
 ﻿using BackupEngine.Progress;
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using BackupEngine.State;
 using BackupEngine.Log;
-using BackupEngine.Settings;
-using System.Diagnostics;
-using System.Collections.Concurrent;
 
 namespace BackupEngine.Backup
 {
@@ -18,21 +9,6 @@ namespace BackupEngine.Backup
     /// </summary>
     public class FullSaveStrategy : SaveStrategy
     {
-        private SettingsRepository _settingsRepository = new SettingsRepository();
-        private readonly int _koLimit = 1024;
-        private readonly SemaphoreSlim _largeFileSemaphore = new SemaphoreSlim(1, 1);
-        /// <summary>
-        /// Mutex name to ensure only one CryptoSoft instance runs at a time.
-        /// </summary>
-        private static readonly string _mutexName = "Global\\CryptoSoft_Mutex";
-        /// <summary>
-        /// Queue to store files that require encryption.
-        /// </summary>
-        private readonly ConcurrentQueue<(string, string)> _cryptoQueue = new ConcurrentQueue<(string, string)>();
-        /// <summary>
-        /// Task responsible for processing the encryption queue.
-        /// </summary>
-        private Task _cryptoTask;
         /// <summary>
         /// Initializes a new instance of the FullSaveStrategy class.
         /// </summary>
@@ -149,77 +125,6 @@ namespace BackupEngine.Backup
                 if (isLargeFile)
                 {
                     _largeFileSemaphore.Release(); // Libère le sémaphore après transfert
-                }
-            }
-        }
-
-        /// <summary>
-        /// Waits for business software to close before proceeding with the backup.
-        /// </summary>
-        private void WaitForBusinessSoftwareToClose()
-        {
-            List<string> businessApps = _settingsRepository.GetBusinessSoftwareList();
-            while (IsBusinessSoftwareRunning(businessApps))
-            {
-                Console.WriteLine("Un logiciel métier est en cours d'exécution");
-                Thread.Sleep(3000);
-            }
-        }
-        /// <summary>
-        /// Checks if any business software is currently running.
-        /// </summary>  
-        private bool IsBusinessSoftwareRunning(List<string> businessApps)
-        {
-            foreach (var process in Process.GetProcesses())
-            {
-                if (businessApps.Contains(process.ProcessName, StringComparer.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        /// <summary>
-        /// Determines if a file requires encryption based on its extension.
-        /// </summary>
-        private bool RequiresEncryption(string file)
-        {
-            string extension = Path.GetExtension(file);
-            if (Configuration.ExtensionsToSave == null)
-            {
-                return false;
-            }
-            return Configuration.ExtensionsToSave.Contains(extension);
-        }
-        /// <summary>
-        /// Processes the queue of files that need encryption.
-        /// </summary>
-        private void ProcessCryptoQueue()
-        {
-            using (Mutex mutex = new Mutex(false, _mutexName))
-            {
-                while (!_cryptoQueue.IsEmpty)
-                {
-                    if (_cryptoQueue.TryDequeue(out var filePair))
-                    {
-                        string source = filePair.Item1;
-                        string destination = filePair.Item2;
-
-                        if (!mutex.WaitOne(0, false))
-                        {
-                            Console.WriteLine("CryptoSoft est déjà en cours d'exécution");
-                            mutex.WaitOne();
-                        }
-
-                        try
-                        {
-                            TransferStrategy.TransferFile(source, destination);
-                        }
-                        finally
-                        {
-                            mutex.ReleaseMutex();
-                        }
-                    }
                 }
             }
         }
