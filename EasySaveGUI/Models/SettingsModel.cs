@@ -83,5 +83,10 @@ namespace EasySaveGUI.Models
                 EncryptionKey = EncryptionKey
             };
         }
+
+        public void DeleteConfiguration(BackupConfiguration configuration)
+        {
+            _settingsRepository.DeleteConfiguration(configuration);
+        }
     }
 }
