@@ -1,3 +1,10 @@
+# [2.1.0-beta.5](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.4...v2.1.0-beta.5) (2025-02-26)
+
+
+### Bug Fixes
+
+* add elements to create page + modify ressources dictionnaries ([c3c2030](https://github.com/MattiasGervilliers/EasySave/commit/c3c203071a3fda3e15ffdc89f672fc9a7f195ca7))
+
 # [2.1.0-beta.4](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.3...v2.1.0-beta.4) (2025-02-26)
 
 
