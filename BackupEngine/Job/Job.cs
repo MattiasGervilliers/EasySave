@@ -7,8 +7,8 @@ namespace BackupEngine.Job
         public BackupConfiguration Configuration { get; }
         private FileManager FileManager { get; }
         private readonly CancellationToken _ct;
-        public int Progress = 0;
-        public event EventHandler<int> ProgressChanged;
+        public double Progress = 0;
+        public event EventHandler<double> ProgressChanged;
 
         public Job(BackupConfiguration configuration, CancellationToken Token)
         {
@@ -36,8 +36,10 @@ namespace BackupEngine.Job
             }
             FileManager.SubscribeProgress((sender, e) =>
             {
-                Progress = (int)(e.RemainingSize / e.TotalSize);
-                ProgressChanged?.Invoke(this, Progress);
+                long total = e.TotalSize - e.RemainingSize;
+                double progress1 = ((double) total / e.TotalSize);
+                double progress = progress1 * 100;
+                ProgressChanged?.Invoke(this, progress);
             });
             FileManager.Save(Configuration);
         }

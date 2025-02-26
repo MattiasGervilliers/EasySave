@@ -9,6 +9,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <local:ProgressLookupConverter x:Key="ProgressLookupConvert" />
+
         <!-- Custom Style for ListBox -->
         <Style x:Key="CustomListBoxStyle" TargetType="ListBox">
             <Setter Property="Background" Value="White" />
@@ -110,13 +112,20 @@
 
                         <ProgressBar 
                             Grid.Column="1"
-                            Value="{Binding DataContext.Progress[name], RelativeSource={RelativeSource AncestorType=ListBox}}"
                             Minimum="0" Maximum="100"
                             Height="10"
                             Foreground="Green"
                             Background="LightGray"
-                            Margin="0,5,0,0"/>
-
+                            Margin="0,5,0,0">
+                            <ProgressBar.Value>
+                                <MultiBinding Converter="{StaticResource ProgressLookupConvert}">
+                                    <!-- Pass the Progress dictionary from ListBox's DataContext -->
+                                    <Binding Path="DataContext.Progress" RelativeSource="{RelativeSource AncestorType=ListBox}"/>
+                                    <!-- Pass the current BackupConfiguration -->
+                                    <Binding Mode="OneWay" />
+                                </MultiBinding>
+                            </ProgressBar.Value>
+                        </ProgressBar>
 
                         <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                             <Button Content="▶️"

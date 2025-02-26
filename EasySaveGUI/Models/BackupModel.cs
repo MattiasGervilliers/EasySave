@@ -8,20 +8,20 @@ namespace EasySaveGUI.Models
         private readonly JobManager _jobManager = new JobManager();
 
         private readonly Dictionary<BackupConfiguration, Job> _jobs = [];
-        public event Action<BackupConfiguration, int>? ProgressUpdated;
+        public event Action<BackupConfiguration, double>? ProgressUpdated;
 
         public void LaunchBackup(List<BackupConfiguration> configurations)
         {
             List<Job> jobs = _jobManager.LaunchBackup(configurations);
            
-            for (int i = 0; i < configurations.Count; i++)
+            for (int i = 0; i < configurations.Count; ++i)
             {
                 _jobs.Add(configurations[i], jobs[i]);
-                jobs[i].ProgressChanged += (sender, progress) => OnProgressChange(configurations[i], progress);
+                jobs[i].ProgressChanged += (sender, progress) => OnProgressChange(configurations[i-1], progress);
             }
         }
 
-        private void OnProgressChange(BackupConfiguration configuration, int progress)
+        private void OnProgressChange(BackupConfiguration configuration, double progress)
         {
             ProgressUpdated?.Invoke(configuration, progress);
         }

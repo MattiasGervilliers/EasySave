@@ -22,8 +22,8 @@ namespace EasySaveGUI.ViewModels
         public RelayCommand NavigateCreateCommand { get; }
         public RelayCommand ToggleSelectionCommand { get; }
 
-        private Dictionary<BackupConfiguration, int> _progress = new();
-        public Dictionary<BackupConfiguration, int> Progress
+        private Dictionary<BackupConfiguration, double> _progress = new();
+        public Dictionary<BackupConfiguration, double> Progress
         {
             get => _progress;
             set
@@ -55,11 +55,11 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
-        private void OnProgressUpdated(BackupConfiguration configuration, int progress)
+        private void OnProgressUpdated(BackupConfiguration configuration, double progress)
         {
             if (Progress.ContainsKey(configuration))
             {
-                Progress[configuration] = progress;
+                Progress[configuration] = (double) progress;
                 OnPropertyChanged(nameof(Progress));
             }
         }
