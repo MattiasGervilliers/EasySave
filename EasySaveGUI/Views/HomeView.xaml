@@ -85,7 +85,7 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="60" />
+                                <ColumnDefinition Width="90" />
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
                             <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
@@ -115,7 +115,27 @@
                                         Width="30"
                                         HorizontalAlignment="Right">
                                 </Button>
-                            </StackPanel>
+                            <Button 
+                                Style="{DynamicResource HoverButtonStyle}"
+                                Height="30"
+                                Width="30"
+                                HorizontalAlignment="Right">
+                                <Button.Content>
+                                    <Image Source="../assets/editer.png" Width="15" Height="15" />
+                                </Button.Content>
+                            </Button>
+                            <Button 
+                                Style="{DynamicResource HoverButtonStyle}"
+                                Height="30"
+                                Width="30"
+                                HorizontalAlignment="Right"
+                                Click="OnMenuButtonClick">
+                                <Button.Content>
+                                    <Image Source="../assets/poubelle.png" Width="15" Height="15" />
+                                </Button.Content>
+                            </Button>
+
+                        </StackPanel>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

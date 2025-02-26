@@ -82,5 +82,10 @@ namespace EasySaveGUI.Models
                 BackupType = backupType,
             };
         }
+
+        public void DeleteConfiguration(BackupConfiguration configuration)
+        {
+            _settingsRepository.DeleteConfiguration(configuration);
+        }
     }
 }
