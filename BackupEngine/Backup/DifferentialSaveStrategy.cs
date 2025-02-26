@@ -57,7 +57,6 @@ namespace BackupEngine.Backup
 
             List<Task> tasks = new List<Task>();
 
-            // 🔴 Attendre avant de lancer la sauvegarde
             WaitForBusinessSoftwareToClose();
 
             foreach (string file in files)
@@ -66,7 +65,7 @@ namespace BackupEngine.Backup
                 string destFile = Path.Combine(uniqueDestinationPath, relativePath);
                 Directory.CreateDirectory(Path.GetDirectoryName(destFile));
 
-                if (!ShouldBackupFile(file, destFile)) // 🔴 Ne sauvegarde que si nécessaire
+                if (!ShouldBackupFile(file, destFile)) 
                 {
                     continue;
                 }
@@ -136,7 +135,7 @@ namespace BackupEngine.Backup
             if (!File.Exists(destFile))
             {
                 Console.WriteLine($"[DIFF] Nouveau fichier détecté : {sourceFile}");
-                return true; // 🔴 Sauvegarde si le fichier n'existe pas encore
+                return true; 
             }
 
             FileInfo sourceInfo = new FileInfo(sourceFile);
@@ -145,11 +144,11 @@ namespace BackupEngine.Backup
             if (sourceInfo.LastWriteTime > destInfo.LastWriteTime)
             {
                 Console.WriteLine($"[DIFF] Fichier modifié détecté : {sourceFile}");
-                return true; // 🔴 Sauvegarde si le fichier a été modifié
+                return true; 
             }
 
             Console.WriteLine($"[DIFF] Pas de modification pour : {sourceFile}");
-            return false; // ❌ Pas besoin de sauvegarder
+            return false; 
         }
 
         /// <summary>
@@ -177,7 +176,7 @@ namespace BackupEngine.Backup
 
                         if (!mutex.WaitOne(0, false))
                         {
-                            Console.WriteLine("CryptoSoft est déjà en cours d'exécution. Attente...");
+                            Console.WriteLine("CryptoSoft est déjà en cours d'exécution");
                             mutex.WaitOne();
                         }
 
@@ -202,7 +201,7 @@ namespace BackupEngine.Backup
             List<string> businessApps = _settingsRepository.GetBusinessSoftwareList();
             while (IsBusinessSoftwareRunning(businessApps))
             {
-                Console.WriteLine("Un logiciel métier est en cours d'exécution. Pause des sauvegardes...");
+                Console.WriteLine("Un logiciel métier est en cours d'exécution");
                 Thread.Sleep(3000);
             }
         }
