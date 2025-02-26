@@ -1,3 +1,10 @@
+# [2.1.0-beta.7](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.6...v2.1.0-beta.7) (2025-02-26)
+
+
+### Bug Fixes
+
+* differential save ([3df7a90](https://github.com/MattiasGervilliers/EasySave/commit/3df7a900b4f2823078b481623057b3a2137e2b39))
+
 # [2.1.0-beta.6](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.5...v2.1.0-beta.6) (2025-02-26)
 
 
