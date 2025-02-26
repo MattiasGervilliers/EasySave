@@ -2,6 +2,7 @@
 using BackupEngine.Log;
 using BackupEngine.Progress;
 using BackupEngine.Cache;
+using System.IO;
 
 namespace BackupEngine.Backup
 {
@@ -134,10 +135,17 @@ namespace BackupEngine.Backup
         private void TransferFile(string file, string destFile, ref long totalSize, ref int remainingFiles, ref long remainingSize, ref EventWaitHandle waitHandle)
         {
             FileInfo fileInfo = new FileInfo(file);
+            bool isLargeFile = fileInfo.Length > _koLimit * 1024;
 
             try
             {
                 WaitForBusinessSoftwareToClose();
+                
+                if (isLargeFile)
+                {
+                    Console.WriteLine($"Waiting to transfer large file: {file}");
+                    _largeFileSemaphore.Wait(); // Assure un seul fichier volumineux à la fois
+                }
 
                 waitHandle.WaitOne();
 
@@ -159,6 +167,13 @@ namespace BackupEngine.Backup
             {
                 Console.WriteLine($"Error copying file {file}: {e.Message}");
                 OnTransfer(new TransferEvent(Configuration, new TimeSpan(-1), fileInfo, new FileInfo(destFile)));
+            }
+            finally
+            {
+                if (isLargeFile)
+                {
+                    _largeFileSemaphore.Release();
+                }
             }
         }
 
