@@ -1,3 +1,18 @@
+# [2.1.0-beta.6](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.5...v2.1.0-beta.6) (2025-02-26)
+
+
+### Bug Fixes
+
+* merge ([c97c734](https://github.com/MattiasGervilliers/EasySave/commit/c97c734b75e0202a8d28472bc3ef1ea961513a68))
+* multiple backup progress ([53ccb3e](https://github.com/MattiasGervilliers/EasySave/commit/53ccb3e2cce1470136626dd29ed43bc19cc0fbb3))
+
+
+### Features
+
+* progress bar (WIP) ([4b509f6](https://github.com/MattiasGervilliers/EasySave/commit/4b509f6778e2ba7a3478ca9d52aa3f816a14fa43))
+* Progress bar for full and differential save ([b0bd86e](https://github.com/MattiasGervilliers/EasySave/commit/b0bd86edb800886fd5f8837d209abb6703915020))
+* **progress:** Relaunch backups ([362436d](https://github.com/MattiasGervilliers/EasySave/commit/362436d27bc04c9e9e9b8c22260825be0029d906))
+
 # [2.1.0-beta.5](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.4...v2.1.0-beta.5) (2025-02-26)
 
 
