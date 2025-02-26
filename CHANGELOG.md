@@ -1,3 +1,10 @@
+# [2.1.0-beta.4](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.3...v2.1.0-beta.4) (2025-02-26)
+
+
+### Bug Fixes
+
+* change crypto soft to remove self contained ([f184a0b](https://github.com/MattiasGervilliers/EasySave/commit/f184a0b3351411fb96256c0ec953e668d5a7068f))
+
 # [2.1.0-beta.3](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.2...v2.1.0-beta.3) (2025-02-26)
 
 
