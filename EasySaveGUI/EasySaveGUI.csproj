@@ -6,23 +6,41 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>portable</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="assets\EasySave_logo.png" />
+    <Compile Remove="Model\**" />
+    <EmbeddedResource Remove="Model\**" />
+    <None Remove="Model\**" />
+    <Page Remove="Model\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Model\" />
+    <None Remove="assets\EasySave_logo.png" />
+    <None Remove="assets\folder-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
+    <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BackupEngine\BackupEngine.csproj" />
-    <ProjectReference Include="..\LanguageLib\LanguageLib.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="assets\EasySave_logo.png" />
+    <Resource Include="assets\folder-icon.png" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties fr_1json__JsonSchema="json" /></VisualStudio></ProjectExtensions>

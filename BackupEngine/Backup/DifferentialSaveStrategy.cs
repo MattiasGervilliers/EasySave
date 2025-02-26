@@ -32,6 +32,37 @@ namespace BackupEngine.Backup
         /// </summary>
         public override void Save(string uniqueDestinationPath)
         {
+            if (PreviousSaveExists())
+            {
+                string previousSavePath = PreviousSavePath();
+
+                if (!Directory.Exists(previousSavePath))
+                {
+                    PerformFullSave(uniqueDestinationPath);
+                    UpdateCache(uniqueDestinationPath);
+                }
+                else
+                {
+                    DifferentialSave(uniqueDestinationPath, previousSavePath);
+                }
+            }
+            else
+            {
+                PerformFullSave(uniqueDestinationPath);
+                UpdateCache(uniqueDestinationPath);
+            }
+        }
+
+        private void PerformFullSave(string uniqueDestinationPath)
+        {
+            FullSaveStrategy fullSaveStrategy = new FullSaveStrategy(Configuration);
+            fullSaveStrategy.Transfer += (sender, e) => OnTransfer(e);
+            fullSaveStrategy.StateUpdated += (sender, e) => OnStateUpdated(e);
+            fullSaveStrategy.Save(uniqueDestinationPath);
+        }
+
+        private void DifferentialSave(string uniqueDestinationPath, string previousSavePath)
+        {
             if (Configuration.ExtensionsToSave != null)
             {
                 TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, _settingsRepository.GetExtensionPriority());

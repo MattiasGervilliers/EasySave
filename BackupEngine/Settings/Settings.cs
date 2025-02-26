@@ -10,6 +10,7 @@ namespace BackupEngine.Settings
         public CustomPath LogPath { get; set; }
         public CustomPath StatePath { get; set; }
         public List<BackupConfiguration> Configurations { get; set; }
+        public Theme Theme { get; set; }
         public LogType LogFormat { get; set; }
         public HashSet<string> ExtensionPriority { get; set; }
         public List<string> BusinessSoftwareList { get; set; }
@@ -23,7 +24,8 @@ namespace BackupEngine.Settings
             StatePath = new CustomPath("logs/state.json");
             ExtensionPriority = new HashSet<string>() { ".txt", ".pdf" };// Pour l'instant la priorité des extensions est set ici
             BusinessSoftwareList = new List<string> { "CalculatorApp", "msedge" };//idem pour les logitiels metiers
-
+            Theme = Theme.Light;
+            Random random = new Random();   
         }
 
         public void FromJson(string json)
@@ -36,6 +38,7 @@ namespace BackupEngine.Settings
                 StatePath = jsonSettings.StatePath;
                 Configurations = jsonSettings.Configurations;
                 LogFormat = jsonSettings.LogFormat;
+                Theme = jsonSettings.Theme;
             }
         }
 

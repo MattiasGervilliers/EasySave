@@ -1,15 +1,18 @@
 ﻿using BackupEngine.Backup;
+using Newtonsoft.Json.Linq;
 
 namespace BackupEngine.Job
 {
     public class Job
     {
-        private BackupConfiguration Configuration { get; set; }
-        private FileManager FileManager { get; set; }
+        private BackupConfiguration Configuration { get; }
+        private FileManager FileManager { get; }
+        private readonly CancellationToken _ct;
 
-        public Job(BackupConfiguration configuration)
+        public Job(BackupConfiguration configuration, CancellationToken Token)
         {
             Configuration = configuration;
+            _ct = Token;
             switch (Configuration.BackupType)
             {
                 case BackupType.Full:
@@ -25,6 +28,12 @@ namespace BackupEngine.Job
 
         public void Run()
         {
+            // Periodically check for cancellation
+            if (_ct.IsCancellationRequested)
+            {
+                return;
+            }
+
             FileManager.Save(Configuration);
         }
     }

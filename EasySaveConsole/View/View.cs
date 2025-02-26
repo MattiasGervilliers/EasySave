@@ -383,6 +383,7 @@ namespace EasySaveConsole.View
                 ? "Le nom de configuration est vide ou existe déjà"
                 : "The name of the configuration is blank or already exist");
         }
+
         public void DisplayCreateMenu()
         {
             Console.WriteLine(_language == Language.French

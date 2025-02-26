@@ -34,8 +34,20 @@ namespace BackupEngine.Backup
             else
             {
                 File.Copy(source, destination, true);
-            }
+            }  
         }
+        
+        public void UpdateKey(string key)
+        {
+            _key = new NetworkCredential("", key).SecurePassword;
+        }
+        
+        internal string GetKeyToString()
+        {
+            string theString = new NetworkCredential("", _key).Password;
+            return theString;
+        }
+        
         /// <summary>
         /// Launches the CryptoSoft executable to encrypt a file.
         /// </summary>
@@ -45,7 +57,7 @@ namespace BackupEngine.Backup
             {
                 ProcessStartInfo psi = new ProcessStartInfo
                 {
-                    FileName = "C:\\Users\\Nino\\source\\repos\\EasySave\\CryptoSoft\\bin\\Debug\\net8.0\\CryptoSoft.exe",
+                    FileName = "CryptoSoft.exe",
                     Arguments = $"\"{source}\" \"{destination}\" True",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
