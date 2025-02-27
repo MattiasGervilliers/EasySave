@@ -64,23 +64,23 @@
     <Grid>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" Text="{DynamicResource TitleSettings}" Foreground="{DynamicResource Text}"/>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,100,0,0" Text="{DynamicResource LanguageTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,75,0,0" Text="{DynamicResource LanguageTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
         <!-- ComboBox pour la selection de la langue -->
       
-        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,100,0,0" 
+        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,75,0,0" 
                   ItemsSource="{Binding AvailableLanguages}" 
                   SelectedItem="{Binding Language, Mode=TwoWay}" Width="200"/>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,150,0,0" Text="{DynamicResource LogTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,150,0,0">
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,125,0,0" Text="{DynamicResource LogTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,125,0,0">
             <TextBox Text="{Binding LogPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
             <Button Style="{DynamicResource ButtonStyle}" Command="{Binding BrowseLogPathCommand}" Width="30" Height="20" Padding="0">
                 <Image Source="../assets/folder-icon.png" Width="15" Height="15"/>
             </Button>
         </StackPanel>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,200,0,0" Text="{DynamicResource StateTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,200,0,0">
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,175,0,0" Text="{DynamicResource StateTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,175,0,0">
             <TextBox Text="{Binding StatePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
             <Button Style="{DynamicResource ButtonStyle}" Command="{Binding BrowseStatePathCommand}" Width="30" Height="20" Padding="0">
                 <Image Source="../assets/folder-icon.png" Width="15" Height="15"/>
@@ -88,13 +88,13 @@
         </StackPanel>
 
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,250,0,0" Text="{DynamicResource LogTypeTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
-        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,250,0,0"
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,225,0,0" Text="{DynamicResource LogTypeTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
+        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,225,0,0"
           ItemsSource="{Binding AvailableLogTypes}"
           SelectedItem="{Binding LogType, Mode=TwoWay}" Width="200"/>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,300,0,0" Text="{DynamicResource ThemeTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
-        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,300,0,0"
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,275,0,0" Text="{DynamicResource ThemeTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
+        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,275,0,0"
           ItemsSource="{Binding AvailableThemes}"
           SelectedItem="{Binding Theme, Mode=TwoWay}" Width="200"/>
 
