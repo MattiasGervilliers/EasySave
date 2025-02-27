@@ -7,6 +7,9 @@ using BackupEngine.Shared;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
+using BackupEngine.Backup;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
 namespace EasySaveConsole.View
 {
     internal class View
@@ -15,12 +18,10 @@ namespace EasySaveConsole.View
         SaveController _saveController ;
         LanguageController _languageController = new LanguageController();
         ArgumentsController _argumentsController = new ArgumentsController();
-
-
-
+        private bool _encrypted;
         public View(string[] args)
         {
-        
+            
             if (args.Length > 0)
             {
                 _argumentsController.UpdateArguments(args);
@@ -93,7 +94,7 @@ namespace EasySaveConsole.View
                             DestinationPath = DestinationPath,
                             SourcePath = SourcePath,
                             Name = Name,
-                            Encrypt = AskEncryptionPreference()
+                            ExtensionsToSave = AskExtensions(SourcePath.ToString())
                         };
                         _saveController.UpdateConfiguration(backupConfiguration);
                         _saveController.Execute();
@@ -152,6 +153,8 @@ namespace EasySaveConsole.View
                                 else
                                 {
                                     ConfigNotFound();
+                                    configLaunch = Console.ReadLine()?.Trim() ?? "";
+
                                 }
                             }
                         }
@@ -217,13 +220,22 @@ namespace EasySaveConsole.View
         /// </summary>
         public void DisplayBackupConfiguration(BackupConfiguration configuration)
         {
+            string extensions = DisplayExtensions(configuration.ExtensionsToSave);
             Console.WriteLine(_language == Language.French
                 ? $"Nom: {configuration.Name} --- Dossier source: {configuration.SourcePath.GetAbsolutePath()} " +
                   $"--- Dossier de destination: {configuration.DestinationPath.GetAbsolutePath()} " +
-                  $"--- Sauvegarde {configuration.BackupType}" + $"--- Encryption {configuration.Encrypt}"
+                  $"--- Sauvegarde {configuration.BackupType}" + $"--- Extensions : {extensions}"
                 : $"Name: {configuration.Name} --- Source folder: {configuration.SourcePath.GetAbsolutePath()} " +
                   $"--- Destination folder: {configuration.DestinationPath.GetAbsolutePath()} " +
-                  $"--- Backup {configuration.BackupType}" + $"--- Encryption {configuration.Encrypt}");
+                  $"--- Backup {configuration.BackupType}" + $"--- Extensions : {extensions}");
+        }
+        private string? DisplayExtensions(HashSet<string> extensions)
+        {
+            if (extensions == null)
+            {
+                return null; 
+            }
+            return string.Join(", ", extensions);
         }
         /// <summary>
         /// Displays a success message when a configuration is deleted.
@@ -371,7 +383,7 @@ namespace EasySaveConsole.View
                 ? "Le nom de configuration est vide ou existe déjà"
                 : "The name of the configuration is blank or already exist");
         }
-  
+
         public void DisplayCreateMenu()
         {
             Console.WriteLine(_language == Language.French
@@ -402,34 +414,134 @@ namespace EasySaveConsole.View
         /// <summary>
         /// Asks the user whether they want to encrypt the backup.
         /// </summary>
-        public bool AskEncryptionPreference()
+
+        internal string AskEncryptionKey(string sourcePath)
+        {
+            this._encrypted = false;
+            Console.WriteLine(_language == Language.French
+                ? "Voulez-vous chiffrer vos données ? (oui/non) : "
+                : "Do you want to encrypt your data? (yes/no) : ");
+
+            string choice;
+            do
+            {
+                choice = Console.ReadLine().Trim().ToLower();
+            } while (choice != "oui" && choice != "non" && choice != "yes" && choice != "no");
+
+            string encryptionKey = "";
+
+            if (choice == "oui" || choice == "yes")
+            {
+                Console.WriteLine(_language == Language.French
+                    ? "Veuillez entrer la clé de chiffrement de vos sauvegardes : "
+                    : "Please enter the encryption key for your backups : ");
+
+                while (!Regex.IsMatch(encryptionKey = Console.ReadLine(), "^[a-zA-Z]*$"))
+                {
+                    Console.WriteLine(_language == Language.French
+                        ? "Erreur : Veuillez entrer uniquement des lettres (A-Z, a-z)."
+                        : "Error: Please enter only letters (A-Z, a-z).");
+                    Console.Write("Votre choix / Your choice: ");
+                }
+                this._encrypted = true;
+            }
+
+            Console.WriteLine(_language == Language.French
+                ? "Configuration terminée."
+                : "Configuration complete.");
+            return encryptionKey;
+        }
+
+        public HashSet<string>? AskExtensions(string sourcePath)
         {
             Console.WriteLine(_language == Language.French
-                ? "Voulez-vous chiffrer votre sauvegarde ? (oui/non)"
-                : "Do you want to encrypt your backup? (yes/no)");
-            Console.Write("Votre choix / Your choice: ");
+                ? "Voulez-vous chiffrer vos données ? (oui/non) : "
+                : "Do you want to encrypt your data? (yes/no) : ");
 
-            while (true)
+            string choice;
+            do
             {
-                string input = Console.ReadLine().Trim().ToLower();
+                choice = Console.ReadLine().Trim().ToLower();
+            } while (choice != "oui" && choice != "non" && choice != "yes" && choice != "no");
 
-                if (input == "oui" || input == "yes")
-                    return true;
-                else if (input == "non" || input == "no")
-                    return false;
-                else
+            string encryptionKey = "";
+
+            if (choice == "oui" || choice == "yes")
+            {
+                try
                 {
-                    if (_language == Language.French)
+                    ScanExtension scanner = new ScanExtension(sourcePath);
+                    HashSet<string> availableExtensions = scanner.GetUniqueExtensions();
+
+                    if (availableExtensions.Count == 0)
                     {
-                        Console.WriteLine("Entrée invalide. Veuillez répondre par 'oui' ou 'non'.");
+                        Console.WriteLine("Aucune extension trouvée dans le dossier.");
+                    }
+
+                    Console.WriteLine(_language == Language.French
+                         ? "\nExtensions trouvées :"
+                         : "\nFound extensions:"); foreach (string ext in availableExtensions)
+                    {
+                        Console.WriteLine($"- {ext}");
+                    }
+
+                    Console.WriteLine(_language == Language.French
+                         ? "\nEntrez les extensions à sauvegarder :"
+                         : "\nEnter the extensions to save:");
+                    Console.WriteLine(_language == Language.French
+                         ? "- Tapez \"tout\" ou \"all\" pour sélectionner toutes les extensions trouvées."
+                         : "- Type \"all\" to select all found extensions.");
+                    Console.WriteLine(_language == Language.French
+                        ? "- Ou entrez manuellement les extensions séparées par des virgules (ex: .txt,.pdf,.cs)."
+                        : "- Or manually enter the extensions separated by commas (e.g., .txt,.pdf,.cs).");
+                    string input = Console.ReadLine().Trim();
+                    HashSet<string> selectedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                    if (input.Equals("tout", StringComparison.OrdinalIgnoreCase) || input.Equals("all", StringComparison.OrdinalIgnoreCase))
+                    {
+                        selectedExtensions = new HashSet<string>(availableExtensions, StringComparer.OrdinalIgnoreCase);
+                    }
+                    else if (input == "")
+                    {
+                        return null;
                     }
                     else
                     {
-                        Console.WriteLine("Invalid entry. Please answer 'yes' or 'no'.");
+                        string[] manualExtensions = input.Split(',');
+
+                        foreach (string ext in manualExtensions)
+                        {
+                            string cleanExt = ext.Trim();
+                            if (!string.IsNullOrEmpty(cleanExt) && cleanExt.StartsWith("."))
+                            {
+                                selectedExtensions.Add(cleanExt);
+                            }
+                            else
+                            {
+                                Console.WriteLine(_language == Language.French
+                                    ? $"Extension ignorée (format invalide) : {ext}"
+                                    : $"Ignored extension (invalid format): {ext}");
+                            }
+                        }
                     }
+                    return selectedExtensions;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(_language == Language.French
+                        ? $"Erreur : {ex.Message}"
+                        : $"Error: {ex.Message}");
+                    return null;
                 }
             }
-        }
+            else
+            {
+                return null;
+            }
+
+        } 
+
+
         /// <summary>
         /// Asks the user to choose a backup type (full or incremental).
         /// </summary>

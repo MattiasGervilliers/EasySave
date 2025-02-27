@@ -1,62 +1,94 @@
-name: Build and Release UWP App
+name: Build and Release UWP & Console App
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
-  release:
-    types: [created]
+      - develop
 
 jobs:
   build:
     runs-on: windows-latest
 
+    permissions:
+      contents: write  # Allow pushing to the repository
+      issues: write    # Required for @semantic-release/github
+      pull-requests: write  # Required for @semantic-release/github
+
     steps:
       - name: Checkout du code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full Git history for semantic-release
 
       - name: Configurer MSBuild
         uses: microsoft/setup-msbuild@v1.1
 
-      - name: Installer le SDK Windows UWP
-        run: |
-          choco install visualstudio2022buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.UniversalBuildTools"
-
       - name: Restaurer les dépendances NuGet
-        run: nuget restore MonProjetUWP.sln
+        run: nuget restore EasySave.sln
 
       - name: Compiler l'application en mode Release
-        run: msbuild MonProjetUWP.sln /p:Configuration=Release /p:Platform=x86
+        run: msbuild EasySave.sln /p:Configuration=Release /p:Platform="Any CPU"
 
-      - name: Packager l'application (MSIX)
-        run: |
-          mkdir package
-          copy MonProjetUWP\AppPackages\* package\
-      
+      - name: Publier EasySaveConsole (Console App) avec le profil de publication
+        run: dotnet publish EasySaveConsole/EasySaveConsole.csproj /p:PublishProfile=FolderProfile.pubxml
+
+      - name: Publier CryptoSoft (Console App) avec le profil de publication
+        run: dotnet publish CryptoSoft/CryptoSoft.csproj /p:PublishProfile=FolderProfile.pubxml
+
+      - name: Publier EasySaveGUI (UWP) avec le profil de publication
+        run: dotnet publish EasySaveGUI/EasySaveGUI.csproj /p:PublishProfile=FolderProfile.pubxml
+
       - name: Télécharger l'artefact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: UWP-App
-          path: package/
+          name: EasySave-Apps
+          path: |
+            EasySaveConsole/publish/
+            EasySaveGUI/publish/
+            CryptoSoft/publish/
 
   release:
     needs: build
-    runs-on: windows-latest
-    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # Allow pushing to the repository
+      issues: write    # Required for @semantic-release/github
+      pull-requests: write  # Required for @semantic-release/github
 
     steps:
-      - name: Télécharger l'artefact du build
-        uses: actions/download-artifact@v3
+      - name: Checkout du code
+        uses: actions/checkout@v4
         with:
-          name: UWP-App
-          path: package/
+          fetch-depth: 0  # Fetch full Git history for semantic-release
 
-      - name: Créer une Release GitHub
-        uses: softprops/action-gh-release@v1
+      - name: Configurer Node.js
+        uses: actions/setup-node@v4
         with:
-          files: package/*
+          node-version: '20'
+
+      - name: Installer semantic-release et plugins
+        run: npm install -g semantic-release @semantic-release/changelog @semantic-release/git
+
+      - name: Exécuter semantic-release
+        id: semantic_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx semantic-release | tee release-output.txt
+          echo "RELEASE_TAG=$(grep -oP 'Published release \K(v?[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9]+(\.[0-9]+)?)?)' release-output.txt | head -1)" >> $GITHUB_ENV
+
+      - name: Télécharger l'artefact du build
+        uses: actions/download-artifact@v4
+        with:
+          name: EasySave-Apps
+          path: package/
+
+      - name: Ajout des fichiers à la release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: package/*
+          tag: ${{ env.RELEASE_TAG }} 
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          overwrite: true

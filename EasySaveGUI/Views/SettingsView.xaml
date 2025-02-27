@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:EasySaveGUI.Views"
       xmlns:viewModels="clr-namespace:EasySaveGUI.ViewModels"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800">
 
@@ -12,23 +13,116 @@
         <viewModels:SettingsViewModel />
     </UserControl.DataContext>
 
+    <UserControl.Resources>
+        <!-- Style pour le Border -->
+        <Style x:Key="CustomSnackbarContainerStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Padding" Value="5,5,5,5"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" 
+                          Direction="320" 
+                          ShadowDepth="5" 
+                          Opacity="0.5" 
+                          BlurRadius="10"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TranslateTransform Y="100"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSnackbarActive}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Y"
+                                     From="100" To="0" 
+                                     Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Y"
+                                     From="0" To="100" 
+                                     Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+
     <Grid>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" Text="{Binding WelcomeMessage}" />
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" Text="{DynamicResource TitleSettings}" Foreground="{DynamicResource Text}"/>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,100,0,0" Text="Language: " />
-        <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,100,0,0" Text="{Binding Language, Mode=TwoWay}" Width="200"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,100,0,0" Text="{DynamicResource LanguageTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
+        <!-- ComboBox pour la selection de la langue -->
+      
+        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,100,0,0" 
+                  ItemsSource="{Binding AvailableLanguages}" 
+                  SelectedItem="{Binding Language, Mode=TwoWay}" Width="200"/>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,150,0,0" Text="Log Path: " />
-        <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,150,0,0" Text="{Binding LogPath, Mode=TwoWay}" Width="200"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,150,0,0" Text="{DynamicResource LogTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,150,0,0">
+            <TextBox Text="{Binding LogPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+            <Button Style="{DynamicResource ButtonStyle}" Command="{Binding BrowseLogPathCommand}" Width="30" Height="20" Padding="0">
+                <Image Source="../assets/folder-icon.png" Width="15" Height="15"/>
+            </Button>
+        </StackPanel>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,200,0,0" Text="State Path: " />
-        <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,200,0,0" Text="{Binding StatePath, Mode=TwoWay}" Width="200"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,200,0,0" Text="{DynamicResource StateTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,200,0,0">
+            <TextBox Text="{Binding StatePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+            <Button Style="{DynamicResource ButtonStyle}" Command="{Binding BrowseStatePathCommand}" Width="30" Height="20" Padding="0">
+                <Image Source="../assets/folder-icon.png" Width="15" Height="15"/>
+            </Button>
+        </StackPanel>
 
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,250,0,0" Text="Log Type: " />
-        <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,250,0,0" Text="{Binding LogType, Mode=TwoWay}" Width="200"/>
+
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,250,0,0" Text="{DynamicResource LogTypeTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
+        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,250,0,0"
+          ItemsSource="{Binding AvailableLogTypes}"
+          SelectedItem="{Binding LogType, Mode=TwoWay}" Width="200"/>
+
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,300,0,0" Text="{DynamicResource ThemeTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
+        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,300,0,0"
+          ItemsSource="{Binding AvailableTheme}"
+          SelectedItem="{Binding Theme, Mode=TwoWay}" Width="200"/>
 
         <!-- Bouton Save -->
-        <Button Content="Save" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20" Width="100"
+        <Button Content="{DynamicResource SaveButtonSettings}" 
+                Background="{DynamicResource List}"
+                BorderBrush="{DynamicResource Card}"
+                Foreground="{DynamicResource Text}"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Bottom" 
+                Margin="0,0,0,20" 
+                Width="100"
+                FontSize="16"
+                Style="{DynamicResource ClassicButtonStyle}"
                 Command="{Binding SaveCommand}" />
+
+
+        <Border Style="{StaticResource CustomSnackbarContainerStyle}"
+        VerticalAlignment="Bottom"
+        HorizontalAlignment="Right"
+        Margin="0,0,20,20">
+            <materialDesign:Snackbar x:Name="SaveSnackbar"
+                     MessageQueue="{Binding MessageQueue}"
+                     Background="Transparent"
+                     Foreground="White"
+                     FontSize="14"
+                     HorizontalContentAlignment="Center"
+                     VerticalContentAlignment="Center" />
+        </Border>
     </Grid>
 </UserControl>

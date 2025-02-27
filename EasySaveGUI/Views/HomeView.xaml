@@ -9,6 +9,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <local:ProgressLookupConverter x:Key="ProgressLookupConvert" />
+        <local:RunningStateConverter x:Key="RunningStateConvert" />
+
         <!-- Custom Style for ListBox -->
         <Style x:Key="CustomListBoxStyle" TargetType="ListBox">
             <Setter Property="Background" Value="White" />
@@ -23,11 +26,10 @@
 
         <!-- Custom Style for ListBoxItem -->
         <Style x:Key="CustomListBoxItemStyle" TargetType="ListBoxItem">
-            <Setter Property="Background" Value="White" />
-            <Setter Property="BorderBrush" Value="LightGray" />
-            <Setter Property="BorderThickness" Value="0 0 0 1" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Card}" />
+            <Setter Property="BorderThickness" Value="0 0 0 2" />
             <Setter Property="Padding" Value="10" />
-            <Setter Property="Foreground" Value="#333333" />
+            <Setter Property="Foreground" Value="{DynamicResource Text}" />
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -43,48 +45,153 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#E0E0E0" />
+                    <Setter Property="Background" Value="#959595" />
                 </Trigger>
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="#D0D0D0" />
+                    <Setter Property="Background" Value="#787878" />
                 </Trigger>
             </Style.Triggers>
         </Style>
+
     </UserControl.Resources>
 
     <Grid>
-        <StackPanel>
-            <!-- ListBox to display BackupConfigurations -->
-            <ListBox ItemsSource="{Binding BackupConfigurations}"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="8*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
+        <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="0">
+            <TextBlock FontSize="32" Text="{DynamicResource TitleHome}" Foreground="{DynamicResource Text}" FontWeight="Bold"/>
+            <TextBlock Margin="0,5,0,0" Text="{DynamicResource LittleTitleHome}" Foreground="{DynamicResource Text}" FontSize="15"/>
+        </StackPanel>
+
+        <!-- ListBox to display BackupConfigurations -->
+        <ListBox ItemsSource="{Binding BackupConfigurations}"
                      Style="{StaticResource CustomListBoxStyle}"
-                     ItemContainerStyle="{StaticResource CustomListBoxItemStyle}"
-                     SelectionMode="Extended">
-                <!-- Bind selected items -->
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                     ItemContainerStyle="{DynamicResource CustomListBoxItemStyle}"
+                     SelectionMode="Multiple"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                     Grid.Column="1"
+                     Grid.Row="1"
+                     ScrollViewer.CanContentScroll="False"
+                     Background="{DynamicResource List}"
+                     SelectionChanged="ListBox_SelectionChanged">
+            <!-- Bind selected items -->
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="90" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                                      VerticalAlignment="Center"
+                                      Margin="0,0,7,0"
+                                      Command="{Binding DataContext.ToggleSelectionCommand, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                                      CommandParameter="{Binding}"/>
                             <StackPanel>
                                 <TextBlock Text="{Binding Name}" FontWeight="ExtraBlack" FontSize="24px"/>
-                                <TextBlock Text="{Binding SourcePath}" />
-                                <TextBlock Text="{Binding DestinationPath}" />
+                                <TextBlock Text="{Binding BackupType}" FontWeight="DemiBold" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Source:" Margin="0,0,7,0" />
+                                    <TextBlock Text="{Binding SourcePath}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Destination:" Margin="0,0,7,0" />
+                                    <TextBlock Text="{Binding DestinationPath}" />
+                                </StackPanel>
                             </StackPanel>
-                            <TextBlock Text="{Binding BackupType}" HorizontalAlignment="Right" />
-                            <Button Content="Play"
-                                    Command="{Binding DataContext.LaunchConfigurationCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                    CommandParameter="{Binding}" 
-                                    HorizontalAlignment="Right"/>
                         </StackPanel>
+
+                        <ProgressBar 
+                            Grid.Column="1"
+                            Minimum="0" Maximum="100"
+                            Height="10"
+                            Foreground="Green"
+                            Background="LightGray"
+                            Margin="0,5,0,0">
+                            <ProgressBar.Value>
+                                <MultiBinding Converter="{StaticResource ProgressLookupConvert}">
+                                    <!-- Use ObservableCollection instead of Dictionary -->
+                                    <Binding Path="DataContext.Progress" RelativeSource="{RelativeSource AncestorType=ListBox}" />
+                                    <Binding Path="." />
+                                </MultiBinding>
+                            </ProgressBar.Value>
+                        </ProgressBar>
+
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Height="30"
+                                Width="30"
+                                HorizontalAlignment="Right"
+                                Style="{DynamicResource HoverButtonStyle}"
+                                Command="{Binding DataContext.LaunchConfigurationCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                CommandParameter="{Binding}">
+                                <Button.Content>
+                                    <MultiBinding Converter="{StaticResource RunningStateConvert}">
+                                        <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=ListBox}"/>
+                                        <Binding Mode="OneWay" />
+                                    </MultiBinding>
+                                </Button.Content>
+                            </Button>
+
+                            <Button 
+                                Style="{DynamicResource HoverButtonStyle}"
+                                Height="30"
+                                Width="30"
+                                HorizontalAlignment="Right">
+                                <Button.Content>
+                                    <Image Source="../assets/editer.png" Width="15" Height="15" />
+                                </Button.Content>
+                            </Button>
+                            <Button 
+                                Style="{DynamicResource HoverButtonStyle}"
+                                Height="30"
+                                Width="30"
+                                HorizontalAlignment="Right"
+                                Click="OnMenuButtonClick">
+                                <Button.Content>
+                                    <Image Source="../assets/poubelle.png" Width="15" Height="15" />
+                                </Button.Content>
+                            </Button>
+
+                        </StackPanel>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <!-- Play Button -->
-            <Button Content="Launch Selected Configurations"
-                    Command="{Binding LaunchConfigurationsCommand}"
-                    HorizontalAlignment="Right"
-                    Margin="0,10,0,0"
-                    Padding="10,5"
-                    FontSize="14" />
-        </StackPanel>
+
+        <Grid Margin="0,15,0,0" Grid.Column="1" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Command="{Binding NavigateCreateCommand}" 
+                        Grid.Column="0"
+                        Style="{DynamicResource HoverButtonStyle}"
+                        Content="{DynamicResource CreateButtonHome}"
+                        Foreground="{DynamicResource Text}"
+                        FontSize="16"
+                        HorizontalAlignment="Left"/>
+            <Button Command="{Binding LaunchConfigurationsCommand}"
+                        Grid.Column="2"
+                        Style="{DynamicResource ClassicButtonStyle}"
+                        Background="{DynamicResource List}"
+                        BorderBrush="{DynamicResource Card}"
+                        Foreground="{DynamicResource Text}"                        
+                        Content="{DynamicResource LaunchButtonHome}"
+                        Padding="10,5"
+                        FontSize="16"
+                        HorizontalAlignment="Right"/>
+        </Grid>
     </Grid>
 </UserControl>

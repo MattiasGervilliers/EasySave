@@ -28,11 +28,7 @@ namespace BackupEngine
         /// The type of backup (for example, full, differential, etc.).
         /// </summary>
         public BackupType BackupType { get; set; }
-
-        /// <summary>
-        /// Indicates whether the files should be encrypted during the backup.
-        /// </summary>
-        public bool Encrypt { get; set; }
+        public HashSet<string>? ExtensionsToSave { get; set; }
 
         /// <summary>
         /// Deserializes a JSON object into an instance of the BackupConfiguration class.
@@ -41,17 +37,14 @@ namespace BackupEngine
         /// <param name="json">The JSON to deserialize into a BackupConfiguration instance.</param>
         public void FromJson(string json)
         {
-            // Deserialize the JSON into a BackupConfiguration object
             BackupConfiguration jsonConfiguration = JsonConvert.DeserializeObject<BackupConfiguration>(json);
-
-            // If deserialization is successful, assign the values of the object's properties.
             if (jsonConfiguration != null)
             {
                 Name = jsonConfiguration.Name;
                 SourcePath = jsonConfiguration.SourcePath;
                 DestinationPath = jsonConfiguration.DestinationPath;
                 BackupType = jsonConfiguration.BackupType;
-                Encrypt = jsonConfiguration.Encrypt;
+                ExtensionsToSave = jsonConfiguration.ExtensionsToSave;
             }
         }
 

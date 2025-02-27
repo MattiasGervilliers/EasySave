@@ -14,21 +14,21 @@ namespace BackupEngine.Job
         /// FileManager: Manages the backup based on the configuration.
         /// CryptStrategy: Encryption strategy used for secure file transfer. Instantiated by default.
         /// </summary>
-        private BackupConfiguration Configuration { get; set; }
-        private FileManager FileManager { get; set; }
-        private CryptStrategy _cryptStrategy = new CryptStrategy();
-
+        public BackupConfiguration Configuration { get; }
+        private FileManager FileManager { get; }
+        private readonly CancellationToken _ct;
+        public double Progress = 0;
+        public event EventHandler<double> ProgressChanged;
+        private readonly EventWaitHandle _waitHandle;
+        
         /// <summary>
         /// Constructor of the Job class. Accepts a backup configuration.
         /// Depending on the backup type specified in the configuration, it initializes the FileManager with the appropriate strategy.
         /// </summary>
-        public Job(BackupConfiguration configuration)
+        public Job(BackupConfiguration configuration, CancellationToken Token, EventWaitHandle waitHandle)
         {
             Configuration = configuration;
-
-            /// <summary>
-            /// Depending on the backup type, instantiate a FileManager with the correct backup strategy.
-            /// </summary>
+            _ct = Token;
             switch (Configuration.BackupType)
             {
                 case BackupType.Full:
@@ -38,11 +38,10 @@ namespace BackupEngine.Job
                     FileManager = new FileManager(new DifferentialSaveStrategy(Configuration));
                     break;
                 default:
-                    /// <summary>
-                    /// If the backup type is invalid, an exception is thrown.
-                    /// </summary>
                     throw new Exception("Invalid backup type");
             }
+
+            _waitHandle = waitHandle;
         }
 
         /// <summary>
@@ -50,10 +49,19 @@ namespace BackupEngine.Job
         /// </summary>
         public void Run()
         {
-            /// <summary>
-            /// Calls the Save method of the FileManager to perform the backup with the provided configuration.
-            /// </summary>
-            FileManager.Save(Configuration);
+            // Periodically check for cancellation
+            if (_ct.IsCancellationRequested)
+            {
+                return;
+            }
+            FileManager.SubscribeProgress((sender, e) =>
+            {
+                long total = e.TotalSize - e.RemainingSize;
+                double progress1 = ((double) total / e.TotalSize);
+                double progress = progress1 * 100;
+                ProgressChanged?.Invoke(this, progress);
+            });
+            FileManager.Save(Configuration, _waitHandle);
         }
     }
 }

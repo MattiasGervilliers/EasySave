@@ -11,7 +11,7 @@ namespace BackupEngine.State
         public StateManager()
         {
             SettingsRepository settingsRepository = new SettingsRepository();
-            _statePath = settingsRepository.GetStatePath().GetAbsolutePath();
+            _statePath = settingsRepository.GetStatePath().GetAbsolutePath() + "/state.json";
         }
 
         public void OnStateUpdated(object sender, StateEvent e)

@@ -1,7 +1,30 @@
 {
   "Language": 1,
-  "LogPath": "C:\\Users\\rb153\\Desktop\\EasySave\\logs",
-  "StatePath": "C:\\Users\\rb153\\Desktop\\EasySave\\logs\\state.json",
-  "Configurations": [],
-  "LogFormat": 0
+  "LogPath": "C:\\Travail\\FISA A3\\Travail divers Cesi\\Blocs\\2 - Génie logiciel\\Projet - EasySave de chez ProSoft\\Depot projet\\EasySave\\EasySaveGUI\\bin\\Debug\\net8.0-windows\\logs",
+  "StatePath": "C:\\Travail\\FISA A3\\Travail divers Cesi\\Blocs\\2 - Génie logiciel\\Projet - EasySave de chez ProSoft\\Depot projet\\EasySave\\EasySaveGUI\\bin\\Debug\\net8.0-windows\\logs\\state.json",
+  "Configurations": [
+    {
+      "Name": "test",
+      "SourcePath": "C:\\Test",
+      "DestinationPath": "C:\\test2",
+      "BackupType": 0,
+      "EncryptionKey": null
+    },
+    {
+      "Name": "test2",
+      "SourcePath": "C:\\Test",
+      "DestinationPath": "C:\\test2\\test\\test\\tessaatt\\",
+      "BackupType": 1,
+      "EncryptionKey": null
+    },
+    {
+      "Name": "test3",
+      "SourcePath": "C:\\Test",
+      "DestinationPath": "C:\\test2",
+      "BackupType": 1,
+      "EncryptionKey": null
+    }
+  ],
+  "Theme": 1,
+  "LogFormat": 0,
 }

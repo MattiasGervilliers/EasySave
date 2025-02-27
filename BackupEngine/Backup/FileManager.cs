@@ -1,8 +1,7 @@
 ﻿using BackupEngine.Log;
-using BackupEngine.State;
+using BackupEngine.Progress;
 using BackupEngine.Settings;
-using System;
-using System.IO;
+using BackupEngine.State;
 
 namespace BackupEngine.Backup
 {
@@ -35,11 +34,11 @@ namespace BackupEngine.Backup
         {
             _saveStrategy = newStrategy;
         }
-
+        
         /// <summary>
         /// Method that starts the backup by creating a unique destination folder and using the defined backup strategy.
         /// </summary>
-        public void Save(BackupConfiguration configuration)
+        public void Save(BackupConfiguration configuration, EventWaitHandle waitHandle)
         {
             string destinationBasePath = configuration.DestinationPath.GetAbsolutePath();
 
@@ -48,28 +47,25 @@ namespace BackupEngine.Backup
                 Directory.CreateDirectory(destinationBasePath);
             }
 
-            /// <summary>
-            /// Generate a unique name for the backup folder using a timestamp.
-            /// </summary>
+            // Générer un nom unique pour le dossier de sauvegarde
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
             string uniqueDestinationPath = Path.Combine(destinationBasePath, $"{timestamp}_{configuration.Name}");
 
-            /// <summary>
-            /// Create the backup folder.
-            /// </summary>
+            // Créer le dossier de sauvegarde
             Directory.CreateDirectory(uniqueDestinationPath);
 
             _saveStrategy.Transfer += _logManager.OnTransfer;
 
-            /// <summary>
-            /// Add a listener for the StateUpdated event.
-            /// </summary>
+            // Ajouter un écouteur pour l'événement StateUpdated
             _saveStrategy.StateUpdated += _stateManager.OnStateUpdated;
 
-            /// <summary>
-            /// Start the backup with the correct folder.
-            /// </summary>
-            _saveStrategy.Save(uniqueDestinationPath);
+            // Lancer la sauvegarde avec le bon dossier
+            _saveStrategy.Save(uniqueDestinationPath, waitHandle);
+        }
+
+        public void SubscribeProgress(EventHandler<ProgressEvent> handler)
+        {
+            _saveStrategy.Progress += handler;
         }
     }
 }

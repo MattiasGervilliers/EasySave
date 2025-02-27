@@ -1,6 +1,6 @@
 ﻿using BackupEngine.Log;
 using BackupEngine.Shared;
-using BackupEngine.State;
+using BackupEngine.Progress;
 using System;
 using System.Collections.Generic;
 using System.Linq;

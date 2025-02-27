@@ -30,11 +30,13 @@ namespace BackupEngine.Settings
         /// A list of backup configurations defining different types of backups and their parameters.
         /// </summary>
         public List<BackupConfiguration> Configurations { get; set; }
-
+        public Theme Theme { get; set; }
         /// <summary>
         /// The log format used (e.g., JSON or text).
         /// </summary>
         public LogType LogFormat { get; set; }
+        public HashSet<string> ExtensionPriority { get; set; }
+        public List<string> BusinessSoftwareList { get; set; }
 
         /// <summary>
         /// Constructor for the Settings class that initializes the default settings.
@@ -47,7 +49,11 @@ namespace BackupEngine.Settings
             Language = Language.English;
             LogPath = new CustomPath("logs");
             LogFormat = LogType.Json;
-            StatePath = new CustomPath("logs/state.json");
+            StatePath = new CustomPath("logs");
+            ExtensionPriority = new HashSet<string>() { ".txt", ".pdf" };// Pour l'instant la priorité des extensions est set ici
+            BusinessSoftwareList = new List<string> { "CalculatorApp", "msedge" };//idem pour les logitiels metiers
+            Theme = Theme.Light;
+            Random random = new Random();   
         }
 
         /// <summary>
@@ -56,16 +62,15 @@ namespace BackupEngine.Settings
         /// <param name="json">The JSON string to deserialize.</param>
         public void FromJson(string json)
         {
-            // Deserialize the JSON into a Settings object
             Settings jsonSettings = JsonConvert.DeserializeObject<Settings>(json);
             if (jsonSettings != null)
             {
-                // Copy the properties from the deserialized object into the current object
                 Language = jsonSettings.Language;
                 LogPath = jsonSettings.LogPath;
                 StatePath = jsonSettings.StatePath;
                 Configurations = jsonSettings.Configurations;
                 LogFormat = jsonSettings.LogFormat;
+                Theme = jsonSettings.Theme;
             }
         }
 
@@ -75,7 +80,6 @@ namespace BackupEngine.Settings
         /// <returns>The JSON string representing the Settings object.</returns>
         public string ToJson()
         {
-            // Serialize the current object into JSON with indented formatting for readability
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
     }

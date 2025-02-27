@@ -24,9 +24,6 @@ namespace BackupEngine.Cache
         /// </summary>
         public DifferentialBackupCacheRepository()
         {
-            /// <summary>
-            /// Loading the cache from the file or creating a new empty cache.
-            /// </summary>
             _cache = Load();
         }
 
@@ -37,16 +34,10 @@ namespace BackupEngine.Cache
         /// <returns>Returns an instance of DifferentialBackupCache containing the cache data.</returns>
         private DifferentialBackupCache Load()
         {
-            /// <summary>
-            /// Checks if the cache file exists.
-            /// </summary>
             if (File.Exists(CACHE_PATH))
             {
                 DifferentialBackupCache cache = new DifferentialBackupCache();
 
-                /// <summary>
-                /// If the cache file exists, opens the file for reading and loads the JSON data into the cache object.
-                /// </summary>
                 using (FileStream fs = File.Open(CACHE_PATH, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     using (StreamReader sr = new StreamReader(fs))
@@ -58,9 +49,6 @@ namespace BackupEngine.Cache
             }
             else
             {
-                /// <summary>
-                /// If the cache file does not exist, creates a new cache file and returns an empty cache.
-                /// </summary>
                 CreateFile();
                 return new DifferentialBackupCache();
             }
@@ -71,9 +59,6 @@ namespace BackupEngine.Cache
         /// </summary>
         private void CreateFile()
         {
-            /// <summary>
-            /// Creates the empty cache file.
-            /// </summary>
             FileStream fs = File.Create(CACHE_PATH);
             fs.Close();
         }
@@ -84,15 +69,8 @@ namespace BackupEngine.Cache
         /// </summary>
         private void Save()
         {
-            /// <summary>
-            /// Serializes the cache to JSON format.
-            /// </summary>
             string json = _cache.ToJson();
-
-            /// <summary>
-            /// Opens the cache file for writing and saves the formatted JSON.
-            /// </summary>
-            using (FileStream fs = File.Open(CACHE_PATH, FileMode.Open, FileAccess.Write, FileShare.None))
+            using (FileStream fs = File.Open(CACHE_PATH, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
             using (StreamWriter sw = new StreamWriter(fs))
             {
                 // Indents the JSON for better readability
@@ -107,9 +85,6 @@ namespace BackupEngine.Cache
         /// <returns>Returns an instance of CachedConfiguration corresponding to the given configuration, or null if it does not exist.</returns>
         public CachedConfiguration? GetCachedConfiguration(BackupConfiguration configuration)
         {
-            /// <summary>
-            /// Searches the cache for the configuration matching the given configuration name.
-            /// </summary>
             return _cache._configurations.Find(c => c.Name == configuration.Name);
         }
 
@@ -122,14 +97,7 @@ namespace BackupEngine.Cache
         /// <param name="directoryName">The name of the directory where the backup was performed.</param>
         public void AddBackup(BackupConfiguration configuration, DateTime date, string directoryName)
         {
-            /// <summary>
-            /// Searches for the configuration in the cache.
-            /// </summary>
             CachedConfiguration? cachedConfiguration = GetCachedConfiguration(configuration);
-
-            /// <summary>
-            /// If the configuration does not exist in the cache, a new entry is created.
-            /// </summary>
             if (cachedConfiguration == null)
             {
                 cachedConfiguration = new CachedConfiguration
@@ -139,15 +107,7 @@ namespace BackupEngine.Cache
                 };
                 _cache._configurations.Add(cachedConfiguration);
             }
-
-            /// <summary>
-            /// Adds the new backup to the existing configuration.
-            /// </summary>
             cachedConfiguration.Backups.Add(new Backup(date, directoryName));
-
-            /// <summary>
-            /// Saves the cache after adding the new backup.
-            /// </summary>
             Save();
         }
     }

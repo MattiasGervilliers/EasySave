@@ -11,5 +11,8 @@
         <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
             <view:SettingsView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:CreateViewModel}">
+            <view:CreateView />
+        </DataTemplate>
     </Application.Resources>
 </Application>

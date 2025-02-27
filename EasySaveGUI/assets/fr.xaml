@@ -1,0 +1,33 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- MainWindow -->
+    <sys:String x:Key="HomeNavbar">Accueil</sys:String>
+    <sys:String x:Key="CreateNavbar">Créer</sys:String>
+
+    <!-- HomeView -->
+    <sys:String x:Key="TitleHome">Sauvegardes</sys:String>
+    <sys:String x:Key="LittleTitleHome">Liste des configurations de sauvegarde</sys:String>
+    <sys:String x:Key="CreateButtonHome">+ Créer une configuration</sys:String>
+    <sys:String x:Key="LaunchButtonHome">Lancer les configurations sélectionnées</sys:String>
+    
+    <!-- CreateView -->
+    <sys:String x:Key="TitleCreate">Création d'une nouvelle de config de Sauvegarde</sys:String>
+    <sys:String x:Key="NameTitleCaseCreate">Nom :</sys:String>
+    <sys:String x:Key="SourcePathTitleCaseCreate">Chemin source :</sys:String>
+    <sys:String x:Key="DestPathTitleCaseCreate">Chemin de destination :</sys:String>
+    <sys:String x:Key="BackupTypeTitleCaseCreate">Type de sauvegarde :</sys:String>
+    <sys:String x:Key="EncryptionTitleCaseCreate">Encrypter :</sys:String>
+    <sys:String x:Key="CreateButtonFinal">Créer</sys:String>
+    
+    <!-- SettingsView -->
+    <sys:String x:Key="TitleSettings">Paramètres</sys:String>
+    <sys:String x:Key="LanguageTitleCaseSettings">Nom :</sys:String>
+    <sys:String x:Key="LogTitleCaseSettings">Chemin Log :</sys:String>
+    <sys:String x:Key="StateTitleCaseSettings">Chemin temps réel :</sys:String>
+    <sys:String x:Key="LogTypeTitleCaseSettings">Type de Log :</sys:String>
+    <sys:String x:Key="ThemeTitleCaseSettings">Thème :</sys:String>
+    <sys:String x:Key="SaveButtonSettings">Sauvegarder</sys:String>
+    <sys:String x:Key="AlertSaveSettings">Paramètres sauvegardés avec succès !</sys:String>
+</ResourceDictionary>

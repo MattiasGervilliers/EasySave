@@ -1,6 +1,4 @@
 ﻿using EasySaveGUI.ViewModels.Base;
-using EasySaveGUI.Views;
-using System.Windows.Controls;
 
 namespace EasySaveGUI.ViewModels
 {
@@ -10,7 +8,6 @@ namespace EasySaveGUI.ViewModels
     /// </summary>
     public class MainWindowViewModel : ViewModelBase
     {
-        // Property to store the currently displayed view.
         private ViewModelBase? _currentView;
 
         /// <summary>
@@ -19,21 +16,17 @@ namespace EasySaveGUI.ViewModels
         /// </summary>
         public ViewModelBase? CurrentView
         {
-            get => _currentView;  // Returns the current view
-            set
-            {
-                _currentView = value;  // Changes the current view
-                OnPropertyChanged(nameof(CurrentView));  // Notifies the property change
-            }
+            get => _currentView;
+            set { _currentView = value; OnPropertyChanged(nameof(CurrentView)); }
         }
 
-        // Commands for navigating to different views
         public RelayCommand NavigateHomeCommand { get; }
         public RelayCommand NavigateSettingsCommand { get; }
-
-        // Navigation service to handle transitions between views
+        public RelayCommand NavigateCreateCommand { get; }
         private readonly NavigationService _navigationService;
 
+        private SettingsViewModel _settingViewModel = new SettingsViewModel();
+        
         /// <summary>
         /// Constructor for the MainWindowViewModel class.
         /// Initializes the navigation service and navigation commands.
@@ -42,19 +35,17 @@ namespace EasySaveGUI.ViewModels
         /// </summary>
         public MainWindowViewModel()
         {
-            _navigationService = new NavigationService();  // Initializes the navigation service
-
-            // Configures the navigation service: when the view changes, update CurrentView
+            _settingViewModel.SetTheme();
+            _settingViewModel.SetLanguage();
+            _navigationService = new NavigationService();
             _navigationService.Configure(vm => CurrentView = vm);
 
-            // Command to navigate to the Home view
-            NavigateHomeCommand = new RelayCommand(_ => _navigationService.Navigate(new HomeViewModel()));
-
-            // Command to navigate to the Settings view
+            NavigateHomeCommand = new RelayCommand(_ => _navigationService.Navigate(new HomeViewModel(_navigationService)));
             NavigateSettingsCommand = new RelayCommand(_ => _navigationService.Navigate(new SettingsViewModel()));
+            NavigateCreateCommand = new RelayCommand(_ => _navigationService.Navigate(new CreateViewModel()));
 
-            // Initial navigation to the Home view (default view)
-            _navigationService.Navigate(new HomeViewModel());
+            _navigationService.Navigate(new HomeViewModel(_navigationService)); // Default view
         }
+
     }
 }

@@ -118,6 +118,10 @@ namespace BackupEngine.Settings
         {
             return Settings.Configurations;
         }
+        public List<string> GetBusinessSoftwareList()
+        {
+            return Settings.BusinessSoftwareList;
+        }
 
         /// <summary>
         /// Updates the application's language and saves the settings.
@@ -127,6 +131,15 @@ namespace BackupEngine.Settings
         {
             Settings.Language = language;
             SaveSettings();
+        }
+        public void UpdateExtensionPriority(HashSet<string> extensionPriority)
+        {
+            Settings.ExtensionPriority = extensionPriority;
+            SaveSettings();
+        }
+        public HashSet<string> GetExtensionPriority()
+        {
+            return Settings.ExtensionPriority;
         }
 
         /// <summary>
@@ -155,6 +168,15 @@ namespace BackupEngine.Settings
         public Language GetLanguage()
         {
             return Settings.Language;
+        }
+        public Theme GetTheme()
+        {
+            return Settings.Theme;
+        }
+        public void UpdateTheme(Theme theme)
+        {
+            Settings.Theme = theme;
+            SaveSettings();
         }
 
         /// <summary>

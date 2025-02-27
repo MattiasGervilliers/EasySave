@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
 
 namespace CryptoSoft
 {
@@ -10,6 +11,8 @@ namespace CryptoSoft
     /// </summary>
     class Program
     {
+        private static Mutex _mutex = new Mutex(true, "Global\\CryptoSoftMutex");
+        
         /// <summary>
         /// The main method of the program. It receives command-line arguments to decide whether to
         /// encrypt or decrypt a file and displays the elapsed time for the operation.
@@ -18,36 +21,35 @@ namespace CryptoSoft
         /// <returns>Returns 0 on success, -1 on error.</returns>
         static int Main(string[] args)
         {
-            int returnValue = 0;  // Default return code (success)
-            Stopwatch stopWatch = new Stopwatch();  // Stopwatch to measure execution time
-            stopWatch.Start();  // Starts the stopwatch
+            // check if there is already a Cryptosoft instance 
+            if (!_mutex.WaitOne(0, false))
+            {
+                Console.WriteLine("CryptoSoft est déjà en cours d'exécution.");
+                return -1; 
+            }
 
+            int returnValue = 0;
             try
             {
-                // Checks if the third argument (args[2]) is "True" to decide whether to encrypt or decrypt
                 if (args[2] == "True")
                 {
-                    // Calls the Encrypt method of the Encoder class to encrypt the file
                     Encoder.Encrypt(args[0], args[1]);
                 }
                 else
                 {
-                    // If it wasn't "True", the Decrypt method could be called here, but it is commented out
-                    // Encoder.Decrypt(args[0]);
+                    Console.ReadLine(); 
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                // In case of an exception (for example, if the arguments are wrong or the file is not found),
-                // return -1 to signal an error
                 return -1;
             }
+            finally
+            {
+                _mutex.ReleaseMutex();
+            }
 
-            // Stops the stopwatch after the operation has been executed
-            stopWatch.Stop();
-            int elapsedTime = (int)stopWatch.ElapsedMilliseconds;  // Elapsed time in milliseconds
-            Console.WriteLine(elapsedTime);  // Displays the execution time in the console
-            return returnValue;  // Returns 0 to indicate successful execution
+            return returnValue;
         }
     }
 }

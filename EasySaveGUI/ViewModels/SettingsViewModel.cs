@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using BackupEngine.Settings;
-using BackupEngine.Shared;
+using EasySaveGUI.Models;
 using EasySaveGUI.ViewModels.Base;
 using LogLib;
+using Microsoft.WindowsAPICodePack.Dialogs;  // Nécessaire pour le FolderPicker
+using System.IO;
+using MaterialDesignThemes.Wpf; // Import pour Snackbar
+using System.Windows;
+using System.Collections;
 
 namespace EasySaveGUI.ViewModels
 {
@@ -14,37 +20,49 @@ namespace EasySaveGUI.ViewModels
     /// </summary>
     public class SettingsViewModel : ViewModelBase
     {
-        // Repository to access and update settings.
-        private readonly SettingsRepository _settingsRepository;
-
-        // Private variables to store the settings values.
+        private readonly SettingsModel _settingsModel;
         private string _language;
         private string _logPath;
         private string _statePath;
         private string _logType;
+        private string _theme;
 
+        public SnackbarMessageQueue MessageQueue { get; } = new SnackbarMessageQueue();
+        
         /// <summary>
         /// Welcome message displayed on the settings page.
         /// </summary>
         public string WelcomeMessage { get; } = "Settings";
 
-        /// <summary>
-        /// Property representing the selected language in the interface.
-        /// It is bound to the language stored in the repository.
-        /// </summary>
-        public string Language
+        private bool _isSnackbarActive;
+        public bool IsSnackbarActive
         {
-            get => _language;  // Returns the current language
+            get => _isSnackbarActive;
             set
             {
-                _language = value;  // Modifies the selected language
-                OnPropertyChanged(nameof(Language));  // Notifies the property change
+                _isSnackbarActive = value;
+                OnPropertyChanged(nameof(IsSnackbarActive));
+            }
+        }
 
-                // Converts the language string to an enum Language and updates the repository.
-                if (Enum.TryParse(value, out Language lang))
-                {
-                    _settingsRepository.UpdateLanguage(lang);  // Updates the language in the settings
-                }
+        // Propriétés de données
+        public string Language
+        {
+            get => _language;
+            set
+            {
+                _language = value;
+                OnPropertyChanged(nameof(Language));
+            }
+        }
+        
+        public string Theme
+        {
+            get => _theme;
+            set
+            {
+                _theme = value;
+                OnPropertyChanged(nameof(Theme));
             }
         }
 
@@ -54,11 +72,11 @@ namespace EasySaveGUI.ViewModels
         /// </summary>
         public string LogPath
         {
-            get => _logPath;  // Returns the log file path
+            get => _logPath;
             set
             {
-                _logPath = value;  // Modifies the log file path
-                OnPropertyChanged(nameof(LogPath));  // Notifies the property change
+                _logPath = value;
+                OnPropertyChanged(nameof(LogPath));
             }
         }
 
@@ -68,11 +86,11 @@ namespace EasySaveGUI.ViewModels
         /// </summary>
         public string StatePath
         {
-            get => _statePath;  // Returns the state file path
+            get => _statePath;
             set
             {
-                _statePath = value;  // Modifies the state path
-                OnPropertyChanged(nameof(StatePath));  // Notifies the property change
+                _statePath = value;
+                OnPropertyChanged(nameof(StatePath));
             }
         }
 
@@ -82,30 +100,64 @@ namespace EasySaveGUI.ViewModels
         /// </summary>
         public string LogType
         {
-            get => _logType;  // Returns the log type
+            get => _logType;
             set
             {
-                _logType = value;  // Modifies the log type
-                OnPropertyChanged(nameof(LogType));  // Notifies the property change
+                _logType = value;
+                OnPropertyChanged(nameof(LogType));
             }
         }
 
-        /// <summary>
-        /// Command executed to save the modified settings.
-        /// </summary>
-        public ICommand SaveCommand { get; }
+        // Liste des langues disponibles
+        public List<string> AvailableLanguages { get; } = new List<string>
+        {
+            "English", "French"
+        };
 
-        /// <summary>
-        /// Constructor that initializes the settings repository and loads the current settings.
-        /// It also creates the SaveCommand to save the settings.
-        /// </summary>
+        public List<string> AvailableLogTypes { get; } = new List<string> { "Json", "Xml" };
+
+        public List<string> AvailableTheme { get; } = new List<string> { "Dark", "Light" }; 
+
+        public ICommand SaveCommand { get; }
+        public ICommand BrowseLogPathCommand { get; }
+        public ICommand BrowseStatePathCommand { get; }
+
         public SettingsViewModel()
         {
-            _settingsRepository = new SettingsRepository();  // Initializes the settings repository
-            LoadSettings();  // Loads the current settings from the repository
+            _settingsModel = new SettingsModel();
+            LoadSettings();
 
-            // Initializes the command to save the settings.
-            SaveCommand = new CommandHandler(() => SaveSettings(), true);
+            SaveCommand = new RelayCommand(_ => SaveSettings());
+
+            // Initialisation des commandes pour ouvrir l'explorateur
+            BrowseLogPathCommand = new RelayCommand(_ => BrowseLogPath());
+            BrowseStatePathCommand = new RelayCommand(_ => BrowseStatePath());
+        }
+
+        private void BrowseLogPath()
+        {
+            var dialog = new CommonOpenFileDialog
+            {
+                IsFolderPicker = true  // Spécifie que c'est un explorateur de dossiers
+            };
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                LogPath = dialog.FileName;  // Met à jour la propriété LogPath avec le chemin choisi
+            }
+        }
+
+        private void BrowseStatePath()
+        {
+            var dialog = new CommonOpenFileDialog
+            {
+                IsFolderPicker = true
+            };
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                StatePath = dialog.FileName;  // Met à jour la propriété StatePath avec le chemin choisi
+            }
         }
 
         /// <summary>
@@ -113,14 +165,49 @@ namespace EasySaveGUI.ViewModels
         /// </summary>
         private void LoadSettings()
         {
-            // Loads the language from the settings
-            var language = _settingsRepository.GetLanguage();
-            Language = language.ToString();
+            Language = _settingsModel.GetLanguage().ToString();
+            Theme = _settingsModel.GetTheme().ToString();
+            LogPath = _settingsModel.GetLogPath();
+            StatePath = _settingsModel.GetStatePath();
+            LogType = _settingsModel.GetLogType();  // Charge correctement le type de log
+        }
 
-            // Loads other settings from the repository
-            LogPath = _settingsRepository.GetLogPath().ToString();
-            StatePath = _settingsRepository.GetStatePath().ToString();
-            LogType = _settingsRepository.GetLogType().ToString();
+        public void SetTheme()
+        {
+            string toChangeTheme = _theme;
+            if (toChangeTheme == "Dark")
+            {
+                ResourceDictionary Theme = new ResourceDictionary() { Source = new Uri("../assets/DarkTheme.xaml", UriKind.Relative) };
+                App.Current.Resources.MergedDictionaries.Add(Theme);
+            }
+            else if (toChangeTheme == "Light")
+            {
+                ResourceDictionary Theme = new ResourceDictionary() { Source = new Uri("../assets/LightTheme.xaml", UriKind.Relative) };
+                App.Current.Resources.MergedDictionaries.Add(Theme);
+            }
+            else
+            {
+                throw new InvalidOperationException("name theme problem");
+            }
+        }
+
+        public void SetLanguage()
+        {
+            string toChangeLanguage = _language;
+            if (toChangeLanguage == "French")
+            {
+                ResourceDictionary Langue = new ResourceDictionary() { Source = new Uri("../assets/fr.xaml", UriKind.Relative) };
+                App.Current.Resources.MergedDictionaries.Add(Langue);
+            }
+            else if (toChangeLanguage == "English")
+            {
+                ResourceDictionary Langue = new ResourceDictionary() { Source = new Uri("../assets/en.xaml", UriKind.Relative) };
+                App.Current.Resources.MergedDictionaries.Add(Langue);
+            }
+            else
+            {
+                throw new InvalidOperationException("name language problem");
+            }
         }
 
         /// <summary>
@@ -129,53 +216,28 @@ namespace EasySaveGUI.ViewModels
         /// </summary>
         private void SaveSettings()
         {
-            // Converts and updates the language
-            _settingsRepository.UpdateLanguage((Language)Enum.Parse(typeof(Language), Language));
+            _settingsModel.UpdateLanguage(Language);
+            _settingsModel.UpdateLogPath(LogPath);
+            _settingsModel.UpdateStatePath(StatePath);
+            _settingsModel.UpdateLogType(LogType);
+            _settingsModel.UpdateTheme(Theme);
 
-            // Updates the other settings
-            _settingsRepository.UpdateLogPath(new CustomPath(LogPath));
-            _settingsRepository.UpdateStatePath(StatePath);
-            _settingsRepository.UpdateLogType((LogType)Enum.Parse(typeof(LogType), LogType));
-
-            // Notifies the property change after saving
             OnPropertyChanged(nameof(Language));
+            OnPropertyChanged(nameof(Theme));
             OnPropertyChanged(nameof(LogPath));
             OnPropertyChanged(nameof(StatePath));
             OnPropertyChanged(nameof(LogType));
+
+            SetTheme();
+            SetLanguage();
+
+            // Activer le Snackbar
+            var message = (string)Application.Current.Resources["AlertSaveSettings"];
+            MessageQueue.Enqueue(message);
+            IsSnackbarActive = true;
+
+            // Désactiver le Snackbar après un délai
+            Task.Delay(3000).ContinueWith(_ => IsSnackbarActive = false);
         }
-    }
-
-    /// <summary>
-    /// Implementation of ICommand to handle the execution of a command with custom logic.
-    /// </summary>
-    public class CommandHandler : ICommand
-    {
-        private readonly Action _execute;  // Action to execute when the command is triggered
-        private readonly bool _canExecute;  // Determines if the command can be executed
-
-        /// <summary>
-        /// Constructor that initializes the command with the action to execute and the execution condition.
-        /// </summary>
-        public CommandHandler(Action execute, bool canExecute)
-        {
-            _execute = execute;  // Action to execute
-            _canExecute = canExecute;  // Execution condition
-        }
-
-        /// <summary>
-        /// Returns whether the command can be executed based on the condition.
-        /// </summary>
-        public bool CanExecute(object parameter) => _canExecute;
-
-        /// <summary>
-        /// Executes the action associated with the command.
-        /// </summary>
-        public void Execute(object parameter) => _execute();
-
-        /// <summary>
-        /// Event to notify changes on the execution condition.
-        /// </summary>
-        public event EventHandler CanExecuteChanged;
     }
 }
-
