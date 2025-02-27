@@ -20,7 +20,7 @@
     <sys:String x:Key="DestPathTitleCaseCreate">Chemin de destination :</sys:String>
     <sys:String x:Key="BackupTypeTitleCaseCreate">Type de sauvegarde :</sys:String>
     <sys:String x:Key="EncryptionTitleCaseCreate">Encrypter :</sys:String>
-    <sys:String x:Key="AlertSaveConfiguration">Configuration saved succesfully !</sys:String>
+    <sys:String x:Key="AlertSaveConfiguration">Configuration sauvegardé avec succès !</sys:String>
     <sys:String x:Key="CreateButtonFinal">Enregistrer</sys:String>
     
     <!-- SettingsView -->
