@@ -14,7 +14,7 @@
     <sys:String x:Key="NoItem">No Configurations found.</sys:String>
     
     <!-- CreateView -->
-    <sys:String x:Key="TitleCreate">Create a new Backup Configuration</sys:String>
+    <sys:String x:Key="TitleCreate">Backup Configuration</sys:String>
     <sys:String x:Key="NameTitleCaseCreate">Name:</sys:String>
     <sys:String x:Key="SourcePathTitleCaseCreate">Source path:</sys:String>
     <sys:String x:Key="DestPathTitleCaseCreate">Destination path:</sys:String>

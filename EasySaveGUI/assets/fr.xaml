@@ -14,7 +14,7 @@
     <sys:String x:Key="NoItem">Aucune configuration trouvée.</sys:String>
     
     <!-- CreateView -->
-    <sys:String x:Key="TitleCreate">Création d'une nouvelle de config de Sauvegarde</sys:String>
+    <sys:String x:Key="TitleCreate">Configuration d'une Sauvegarde</sys:String>
     <sys:String x:Key="NameTitleCaseCreate">Nom :</sys:String>
     <sys:String x:Key="SourcePathTitleCaseCreate">Chemin source :</sys:String>
     <sys:String x:Key="DestPathTitleCaseCreate">Chemin de destination :</sys:String>
