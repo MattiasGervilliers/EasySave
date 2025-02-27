@@ -6,7 +6,7 @@ namespace BackupEngine.Settings
 {
     public class SettingsRepository
     {
-        private static readonly string _settingsPath = "settings.json";
+        private static readonly string SettingsPath = "settings.json";
         private Settings Settings { get; set; }
 
         public SettingsRepository() {
@@ -15,9 +15,9 @@ namespace BackupEngine.Settings
 
         Settings Load()
         {
-            if (File.Exists(_settingsPath))
+            if (File.Exists(SettingsPath))
             {
-                string json = File.ReadAllText(_settingsPath);
+                string json = File.ReadAllText(SettingsPath);
                 Settings settings = new Settings();
                 settings.FromJson(json);
                 return settings;
@@ -31,14 +31,14 @@ namespace BackupEngine.Settings
 
         private void CreateFile()
         {
-            FileStream fs = File.Create(_settingsPath);
+            FileStream fs = File.Create(SettingsPath);
             fs.Close();
         }
 
         private void SaveSettings()
         {
             string json = Settings.ToJson();
-            File.WriteAllText(_settingsPath, JsonConvert.SerializeObject(JsonConvert.DeserializeObject(json), Formatting.Indented));
+            File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(JsonConvert.DeserializeObject(json), Formatting.Indented));
         }
 
         public void AddConfiguration(BackupConfiguration configuration)

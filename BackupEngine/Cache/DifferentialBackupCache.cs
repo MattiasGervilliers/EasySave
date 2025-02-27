@@ -6,21 +6,21 @@ namespace BackupEngine.Cache
 {
     internal class DifferentialBackupCache : IJsonSerializable
     {
-        public List<CachedConfiguration> _configurations { get; set; }
+        public List<CachedConfiguration> Configurations { get; set; }
 
         public DifferentialBackupCache()
         {
-            _configurations = new List<CachedConfiguration>();
+            Configurations = new List<CachedConfiguration>();
         }
 
         public void FromJson(string json)
         {
-            _configurations = JsonConvert.DeserializeObject<List<CachedConfiguration>>(json) ?? new List<CachedConfiguration>();
+            Configurations = JsonConvert.DeserializeObject<List<CachedConfiguration>>(json) ?? new List<CachedConfiguration>();
         }
 
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(_configurations);
+            return JsonConvert.SerializeObject(Configurations);
         }
     }
 

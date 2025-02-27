@@ -51,7 +51,7 @@ namespace BackupEngine.Backup
 
         private void PerformFullSave(string uniqueDestinationPath)
         {
-            FullSaveStrategy fullSaveStrategy = new FullSaveStrategy(Configuration);
+            FullSaveStrategy fullSaveStrategy = new FullSaveStrategy(_configuration);
             fullSaveStrategy.Transfer += (sender, e) => OnTransfer(e);
             fullSaveStrategy.StateUpdated += (sender, e) => OnStateUpdated(e);
             fullSaveStrategy.Save(uniqueDestinationPath);
@@ -59,16 +59,16 @@ namespace BackupEngine.Backup
 
         private void DifferentialSave(string uniqueDestinationPath, string previousSavePath)
         {
-            if (Configuration.ExtensionsToSave != null)
+            if (_configuration.ExtensionsToSave != null)
             {
-                TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, _settingsRepository.GetExtensionPriority());
+                TransferStrategy = new CryptStrategy(_configuration.ExtensionsToSave, _settingsRepository.GetExtensionPriority());
             }
             else
             {
                 TransferStrategy = new CopyStrategy();
             }
 
-            string sourcePath = Configuration.SourcePath.GetAbsolutePath();
+            string sourcePath = _configuration.SourcePath.GetAbsolutePath();
             if (!Directory.Exists(sourcePath))
             {
                 throw new DirectoryNotFoundException($"The source folder '{sourcePath}' does not exist.");
@@ -144,13 +144,13 @@ namespace BackupEngine.Backup
 
                 OnStateUpdated(new StateEvent("Differential Backup", "Active", remainingFiles, remainingSize, remainingFiles, remainingSize, file, destFile));
 
-                TransferEvent transferEvent = new TransferEvent(Configuration, duration, fileInfo, new FileInfo(destFile));
+                TransferEvent transferEvent = new TransferEvent(_configuration, duration, fileInfo, new FileInfo(destFile));
                 OnTransfer(transferEvent);
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Error copying file {file}: {e.Message}");
-                OnTransfer(new TransferEvent(Configuration, new TimeSpan(-1), fileInfo, new FileInfo(destFile)));
+                OnTransfer(new TransferEvent(_configuration, new TimeSpan(-1), fileInfo, new FileInfo(destFile)));
             }
         }
 
@@ -184,7 +184,7 @@ namespace BackupEngine.Backup
         private bool RequiresEncryption(string file)
         {
             string extension = Path.GetExtension(file);
-            return Configuration.ExtensionsToSave.Contains(extension);
+            return _configuration.ExtensionsToSave.Contains(extension);
         }
 
         /// <summary>
@@ -222,19 +222,19 @@ namespace BackupEngine.Backup
 
         private bool PreviousSaveExists()
         {
-            CachedConfiguration? cached = _cacheRepository.GetCachedConfiguration(Configuration);
+            CachedConfiguration? cached = _cacheRepository.GetCachedConfiguration(_configuration);
             return cached != null;
         }
 
         private string PreviousSavePath()
         {
-            CachedConfiguration? cached = _cacheRepository.GetCachedConfiguration(Configuration);
+            CachedConfiguration? cached = _cacheRepository.GetCachedConfiguration(_configuration);
             return cached!.Backups.OrderByDescending(b => b.Date).First().DirectoryName;
         }
 
         private void UpdateCache(string uniqueDestinationPath)
         {
-            _cacheRepository.AddBackup(Configuration, DateTime.Now, uniqueDestinationPath);
+            _cacheRepository.AddBackup(_configuration, DateTime.Now, uniqueDestinationPath);
         }
 
         /// <summary>

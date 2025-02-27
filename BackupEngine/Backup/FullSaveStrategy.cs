@@ -41,16 +41,16 @@ namespace BackupEngine.Backup
         /// </summary>
         public override void Save(string uniqueDestinationPath)
         {
-            if (Configuration.ExtensionsToSave != null)
+            if (_configuration.ExtensionsToSave != null)
             {
-                TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, _settingsRepository.GetExtensionPriority());
+                TransferStrategy = new CryptStrategy(_configuration.ExtensionsToSave, _settingsRepository.GetExtensionPriority());
             }
             else
             {
                 TransferStrategy = new CopyStrategy();
             }
 
-            string sourcePath = Configuration.SourcePath.GetAbsolutePath();
+            string sourcePath = _configuration.SourcePath.GetAbsolutePath();
             if (!Directory.Exists(sourcePath))
             {
                 throw new DirectoryNotFoundException($"The source folder '{sourcePath}' does not exist.");
@@ -127,13 +127,13 @@ namespace BackupEngine.Backup
 
                 OnStateUpdated(new StateEvent("Full Backup", "Active", remainingFiles, remainingSize, remainingFiles, remainingSize, file, destFile));
 
-                TransferEvent transferEvent = new TransferEvent(Configuration, duration, fileInfo, new FileInfo(destFile));
+                TransferEvent transferEvent = new TransferEvent(_configuration, duration, fileInfo, new FileInfo(destFile));
                 OnTransfer(transferEvent);
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Error copying file {file}: {e.Message}");
-                OnTransfer(new TransferEvent(Configuration, new TimeSpan(-1), fileInfo, new FileInfo(destFile)));
+                OnTransfer(new TransferEvent(_configuration, new TimeSpan(-1), fileInfo, new FileInfo(destFile)));
             }
             finally
             {
@@ -176,11 +176,11 @@ namespace BackupEngine.Backup
         private bool RequiresEncryption(string file)
         {
             string extension = Path.GetExtension(file);
-            if (Configuration.ExtensionsToSave == null)
+            if (_configuration.ExtensionsToSave == null)
             {
                 return false;
             }
-            return Configuration.ExtensionsToSave.Contains(extension);
+            return _configuration.ExtensionsToSave.Contains(extension);
         }
         /// <summary>
         /// Processes the queue of files that need encryption.

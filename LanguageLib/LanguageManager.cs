@@ -4,7 +4,7 @@ using System.Text.Json;
 public class LanguageManager
 {
     private Dictionary<string, string>? _translations;
-    private readonly string _languageFolder = "Languages"; // Folder containing JSON files
+    private readonly string LanguageFolder = "Languages"; // Folder containing JSON files
     private Language _currentLanguage;
 
     public LanguageManager(Language language)
@@ -16,7 +16,7 @@ public class LanguageManager
     private void LoadLanguageFile()
     {
         string fileName = _currentLanguage.ToString() + ".json";
-        string filePath = Path.Combine(_languageFolder, fileName);
+        string filePath = Path.Combine(LanguageFolder, fileName);
 
         if (File.Exists(filePath))
         {

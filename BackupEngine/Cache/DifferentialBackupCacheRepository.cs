@@ -4,7 +4,7 @@ namespace BackupEngine.Cache
 {
     internal class DifferentialBackupCacheRepository
     {
-        private const string CACHE_PATH = ".differentiel_cache.json";
+        private const string CachePath = ".differentiel_cache.json";
 
         private readonly DifferentialBackupCache _cache;
 
@@ -15,11 +15,11 @@ namespace BackupEngine.Cache
 
         private DifferentialBackupCache Load()
         {
-            if (File.Exists(CACHE_PATH))
+            if (File.Exists(CachePath))
             {
                 DifferentialBackupCache cache = new DifferentialBackupCache();
 
-                using (FileStream fs = File.Open(CACHE_PATH, FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (FileStream fs = File.Open(CachePath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     using (StreamReader sr = new StreamReader(fs))
                     {
@@ -37,14 +37,14 @@ namespace BackupEngine.Cache
 
         private void CreateFile()
         {
-            FileStream fs = File.Create(CACHE_PATH);
+            FileStream fs = File.Create(CachePath);
             fs.Close();
         }
 
         private void Save()
         {
             string json = _cache.ToJson();
-            using (FileStream fs = File.Open(CACHE_PATH, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
+            using (FileStream fs = File.Open(CachePath, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
             using (StreamWriter sw = new StreamWriter(fs))
             {
                 // indent the json for better readability
@@ -54,7 +54,7 @@ namespace BackupEngine.Cache
 
         public CachedConfiguration? GetCachedConfiguration(BackupConfiguration configuration)
         {
-            return _cache._configurations.Find(c => c.Name == configuration.Name);
+            return _cache.Configurations.Find(c => c.Name == configuration.Name);
         }
 
         public void AddBackup(BackupConfiguration configuration, DateTime date, string directoryName)
@@ -67,7 +67,7 @@ namespace BackupEngine.Cache
                     Name = configuration.Name,
                     Backups = new List<Backup>()
                 };
-                _cache._configurations.Add(cachedConfiguration);
+                _cache.Configurations.Add(cachedConfiguration);
             }
             cachedConfiguration.Backups.Add(new Backup(date, directoryName));
             Save();

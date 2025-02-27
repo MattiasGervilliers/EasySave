@@ -9,10 +9,10 @@ namespace BackupEngine.Job
         private FileManager FileManager { get; }
         private readonly CancellationToken _ct;
 
-        public Job(BackupConfiguration configuration, CancellationToken Token)
+        public Job(BackupConfiguration configuration, CancellationToken token)
         {
             Configuration = configuration;
-            _ct = Token;
+            _ct = token;
             switch (Configuration.BackupType)
             {
                 case BackupType.Full:

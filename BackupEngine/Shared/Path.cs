@@ -2,7 +2,7 @@
 
 namespace BackupEngine.Shared
 {
-    [JsonConverter(typeof(CheminConverter))]
+    [JsonConverter(typeof(CustomPathConverter))]
     public class CustomPath
     {
         private string _path { get; set; }
@@ -22,7 +22,7 @@ namespace BackupEngine.Shared
             return Directory.Exists(_path);
         }
 
-        private bool CheckPathValidity(string TestedPath)
+        private bool CheckPathValidity(string testedPath)
         {
             // TODO : Check if the path is valid
             return true;
@@ -39,7 +39,7 @@ namespace BackupEngine.Shared
         }
     }
 
-    public class CheminConverter : JsonConverter<CustomPath>
+    public class CustomPathConverter : JsonConverter<CustomPath>
     {
         public override void WriteJson(JsonWriter writer, CustomPath value, JsonSerializer serializer)
         {
