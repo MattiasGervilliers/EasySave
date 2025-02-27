@@ -12,6 +12,7 @@
     <sys:String x:Key="CreateButtonHome">+ Create a configuration</sys:String>
     <sys:String x:Key="LaunchButtonHome">Launch Selected Configurations</sys:String>
     <sys:String x:Key="NoItem">No Configurations found.</sys:String>
+    <sys:String x:Key="AlertBackupFinished">The backup {0} finished successfully !</sys:String>
     
     <!-- CreateView -->
     <sys:String x:Key="TitleCreate">Backup Configuration</sys:String>
@@ -20,7 +21,7 @@
     <sys:String x:Key="DestPathTitleCaseCreate">Destination path:</sys:String>
     <sys:String x:Key="BackupTypeTitleCaseCreate">Backup type:</sys:String>
     <sys:String x:Key="EncryptionTitleCaseCreate">Encrypt:</sys:String>
-    <sys:String x:Key="AlertSaveConfiguration">Configuration saved succesfully !</sys:String>
+    <sys:String x:Key="AlertSaveConfiguration">Configuration saved successfully !</sys:String>
     <sys:String x:Key="CreateButtonFinal">Save</sys:String>
 
     <!-- SettingsView -->
@@ -31,5 +32,5 @@
     <sys:String x:Key="LogTypeTitleCaseSettings">Log Type:</sys:String>
     <sys:String x:Key="ThemeTitleCaseSettings">Theme:</sys:String>
     <sys:String x:Key="SaveButtonSettings">Save</sys:String>
-    <sys:String x:Key="AlertSaveSettings">Settings saved succesfully !</sys:String>
+    <sys:String x:Key="AlertSaveSettings">Settings saved successfully !</sys:String>
 </ResourceDictionary>

@@ -28,11 +28,6 @@ namespace EasySaveGUI.ViewModels
         private string _theme;
 
         public SnackbarMessageQueue MessageQueue { get; } = new SnackbarMessageQueue();
-        
-        /// <summary>
-        /// Welcome message displayed on the settings page.
-        /// </summary>
-        public string WelcomeMessage { get; } = "Settings";
 
         private bool _isSnackbarActive;
         public bool IsSnackbarActive

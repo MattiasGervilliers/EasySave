@@ -37,9 +37,9 @@ namespace BackupEngine.Settings
         /// <returns>The Settings object containing data loaded from the JSON file.</returns>
         Settings Load()
         {
-            if (File.Exists(SettingsPath))
+            if (File.Exists(_settingsPath))
             {
-                string json = File.ReadAllText(SettingsPath);
+                string json = File.ReadAllText(_settingsPath);
                 Settings settings = new Settings();
                 settings.FromJson(json);
                 return settings;
@@ -56,7 +56,7 @@ namespace BackupEngine.Settings
         /// </summary>
         private void CreateFile()
         {
-            FileStream fs = File.Create(SettingsPath);
+            FileStream fs = File.Create(_settingsPath);
             fs.Close();
         }
 
@@ -66,7 +66,7 @@ namespace BackupEngine.Settings
         private void SaveSettings()
         {
             string json = Settings.ToJson();
-            File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(JsonConvert.DeserializeObject(json), Formatting.Indented));
+            File.WriteAllText(_settingsPath, JsonConvert.SerializeObject(JsonConvert.DeserializeObject(json), Formatting.Indented));
         }
 
         /// <summary>
