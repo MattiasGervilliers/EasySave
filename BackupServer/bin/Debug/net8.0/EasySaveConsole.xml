@@ -1,0 +1,225 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EasySaveConsole</name>
+    </assembly>
+    <members>
+        <member name="M:EasySaveConsole.Controller.ArgumentsController.Execute">
+            <summary>
+            Executes the backup process by launching configurations with specified arguments.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.ArgumentsController.LaunchWithArguments">
+            <summary>
+            Parses backup arguments and launches the corresponding configurations.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.ArgumentsController.UpdateArguments(System.String[])">
+            <summary>
+            Updates the arguments used for launching backups.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.ArgumentsController.ParseBackupArguments(System.String)">
+            <summary>
+            Parses a string input to extract backup configuration IDs, supporting both single values and ranges.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.LanguageController.UpdateLanguage(BackupEngine.Settings.Language)">
+            <summary>
+            Update the controller language
+            </summary>
+            <param name="newlanguage"></param>
+        </member>
+        <member name="M:EasySaveConsole.Controller.LanguageController.Execute">
+            <summary>
+            Update the model language
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.LanguageController.GetLanguage">
+            <summary>
+            Return the saved language
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EasySaveConsole.Controller.SaveController.#ctor(EasySaveConsole.Controller.SaveAction,System.String,BackupEngine.BackupConfiguration)">
+            <summary>
+            Initializes a new instance of the SaveController with an action and optional configuration parameters.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.SaveController.Execute">
+            <summary>
+            Executes the specified save action (Add, Delete, Launch).
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.SaveController.GetResult">
+            <summary>
+            Returns the result of the executed action.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.SaveController.AddBackupConfiguration">
+            <summary>
+            Adds a new backup configuration if provided.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.SaveController.DeleteBackupConfiguration">
+            <summary>
+            Deletes a backup configuration if it exists.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.SaveController.LaunchBackup">
+            <summary>
+            Launches a backup if the configuration exists.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.SaveController.UpdateConfigName(System.String)">
+            <summary>
+            Updates the configuration name.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.SaveController.UpdateConfiguration(BackupEngine.BackupConfiguration)">
+            <summary>
+            Updates the backup configuration.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.SaveController.UpdateAction(EasySaveConsole.Controller.SaveAction)">
+            <summary>
+            Updates the save action.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.SaveController.GetConfigurations">
+            <summary>
+            Retrieves the list of all backup configurations.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Controller.SaveController.BackupExist">
+            <summary>
+            Checks if the backup configuration exists and returns it if found.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.DisplayNameError">
+            <summary>
+            Displays an error message when an invalid name is entered.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.IsNameValid(System.String)">
+            <summary>
+            Checks if the given name is valid (not empty and matches the allowed character pattern).
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.DisplayPathNotFound">
+            <summary>
+            Displays an error message when an invalid path is entered.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.DisplayBackupConfiguration(BackupEngine.BackupConfiguration)">
+            <summary>
+            Displays the details of a backup configuration.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.DisplayDeleteSuccess">
+            <summary>
+            Displays a success message when a configuration is deleted.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.DisplayCreateSuccess">
+            <summary>
+            Displays a success message when a configuration is created.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.DisplayLaunchSuccess">
+            <summary>
+            Displays a success message when a backup is launched.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.ChooseLanguage">
+            <summary>
+            Handles user input to choose the application language.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.UpdateLanguage">
+            <summary>
+            Prompts the user to select a language.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.DisplayMenu">
+            <summary>
+            Displays the main menu of the application.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.DisplayExitMessage">
+            <summary>
+            Displays an exit message.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.DisplayError">
+            <summary>
+            Displays a generic error message for incorrect input.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.AskBackupConfigurationCreateName">
+            <summary>
+            Asks the user to enter the name of the backup configuration to create.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.AskBackupConfigurationName">
+            <summary>
+            Asks the user to enter the name or number of the backup configuration to launch.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.BackupLaunched">
+            <summary>
+            Displays a message indicating that the backup has started.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.ConfigNotFound">
+            <summary>
+            Displays an error message when a backup configuration is not found.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.ConfigBadName">
+            <summary>
+            Displays the menu for creating a backup configuration.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.AskSourceFolder">
+            <summary>
+            Asks the user to enter the source folder for backup.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.AskDestinationFolder">
+            <summary>
+            Asks the user to enter the destination folder for backup.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.AskEncryptionKey(System.String)">
+            <summary>
+            Asks the user whether they want to encrypt the backup.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.AskBackupType">
+            <summary>
+            Asks the user to choose a backup type (full or incremental).
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.CreationCompleted">
+            <summary>
+            Displays a message indicating that the backup configuration creation is complete.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.DisplayBackupConfigurations(System.Collections.Generic.List{BackupEngine.BackupConfiguration})">
+            <summary>
+            Displays the list of available backup configurations.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.AskDeleteConfigurationName">
+            <summary>
+            Asks the user to enter the name of the configuration to delete.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.DisplayConfigNotFound">
+            <summary>
+            Displays an error message when the configuration to delete does not exist.
+            </summary>
+        </member>
+    </members>
+</doc>

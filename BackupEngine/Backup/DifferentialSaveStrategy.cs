@@ -43,21 +43,31 @@ namespace BackupEngine.Backup
                 UpdateCache(uniqueDestinationPath);
             }
         }
-
+        /// <summary>
+        /// Perform a full backup Save
+        /// </summary>
+        /// <param name="uniqueDestinationPath"></param>
+        /// <param name="waitHandle"></param>
         private void PerformFullSave(string uniqueDestinationPath, EventWaitHandle waitHandle)
         {
-            FullSaveStrategy fullSaveStrategy = new FullSaveStrategy(Configuration);
+            FullSaveStrategy fullSaveStrategy = new FullSaveStrategy(Configuration,CancellationToken.None);
             fullSaveStrategy.Transfer += (sender, e) => OnTransfer(e);
             fullSaveStrategy.StateUpdated += (sender, e) => OnStateUpdated(e);
             fullSaveStrategy.Progress += (sender, e) => OnProgress(e);
             fullSaveStrategy.Save(uniqueDestinationPath, waitHandle);
         }
-
+        /// <summary>
+        /// Perform a differential save
+        /// </summary>
+        /// <param name="uniqueDestinationPath"></param>
+        /// <param name="previousSavePath"></param>
+        /// <param name="waitHandle"></param>
+        /// <exception cref="DirectoryNotFoundException"></exception>
         private void DifferentialSave(string uniqueDestinationPath, string previousSavePath, EventWaitHandle waitHandle)
         {
             if (Configuration.ExtensionsToSave != null)
             {
-                TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, _settingsRepository.GetExtensionPriority());
+                TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, _settingsRepository.GetExtensionPriority(),CancellationToken.None);
             }
             else
             {
@@ -200,19 +210,28 @@ namespace BackupEngine.Backup
             Console.WriteLine($"[DIFF] Pas de modification pour : {sourceFile}");
             return false; 
         }
-
+        /// <summary>
+        /// Check if the prévious save exists
+        /// </summary>
+        /// <returns></returns>
         private bool PreviousSaveExists()
         {
             CachedConfiguration? cached = _cacheRepository.GetCachedConfiguration(Configuration);
             return cached != null;
         }
-
+        /// <summary>
+        /// return the previous save Path
+        /// </summary>
+        /// <returns></returns>
         private string PreviousSavePath()
         {
             CachedConfiguration? cached = _cacheRepository.GetCachedConfiguration(Configuration);
             return cached!.Backups.OrderByDescending(b => b.Date).First().DirectoryName;
         }
-
+        /// <summary>
+        /// update the cache
+        /// </summary>
+        /// <param name="uniqueDestinationPath"></param>
         private void UpdateCache(string uniqueDestinationPath)
         {
             _cacheRepository.AddBackup(Configuration, DateTime.Now, uniqueDestinationPath);

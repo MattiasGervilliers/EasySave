@@ -2,43 +2,51 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 namespace BackupEngine.Backup
 {
     /// <summary>
-    /// Strategy for encrypting files before transfer.
+    /// Stratégie de chiffrement utilisée pour transférer les fichiers en appliquant un chiffrement.
     /// </summary>
     internal class CryptStrategy : ITransferStrategy
     {
-        /// <summary>
-        /// Set of file extensions that need to be encrypted.
-        /// </summary>
         private HashSet<string> _extensionsToCrypt;
+        private CancellationToken _cancellationToken;
+
         /// <summary>
-        /// Initializes a new instance of the CryptStrategy class with specified extensions to encrypt.
+        /// Constructeur prenant en paramètres les extensions à chiffrer et le CancellationToken.
         /// </summary>
-        public CryptStrategy(HashSet<string> extensions, HashSet<string> extensionPriority)
+        public CryptStrategy(HashSet<string> extensions, HashSet<string> extensionPriority, CancellationToken cancellationToken)
         {
             _extensionsToCrypt = extensions ?? new HashSet<string>();
+            _cancellationToken = cancellationToken;
         }
+
         /// <summary>
-        /// Transfers a file from source to destination, applying encryption if required.
+        /// Transfère un fichier du source vers la destination en appliquant le chiffrement si nécessaire.
         /// </summary>
         public void TransferFile(string source, string destination)
         {
             string extension = Path.GetExtension(source).ToLower();
             if (_extensionsToCrypt.Contains(extension))
             {
+                // Vérification du token avant de lancer CryptoSoft
+                if (_cancellationToken.IsCancellationRequested)
+                {
+                    Console.WriteLine("Opération de chiffrement annulée avant lancement.");
+                    return;
+                }
                 LaunchCryptoSoft(source, destination);
             }
             else
             {
                 File.Copy(source, destination, true);
-            }  
+            }
         }
 
         /// <summary>
-        /// Launches the CryptoSoft executable to encrypt a file.
+        /// Lance l'exécutable CryptoSoft pour chiffrer un fichier.
         /// </summary>
         private void LaunchCryptoSoft(string source, string destination)
         {
@@ -58,9 +66,27 @@ namespace BackupEngine.Backup
                 using (Process process = new Process { StartInfo = psi })
                 {
                     process.Start();
+
+                    // Attente active avec vérification du token toutes les 100 ms
+                    while (!process.WaitForExit(100))
+                    {
+                        if (_cancellationToken.IsCancellationRequested)
+                        {
+                            try
+                            {
+                                process.Kill();
+                                Console.WriteLine("CryptoSoft annulé.");
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Erreur lors de l'annulation de CryptoSoft : {ex.Message}");
+                            }
+                            return;
+                        }
+                    }
+
                     string output = process.StandardOutput.ReadToEnd();
                     string error = process.StandardError.ReadToEnd();
-                    process.WaitForExit();
 
                     if (!string.IsNullOrEmpty(error))
                     {

@@ -3,11 +3,15 @@
     "Name": "Nouveau profil",
     "Projects": [
       {
-        "Path": "EasySaveConsole\\EasySaveConsole.csproj",
+        "Path": "RemoteConsole\\RemoteConsole.csproj",
         "Action": "Start"
       },
       {
-        "Path": "RemoteConsole\\RemoteConsole.csproj",
+        "Path": "BackupServer\\BackupServer.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "EasySaveConsole\\EasySaveConsole.csproj",
         "Action": "Start"
       }
     ]

@@ -8,13 +8,23 @@ namespace BackupEngine.Backup
 {
     public class ScanExtension
     {
+        /// <summary>
+        /// Source path where we want to scan extensions
+        /// </summary>
         private readonly string _sourcePath;
-
+        /// <summary>
+        /// ScanExtension Constructor
+        /// </summary>
+        /// <param name="sourcePath"></param>
         public ScanExtension(string sourcePath)
         {
             _sourcePath = sourcePath;
         }
-
+        /// <summary>
+        /// Scan for extensions in the source folder
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="DirectoryNotFoundException"></exception>
         public HashSet<string> GetUniqueExtensions()
         {
             if (!Directory.Exists(_sourcePath))

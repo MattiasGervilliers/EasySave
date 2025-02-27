@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BackupEngine\BackupEngine.csproj" />
+    <ProjectReference Include="..\EasySaveConsole\EasySaveConsole.csproj" />
   </ItemGroup>
 
 </Project>

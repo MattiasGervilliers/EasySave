@@ -1,9 +1,6 @@
 ﻿using BackupEngine.Progress;
 using BackupEngine.State;
 using BackupEngine.Log;
-using System.Diagnostics;
-//using BackupEngine.Remote;
-using BackupEngine.Job;
 
 namespace BackupEngine.Backup
 {
@@ -12,20 +9,30 @@ namespace BackupEngine.Backup
     /// </summary>
     public class FullSaveStrategy : SaveStrategy
     {
-        
+        private readonly CancellationToken _cancellationToken;
+
         /// <summary>
         /// Initializes a new instance of the FullSaveStrategy class.
         /// </summary>
-        public FullSaveStrategy(BackupConfiguration configuration) : base(configuration) { }
+        public FullSaveStrategy(BackupConfiguration configuration, CancellationToken cancellationToken)
+            : base(configuration)
+        {
+            _cancellationToken = cancellationToken;
+        }        
         /// <summary>
         /// Executes the full backup process.
         /// </summary>
         public override void Save(string uniqueDestinationPath, EventWaitHandle waitHandle)
         {
+            // Check before start
+            if (_cancellationToken.IsCancellationRequested)
+            {
+                Console.WriteLine("Sauvegarde annulée avant démarrage.");
+                return;
+            }
             if (Configuration.ExtensionsToSave != null)
             {
-                //StartServer();
-                TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, _settingsRepository.GetExtensionPriority());
+                TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, _settingsRepository.GetExtensionPriority(),_cancellationToken);
             }
             else
             {
@@ -55,6 +62,12 @@ namespace BackupEngine.Backup
             
             foreach (string file in files)
             {
+                // Contrôle régulier du token pour interrompre si demandé
+                if (_cancellationToken.IsCancellationRequested)
+                {
+                    Console.WriteLine("Sauvegarde annulée pendant le traitement.");
+                    return;
+                }
                 waitHandle.WaitOne();
                 string relativePath = file.Substring(sourcePath.Length + 1);
                 string destFile = Path.Combine(uniqueDestinationPath, relativePath);
@@ -68,24 +81,29 @@ namespace BackupEngine.Backup
                     tasks.Add(Task.Run(() =>
                     {
                         WaitForBusinessSoftwareToClose();
-                        Console.WriteLine("1111111111111"+file+destFile);
+                        if (_cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
                         TransferFile(file, destFile, ref totalSize, ref remainingFiles, ref remainingSize, ref waitHandle);
                     }));
-                    Console.WriteLine("ZZZZZZZZZZZZZZZZZZ" + file);
 
                 }
             }
             
             _cryptoTask = Task.Run(() =>
             {
-                    Console.WriteLine("EEEEEEEEEEEEEEEEEE");
                 WaitForBusinessSoftwareToClose(); 
                 ProcessCryptoQueue();
             });
 
             Task.WhenAll(tasks).Wait();
             _cryptoTask.Wait();
-
+            if (_cancellationToken.IsCancellationRequested)
+            {
+                Console.WriteLine("Sauvegarde annulée avant achèvement.");
+                return;
+            }
             OnStateUpdated(new StateEvent("Full Backup", "Completed", totalFiles, totalSize, 0, 0, "", ""));
             OnProgress(new ProgressEvent(totalSize,0));
             Console.WriteLine($"Full backup completed in: {uniqueDestinationPath}");
@@ -96,6 +114,11 @@ namespace BackupEngine.Backup
         /// </summary>
         private void TransferFile(string file, string destFile, ref long totalSize, ref int remainingFiles, ref long remainingSize, ref EventWaitHandle waitHandle)
         {
+            if (_cancellationToken.IsCancellationRequested)
+            {
+                Console.WriteLine("Sauvegarde annulée avant achèvement.");
+                return;
+            }
             FileInfo fileInfo = new FileInfo(file);
             bool isLargeFile = fileInfo.Length > _koLimit * 1024;
 
@@ -106,14 +129,13 @@ namespace BackupEngine.Backup
                 if (isLargeFile)
                 {
                     Console.WriteLine($"Waiting to transfer large file: {file}");
-                    _largeFileSemaphore.Wait(); // Assure un seul fichier volumineux à la fois
+                    _largeFileSemaphore.Wait(); // one large file by the time
                 }
 
                 // Check for pausing
                 waitHandle.WaitOne();
 
                 DateTime start = DateTime.Now;
-                Console.WriteLine("000000000000000000000000000transfer de "+file + "->" + destFile);
                 TransferStrategy.TransferFile(file, destFile);
                 DateTime end = DateTime.Now;
                 TimeSpan duration = end - start;
@@ -136,49 +158,9 @@ namespace BackupEngine.Backup
             {
                 if (isLargeFile)
                 {
-                    _largeFileSemaphore.Release(); // Libère le sémaphore après transfert
+                    _largeFileSemaphore.Release(); // Free Semaphore after transfer
                 }
             }
         }
-                /*
-        public static void StartServer()
-        {
-            _server.Start();
-        }
-        private JobManager JobManager = new JobManager();
-        private static void HandleRemoteCommand(string command)
-        {
-            if (command == "pause")
-            {
-                JobManager.PauseJob();
-                _isPaused = true;
-                Console.WriteLine("[Remote] Pause de la sauvegarde demandée.");
-                lock (_pauseLock)
-                {
-                    _isPaused = true;
-                }
-            }
-            else if (command == "resume")
-            {
-                _isPaused = false;
-
-                Console.WriteLine("[Remote] Reprise de la sauvegarde demandée.");
-                lock (_pauseLock)
-                {
-                    _isPaused = false;
-                    Monitor.PulseAll(_pauseLock); // Réveille les threads en pause
-                }
-            }
-            else if (command == "stop")
-            {
-                Console.WriteLine("[Remote] Arrêt de la sauvegarde demandée.");
-                lock (_pauseLock)
-                {
-                    _isStopped = true;
-                    Monitor.PulseAll(_pauseLock);
-                }
-            }
-        }
-                 * */
     }
 }

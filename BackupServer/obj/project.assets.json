@@ -40,6 +40,20 @@
           "bin/placeholder/CryptoSoft.dll": {}
         }
       },
+      "EasySaveConsole/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "BackupEngine": "1.0.0",
+          "LogLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/EasySaveConsole.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EasySaveConsole.dll": {}
+        }
+      },
       "LogLib/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -93,6 +107,11 @@
       "path": "../CryptoSoft/CryptoSoft.csproj",
       "msbuildProject": "../CryptoSoft/CryptoSoft.csproj"
     },
+    "EasySaveConsole/1.0.0": {
+      "type": "project",
+      "path": "../EasySaveConsole/EasySaveConsole.csproj",
+      "msbuildProject": "../EasySaveConsole/EasySaveConsole.csproj"
+    },
     "LogLib/1.0.0": {
       "type": "project",
       "path": "../LogLib/LogLib.csproj",
@@ -101,7 +120,8 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "BackupEngine >= 1.0.0"
+      "BackupEngine >= 1.0.0",
+      "EasySaveConsole >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -138,6 +158,9 @@
           "projectReferences": {
             "C:\\Users\\Nino\\source\\repos\\EasySave\\BackupEngine\\BackupEngine.csproj": {
               "projectPath": "C:\\Users\\Nino\\source\\repos\\EasySave\\BackupEngine\\BackupEngine.csproj"
+            },
+            "C:\\Users\\Nino\\source\\repos\\EasySave\\EasySaveConsole\\EasySaveConsole.csproj": {
+              "projectPath": "C:\\Users\\Nino\\source\\repos\\EasySave\\EasySaveConsole\\EasySaveConsole.csproj"
             }
           }
         }

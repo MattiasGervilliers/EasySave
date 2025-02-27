@@ -25,3 +25,8 @@ C:\Users\Nino\source\repos\EasySave\BackupServer\obj\Debug\net8.0\refint\BackupS
 C:\Users\Nino\source\repos\EasySave\BackupServer\obj\Debug\net8.0\BackupServer.pdb
 C:\Users\Nino\source\repos\EasySave\BackupServer\obj\Debug\net8.0\BackupServer.genruntimeconfig.cache
 C:\Users\Nino\source\repos\EasySave\BackupServer\obj\Debug\net8.0\ref\BackupServer.dll
+C:\Users\Nino\source\repos\EasySave\BackupServer\bin\Debug\net8.0\EasySaveConsole.deps.json
+C:\Users\Nino\source\repos\EasySave\BackupServer\bin\Debug\net8.0\EasySaveConsole.runtimeconfig.json
+C:\Users\Nino\source\repos\EasySave\BackupServer\bin\Debug\net8.0\EasySaveConsole.exe
+C:\Users\Nino\source\repos\EasySave\BackupServer\bin\Debug\net8.0\EasySaveConsole.dll
+C:\Users\Nino\source\repos\EasySave\BackupServer\bin\Debug\net8.0\EasySaveConsole.xml
