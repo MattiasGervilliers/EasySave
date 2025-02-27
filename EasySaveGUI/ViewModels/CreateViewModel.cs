@@ -7,6 +7,8 @@ using System.Diagnostics;
 using BackupEngine.Shared;
 using MaterialDesignThemes.Wpf;
 using System.Windows;
+using System.Collections.ObjectModel;
+using BackupEngine.Backup;
 
 namespace EasySaveGUI.ViewModels
 {
@@ -19,6 +21,7 @@ namespace EasySaveGUI.ViewModels
         private string? _sourcePath;
         private string? _destinationPath;
         private BackupType _backupType;
+        private bool _encrypted;
 
         public string Name
         {
@@ -37,6 +40,10 @@ namespace EasySaveGUI.ViewModels
             {
                 _sourcePath = value;
                 OnPropertyChanged(nameof(SourcePath));
+                if (SourcePath != "")
+                {
+                    AvailableExtensions(_sourcePath);
+                }
             }
         }
 
@@ -59,6 +66,24 @@ namespace EasySaveGUI.ViewModels
                 OnPropertyChanged(nameof(BackupType));
             }
         }
+
+        public bool Encrypted
+        {
+            get => _encrypted;
+            set
+            {
+                _encrypted = value;
+                OnPropertyChanged(nameof(Encrypted));
+            }
+        }
+
+        public class ListItem
+        {
+            public bool IsSelected { get; set; }
+            public string Name { get; set; }
+        }
+        public ObservableCollection<ListItem> ListItems { get; set; }
+
 
         // Liste des types de backup disponibles
         public List<string> AvailableBackupTypes { get; } = new List<string>
@@ -88,8 +113,6 @@ namespace EasySaveGUI.ViewModels
 
             BrowseSourcePathCommand = new RelayCommand(_ => BrowseSourcePath());
             BrowseDestPathCommand = new RelayCommand(_ => BrowseDestPath());
-
-            BackupType = BackupType.Differential;
 
             CreateCommand = new RelayCommand(_ => CreateConfiguration());
             _backupConfiguration = backupConfiguration ?? new BackupConfiguration();
@@ -129,6 +152,19 @@ namespace EasySaveGUI.ViewModels
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 DestinationPath = dialog.FileName;
+            }
+        }
+
+        public void AvailableExtensions(string sourcePathAvailable)
+        {
+            ListItems = new ObservableCollection<ListItem>();
+
+            ScanExtension scanner = new ScanExtension(sourcePathAvailable);
+            HashSet<string> availableExtensions = scanner.GetUniqueExtensions();
+
+            foreach (var extension in availableExtensions)
+            {
+                ListItems.Add(new ListItem { Name = extension, IsSelected = false });
             }
         }
 
