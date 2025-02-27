@@ -13,6 +13,11 @@ using System.Collections;
 
 namespace EasySaveGUI.ViewModels
 {
+    /// <summary>
+    /// ViewModel responsible for managing the settings in the application.
+    /// It allows loading and saving the application's settings such as language, 
+    /// log file path, state path, and log type.
+    /// </summary>
     public class SettingsViewModel : ViewModelBase
     {
         private readonly SettingsModel _settingsModel;
@@ -23,6 +28,11 @@ namespace EasySaveGUI.ViewModels
         private string _theme;
 
         public SnackbarMessageQueue MessageQueue { get; } = new SnackbarMessageQueue();
+        
+        /// <summary>
+        /// Welcome message displayed on the settings page.
+        /// </summary>
+        public string WelcomeMessage { get; } = "Settings";
 
         private bool _isSnackbarActive;
         public bool IsSnackbarActive
@@ -56,6 +66,10 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Property for the log file path.
+        /// Allows modifying and notifying the value change.
+        /// </summary>
         public string LogPath
         {
             get => _logPath;
@@ -66,6 +80,10 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Property for the state file path of the configuration.
+        /// Allows modifying and notifying the value change.
+        /// </summary>
         public string StatePath
         {
             get => _statePath;
@@ -76,6 +94,10 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Property for the log type (e.g., JSON, TXT, etc.).
+        /// Allows modifying and notifying the value change.
+        /// </summary>
         public string LogType
         {
             get => _logType;
@@ -94,7 +116,7 @@ namespace EasySaveGUI.ViewModels
 
         public List<string> AvailableLogTypes { get; } = new List<string> { "Json", "Xml" };
 
-        public List<string> AvailableTheme { get; } = new List<string> { "Dark", "Light" }; 
+        public List<string> AvailableThemes { get; } = new List<string> { "Dark", "Light" }; 
 
         public ICommand SaveCommand { get; }
         public ICommand BrowseLogPathCommand { get; }
@@ -138,6 +160,9 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Loads the current settings from the repository and assigns them to the properties.
+        /// </summary>
         private void LoadSettings()
         {
             Language = _settingsModel.GetLanguage().ToString();
@@ -171,13 +196,13 @@ namespace EasySaveGUI.ViewModels
             string toChangeLanguage = _language;
             if (toChangeLanguage == "French")
             {
-                ResourceDictionary Langue = new ResourceDictionary() { Source = new Uri("../assets/fr.xaml", UriKind.Relative) };
-                App.Current.Resources.MergedDictionaries.Add(Langue);
+                ResourceDictionary languageRessource = new ResourceDictionary() { Source = new Uri("../assets/fr.xaml", UriKind.Relative) };
+                App.Current.Resources.MergedDictionaries.Add(languageRessource);
             }
             else if (toChangeLanguage == "English")
             {
-                ResourceDictionary Langue = new ResourceDictionary() { Source = new Uri("../assets/en.xaml", UriKind.Relative) };
-                App.Current.Resources.MergedDictionaries.Add(Langue);
+                ResourceDictionary languageRessource = new ResourceDictionary() { Source = new Uri("../assets/en.xaml", UriKind.Relative) };
+                App.Current.Resources.MergedDictionaries.Add(languageRessource);
             }
             else
             {
@@ -185,6 +210,10 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Saves the modified settings in the repository.
+        /// Updates the language, log path, state path, and log type.
+        /// </summary>
         private void SaveSettings()
         {
             _settingsModel.UpdateLanguage(Language);

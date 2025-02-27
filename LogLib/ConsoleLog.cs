@@ -3,27 +3,27 @@ using System.Text.Json.Serialization;
 
 namespace LogLib
 {
-    // ConsoleLog hérite de Log et ajoute des informations spécifiques aux opérations de sauvegarde
+    // ConsoleLog inherits from Log and adds specific information related to backup operations
     public class ConsoleLog : Log
     {
-        // Nom de la sauvegarde associée au log
+        // Name of the backup associated with the log
         public string BackupName { get; set; }
 
-        // Chemin source du fichier sauvegardé
+        // Source path of the backed-up file
         public string SourcePath { get; set; }
 
-        // Chemin destination où le fichier est sauvegardé
+        // Destination path where the file is backed up
         public string DestinationPath { get; set; }
 
-        // Taille du fichier en octets
+        // File size in bytes
         public long FileSize { get; set; }
 
-        // Temps de transfert en millisecondes
+        // Transfer time in milliseconds
         public long TransferTimeMs { get; set; }
 
-        // Constructeur qui initialise les propriétés avec des valeurs fournies
+        // Constructor that initializes the properties with provided values
         public ConsoleLog(LogLevel level, string message, string backupName, string sourcePath, string destinationPath, long fileSize, long transferTimeMs)
-            : base(level, message) // Appelle le constructeur de la classe parente Log
+            : base(level, message) // Calls the constructor of the parent class Log
         {
             BackupName = backupName;
             SourcePath = sourcePath;

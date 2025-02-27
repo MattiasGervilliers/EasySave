@@ -10,19 +10,19 @@ namespace BackupEngine.State
 {
     public class StateEvent
     {
-        public string JobName { get; set; }  // Appellation du travail de sauvegarde
-        public DateTime LastActionTimestamp { get; set; }  // Horodatage de la dernière action
-        public string JobState { get; set; }  // État du travail de sauvegarde (ex : Actif, Non Actif...)
+        public string JobName { get; set; }  // Name of the backup job
+        public DateTime LastActionTimestamp { get; set; }  // Timestamp of the last action
+        public string JobState { get; set; }  // State of the backup job (e.g., Active, Inactive...)
 
-        // Informations sur la sauvegarde
-        public int TotalEligibleFiles { get; set; }  // Nombre total de fichiers éligibles
-        public long TotalSizeToTransfer { get; set; }  // Taille totale des fichiers à transférer
+        // Backup information
+        public int TotalEligibleFiles { get; set; }  // Total number of eligible files
+        public long TotalSizeToTransfer { get; set; }  // Total size of files to transfer
 
-        // Progression
-        public int RemainingFiles { get; set; }  // Nombre de fichiers restants
-        public long RemainingSize { get; set; }  // Taille des fichiers restants
-        public string CurrentSourceFile { get; set; }  // Adresse complète du fichier source en cours de sauvegarde
-        public string CurrentDestinationFile { get; set; }  // Adresse complète du fichier de destination
+        // Progress
+        public int RemainingFiles { get; set; }  // Number of remaining files
+        public long RemainingSize { get; set; }  // Size of remaining files
+        public string CurrentSourceFile { get; set; }  // Full address of the current source file being backed up
+        public string CurrentDestinationFile { get; set; }  // Full address of the destination file
 
         public StateEvent(string jobName, string jobState, int totalEligibleFiles, long totalSizeToTransfer, int remainingFiles, long remainingSize, string currentSourceFile, string currentDestinationFile)
         {
@@ -37,5 +37,4 @@ namespace BackupEngine.State
             CurrentDestinationFile = currentDestinationFile;
         }
     }
-
 }

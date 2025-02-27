@@ -1,3 +1,11 @@
+# [2.1.0-beta.8](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.7...v2.1.0-beta.8) (2025-02-27)
+
+
+### Bug Fixes
+
+* merge ([49bf68e](https://github.com/MattiasGervilliers/EasySave/commit/49bf68e652eb95c9a21192bce1d833a64543b203))
+* merge ([1b1402d](https://github.com/MattiasGervilliers/EasySave/commit/1b1402da6e392571c1e8b315e60f6db45501ea29))
+
 # [2.1.0-beta.7](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.6...v2.1.0-beta.7) (2025-02-26)
 
 

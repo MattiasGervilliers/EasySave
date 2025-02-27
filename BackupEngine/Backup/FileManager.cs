@@ -5,6 +5,10 @@ using BackupEngine.State;
 
 namespace BackupEngine.Backup
 {
+    /// <summary>
+    /// The FileManager class is responsible for managing the backup.
+    /// It configures and uses a backup strategy, while logging events and updating the state.
+    /// </summary>
     public class FileManager
     {
         private SaveStrategy _saveStrategy;
@@ -12,6 +16,9 @@ namespace BackupEngine.Backup
         private readonly SettingsRepository _settingsRepository;
         private readonly StateManager _stateManager;
 
+        /// <summary>
+        /// Constructor of the FileManager class. It takes a backup strategy as a parameter and initializes the other components.
+        /// </summary>
         public FileManager(SaveStrategy saveStrategy)
         {
             _saveStrategy = saveStrategy;
@@ -20,11 +27,17 @@ namespace BackupEngine.Backup
             _stateManager = new StateManager();
         }
 
+        /// <summary>
+        /// Method to change the backup strategy used by the FileManager.
+        /// </summary>
         public void SetSaveStrategy(SaveStrategy newStrategy)
         {
             _saveStrategy = newStrategy;
         }
-
+        
+        /// <summary>
+        /// Method that starts the backup by creating a unique destination folder and using the defined backup strategy.
+        /// </summary>
         public void Save(BackupConfiguration configuration, EventWaitHandle waitHandle)
         {
             string destinationBasePath = configuration.DestinationPath.GetAbsolutePath();

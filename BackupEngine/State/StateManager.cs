@@ -16,18 +16,18 @@ namespace BackupEngine.State
 
         public void OnStateUpdated(object sender, StateEvent e)
         {
-            // Create file if doesn't exists
+            // Create file if it doesn't exist
             if (!File.Exists(_statePath))
             {
                 File.Create(_statePath).Close();
             }
-            // Enregistre l'état dans un fichier JSON en le réécrivant
+            // Save the state in a JSON file by overwriting it
             LogState(e);
         }
 
         private void LogState(StateEvent stateEvent)
         {
-            // Sérialiser l'objet StateEvent en JSON
+            // Serialize the StateEvent object into JSON
             string jsonString = JsonSerializer.Serialize(stateEvent, new JsonSerializerOptions { WriteIndented = true });
 
             lock (_fileLock) // Ensure thread safety
