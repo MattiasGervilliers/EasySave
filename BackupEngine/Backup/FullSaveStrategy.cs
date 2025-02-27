@@ -10,6 +10,7 @@ using BackupEngine.Log;
 using BackupEngine.Settings;
 using System.Diagnostics;
 using System.Collections.Concurrent;
+using BackupEngine.Remote;
 
 namespace BackupEngine.Backup
 {
@@ -64,10 +65,12 @@ namespace BackupEngine.Backup
             long remainingSize = totalSize;
 
             OnStateUpdated(new StateEvent("Full Backup", "Active", totalFiles, totalSize, remainingFiles, remainingSize, "", ""));
+            /*
             OnProgress(new ProgressEvent(
                 totalSize,
                 remainingSize
             ));
+             */
             
             List<Task> tasks = new List<Task>();
             WaitForBusinessSoftwareToClose();
@@ -102,7 +105,7 @@ namespace BackupEngine.Backup
             _cryptoTask.Wait();
 
             OnStateUpdated(new StateEvent("Full Backup", "Completed", totalFiles, totalSize, 0, 0, "", ""));
-            OnProgress(new ProgressEvent(totalSize,0));
+            //OnProgress(new ProgressEvent(totalSize,0));
             Console.WriteLine($"Full backup completed in: {uniqueDestinationPath}");
         }
 
@@ -134,7 +137,7 @@ namespace BackupEngine.Backup
                 remainingSize -= fileInfo.Length;
 
                 OnStateUpdated(new StateEvent("Full Backup", "Active", remainingFiles, remainingSize, remainingFiles, remainingSize, file, destFile));
-                OnProgress(new ProgressEvent(totalSize,remainingSize));
+                //OnProgress(new ProgressEvent(totalSize,remainingSize));
                 
                 TransferEvent transferEvent = new TransferEvent(Configuration, duration, fileInfo, new FileInfo(destFile));
                 OnTransfer(transferEvent);
@@ -220,6 +223,44 @@ namespace BackupEngine.Backup
                             mutex.ReleaseMutex();
                         }
                     }
+                }
+            }
+        }
+        private static BackupServer _server = new BackupServer(5000, HandleRemoteCommand);
+        private static bool _isPaused = false;
+        private static bool _isStopped = false;
+        private static readonly object _pauseLock = new object();
+        public static void StartServer()
+        {
+            _server.Start();
+        }
+
+        private static void HandleRemoteCommand(string command)
+        {
+            if (command == "pause")
+            {
+                Console.WriteLine("[Remote] Pause de la sauvegarde demandée.");
+                lock (_pauseLock)
+                {
+                    _isPaused = true;
+                }
+            }
+            else if (command == "resume")
+            {
+                Console.WriteLine("[Remote] Reprise de la sauvegarde demandée.");
+                lock (_pauseLock)
+                {
+                    _isPaused = false;
+                    Monitor.PulseAll(_pauseLock); // Réveille les threads en pause
+                }
+            }
+            else if (command == "stop")
+            {
+                Console.WriteLine("[Remote] Arrêt de la sauvegarde demandée.");
+                lock (_pauseLock)
+                {
+                    _isStopped = true;
+                    Monitor.PulseAll(_pauseLock);
                 }
             }
         }
