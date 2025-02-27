@@ -6,11 +6,58 @@
       xmlns:local="clr-namespace:EasySaveGUI.Views"
       xmlns:viewModels="clr-namespace:EasySaveGUI.ViewModels"
       d:DataContext="{d:DesignInstance Type=viewModels:CreateViewModel}"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <Style x:Key="CustomSnackbarContainerStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Padding" Value="5,5,5,5"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" 
+                  Direction="320" 
+                  ShadowDepth="5" 
+                  Opacity="0.5" 
+                  BlurRadius="10"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TranslateTransform Y="100"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSnackbarActive}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Y"
+                             From="100" To="0" 
+                             Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Y"
+                             From="0" To="100" 
+                             Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" Text="Create a new Backup Configuration" Foreground="{DynamicResource Text}"/>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" Text="{DynamicResource TitleCreate}" Foreground="{DynamicResource Text}"/>
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,100,0,0" Text="{DynamicResource NameTitleCaseCreate}" Foreground="{DynamicResource Text}"/>
         <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,100,0,0" Text="{Binding Name, Mode=TwoWay}" Width="200" Height="23"/>
 
@@ -51,5 +98,18 @@
                 BorderBrush="{DynamicResource Card}"
                 Foreground="{DynamicResource Text}"
                 Command="{Binding CreateCommand}" />
+
+        <Border Style="{StaticResource CustomSnackbarContainerStyle}"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                Margin="0,0,20,20">
+            <materialDesign:Snackbar x:Name="SaveSnackbar"
+             MessageQueue="{Binding MessageQueue}"
+             Background="Transparent"
+             Foreground="White"
+             FontSize="14"
+             HorizontalContentAlignment="Center"
+             VerticalContentAlignment="Center" />
+        </Border>
     </Grid>
 </UserControl>

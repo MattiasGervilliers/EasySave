@@ -21,8 +21,18 @@ namespace EasySaveGUI.ViewModels
         public ICommand DeleteConfigurationCommand { get; }
         public RelayCommand NavigateCreateCommand { get; }
         public RelayCommand ToggleSelectionCommand { get; }
+        public ICommand EditConfigurationCommand { get; }
 
-        private List<BackupConfiguration> _pausedConfigurations = [];
+        private ObservableCollection<BackupConfiguration> _pausedConfigurations = [];
+        private ObservableCollection<BackupConfiguration> PausedConfigurations
+        {
+            get => _pausedConfigurations;
+            set
+            {
+                _pausedConfigurations = value;
+                OnPropertyChanged(nameof(PausedConfigurations));
+            }
+        }
 
         private ObservableCollection<KeyValuePair<BackupConfiguration, double>> _progress;
         public ObservableCollection<KeyValuePair<BackupConfiguration, double>> Progress
@@ -47,7 +57,8 @@ namespace EasySaveGUI.ViewModels
             LaunchConfigurationsCommand = new RelayCommand(_ => LaunchConfigurations());
             LaunchConfigurationCommand = new RelayCommand(backupConfiguration => LaunchConfiguration(backupConfiguration));
             NavigateCreateCommand = new RelayCommand(_ => navigationService.Navigate(new CreateViewModel()));
-            
+            EditConfigurationCommand = new RelayCommand(backupConfiguration => navigationService.Navigate(new CreateViewModel((BackupConfiguration)backupConfiguration)));
+
             _backupModel.ProgressUpdated += OnProgressUpdated;
             _progress = new ObservableCollection<KeyValuePair<BackupConfiguration, double>>();
             
@@ -58,6 +69,8 @@ namespace EasySaveGUI.ViewModels
         {
             _pausedConfigurations.Add(configuration);
             _backupModel.PauseBackup(configuration);
+
+            OnPropertyChanged(nameof(PausedConfigurations));
         }
 
         private void OnProgressUpdated(BackupConfiguration configuration, double progress)
@@ -122,6 +135,7 @@ namespace EasySaveGUI.ViewModels
                     }
 
                     _backupModel.ResumeBackup(configuration);
+                    _pausedConfigurations.Remove(configuration);
                     return;
                 }
 

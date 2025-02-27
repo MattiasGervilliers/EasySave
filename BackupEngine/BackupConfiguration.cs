@@ -30,6 +30,13 @@ namespace BackupEngine
         public BackupType BackupType { get; set; }
         public HashSet<string>? ExtensionsToSave { get; set; }
 
+        public BackupConfiguration()
+        {
+            Name = "";
+            BackupType = BackupType.Full;
+            ExtensionsToSave = new HashSet<string>();
+        }
+
         /// <summary>
         /// Deserializes a JSON object into an instance of the BackupConfiguration class.
         /// This method fills the properties of the BackupConfiguration object with data from the JSON.

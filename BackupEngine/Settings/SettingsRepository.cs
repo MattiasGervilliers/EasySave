@@ -76,10 +76,6 @@ namespace BackupEngine.Settings
         /// <param name="configuration">The configuration to add.</param>
         public void AddConfiguration(BackupConfiguration configuration)
         {
-            if (Settings.Configurations.Count >= 5)
-            {
-                throw new System.Exception("You can't have more than 5 configurations.");
-            }
             Settings.Configurations.Add(configuration);
             SaveSettings();
         }
@@ -96,18 +92,21 @@ namespace BackupEngine.Settings
 
         /// <summary>
         /// Updates an existing backup configuration.
-        /// If the configuration is not found, an exception is thrown.
+        /// If the configuration is not found, Create the configuration
         /// </summary>
         /// <param name="configuration">The new backup configuration.</param>
-        public void UpdateConfiguration(BackupConfiguration configuration)
+        public void UpdateOrCreateConfiguration(BackupConfiguration configuration, BackupConfiguration newBackup)
         {
             int index = Settings.Configurations.FindIndex(c => c.Name == configuration.Name);
             if (index == -1)
             {
-                throw new System.Exception("Configuration not found.");
+                AddConfiguration(newBackup);
             }
-            Settings.Configurations[index] = configuration;
-            SaveSettings();
+            else
+            {
+                Settings.Configurations[index] = newBackup;
+                SaveSettings();
+            }
         }
 
         /// <summary>
