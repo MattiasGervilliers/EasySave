@@ -1,3 +1,18 @@
+# [2.1.0-beta.9](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.8...v2.1.0-beta.9) (2025-02-27)
+
+
+### Bug Fixes
+
+* french value of the popup for create and Title create ([97c0fe0](https://github.com/MattiasGervilliers/EasySave/commit/97c0fe00801fa80766bd33b02e8b4f6722b09bdf))
+* merge ([38b12a3](https://github.com/MattiasGervilliers/EasySave/commit/38b12a31003afcfe04a02cfc58a143c8a12d94de))
+* naming convention ([50d99cb](https://github.com/MattiasGervilliers/EasySave/commit/50d99cbb25f67d10078d3f025add4cf1401ecbf5))
+* title of the create / modif view ([47b1ae6](https://github.com/MattiasGervilliers/EasySave/commit/47b1ae6bead184acdca4cc1fc1fd8638624f9b33))
+
+
+### Features
+
+* modify configuration ([5efa410](https://github.com/MattiasGervilliers/EasySave/commit/5efa410f239627d864f5ab69fbd694f8b020320b))
+
 # [2.1.0-beta.8](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.7...v2.1.0-beta.8) (2025-02-27)
 
 
