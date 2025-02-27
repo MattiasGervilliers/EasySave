@@ -1,9 +1,8 @@
 ﻿using BackupEngine.State;
 using BackupEngine.Log;
-using BackupEngine.Settings;
-using System.Diagnostics;
-using System.Collections.Concurrent;
+using BackupEngine.Progress;
 using BackupEngine.Cache;
+using System.IO;
 
 namespace BackupEngine.Backup
 {
@@ -12,11 +11,7 @@ namespace BackupEngine.Backup
     /// </summary>
     public class DifferentialSaveStrategy : SaveStrategy
     {
-        private SettingsRepository _settingsRepository = new SettingsRepository();
         private DifferentialBackupCacheRepository _cacheRepository = new DifferentialBackupCacheRepository();
-        private static readonly string _mutexName = "Global\\CryptoSoft_Mutex";
-        private readonly ConcurrentQueue<(string, string)> _cryptoQueue = new ConcurrentQueue<(string, string)>();
-        private Task _cryptoTask;
 
         /// <summary>
         /// Initializes a new instance of the DifferentialSaveStrategy class.
@@ -26,7 +21,7 @@ namespace BackupEngine.Backup
         /// <summary>
         /// Executes the differential backup process.
         /// </summary>
-        public override void Save(string uniqueDestinationPath)
+        public override void Save(string uniqueDestinationPath, EventWaitHandle waitHandle)
         {
             if (PreviousSaveExists())
             {
@@ -34,30 +29,31 @@ namespace BackupEngine.Backup
 
                 if (!Directory.Exists(previousSavePath))
                 {
-                    PerformFullSave(uniqueDestinationPath);
+                    PerformFullSave(uniqueDestinationPath, waitHandle);
                     UpdateCache(uniqueDestinationPath);
                 }
                 else
                 {
-                    DifferentialSave(uniqueDestinationPath, previousSavePath);
+                    DifferentialSave(uniqueDestinationPath, previousSavePath, waitHandle);
                 }
             }
             else
             {
-                PerformFullSave(uniqueDestinationPath);
+                PerformFullSave(uniqueDestinationPath, waitHandle);
                 UpdateCache(uniqueDestinationPath);
             }
         }
 
-        private void PerformFullSave(string uniqueDestinationPath)
+        private void PerformFullSave(string uniqueDestinationPath, EventWaitHandle waitHandle)
         {
             FullSaveStrategy fullSaveStrategy = new FullSaveStrategy(_configuration);
             fullSaveStrategy.Transfer += (sender, e) => OnTransfer(e);
             fullSaveStrategy.StateUpdated += (sender, e) => OnStateUpdated(e);
-            fullSaveStrategy.Save(uniqueDestinationPath);
+            fullSaveStrategy.Progress += (sender, e) => OnProgress(e);
+            fullSaveStrategy.Save(uniqueDestinationPath, waitHandle);
         }
 
-        private void DifferentialSave(string uniqueDestinationPath, string previousSavePath)
+        private void DifferentialSave(string uniqueDestinationPath, string previousSavePath, EventWaitHandle waitHandle)
         {
             if (_configuration.ExtensionsToSave != null)
             {
@@ -81,18 +77,26 @@ namespace BackupEngine.Backup
             long remainingSize = totalSize;
 
             OnStateUpdated(new StateEvent("Differential Backup", "Active", totalFiles, totalSize, remainingFiles, remainingSize, "", ""));
+            OnProgress(new ProgressEvent(totalSize, remainingSize));
 
             List<Task> tasks = new List<Task>();
 
             WaitForBusinessSoftwareToClose();
 
+            OnProgress(new ProgressEvent(
+                totalSize,
+                remainingSize
+            ));
+
             foreach (string file in files)
             {
+                waitHandle.WaitOne();
                 string relativePath = file.Substring(sourcePath.Length + 1);
                 string destFile = Path.Combine(uniqueDestinationPath, relativePath);
+                string previousFile = Path.Combine(previousSavePath, relativePath);
                 Directory.CreateDirectory(Path.GetDirectoryName(destFile));
 
-                if (!ShouldBackupFile(file, destFile)) 
+                if (!ShouldBackupFile(file, previousFile)) 
                 {
                     continue;
                 }
@@ -106,7 +110,7 @@ namespace BackupEngine.Backup
                     tasks.Add(Task.Run(() =>
                     {
                         WaitForBusinessSoftwareToClose();
-                        TransferFile(file, destFile, ref remainingFiles, ref remainingSize);
+                        TransferFile(file, destFile, ref totalSize, ref remainingFiles, ref remainingSize, ref waitHandle);
                     }));
                 }
             }
@@ -121,19 +125,30 @@ namespace BackupEngine.Backup
             _cryptoTask.Wait();
 
             OnStateUpdated(new StateEvent("Differential Backup", "Completed", totalFiles, totalSize, 0, 0, "", ""));
+            OnProgress(new ProgressEvent(totalSize, 0));
             Console.WriteLine($"Differential backup completed in: {uniqueDestinationPath}");
         }
 
         /// <summary>
         /// Transfers a file and updates the backup state.
         /// </summary>
-        private void TransferFile(string file, string destFile, ref int remainingFiles, ref long remainingSize)
+        private void TransferFile(string file, string destFile, ref long totalSize, ref int remainingFiles, ref long remainingSize, ref EventWaitHandle waitHandle)
         {
             FileInfo fileInfo = new FileInfo(file);
+            bool isLargeFile = fileInfo.Length > _koLimit * 1024;
 
             try
             {
                 WaitForBusinessSoftwareToClose();
+                
+                if (isLargeFile)
+                {
+                    Console.WriteLine($"Waiting to transfer large file: {file}");
+                    _largeFileSemaphore.Wait(); // Assure un seul fichier volumineux à la fois
+                }
+
+                waitHandle.WaitOne();
+
                 DateTime start = DateTime.Now;
                 TransferStrategy.TransferFile(file, destFile);
                 DateTime end = DateTime.Now;
@@ -143,7 +158,7 @@ namespace BackupEngine.Backup
                 remainingSize -= fileInfo.Length;
 
                 OnStateUpdated(new StateEvent("Differential Backup", "Active", remainingFiles, remainingSize, remainingFiles, remainingSize, file, destFile));
-
+                OnProgress(new ProgressEvent(totalSize, remainingSize));
                 TransferEvent transferEvent = new TransferEvent(_configuration, duration, fileInfo, new FileInfo(destFile));
                 OnTransfer(transferEvent);
             }
@@ -151,6 +166,13 @@ namespace BackupEngine.Backup
             {
                 Console.WriteLine($"Error copying file {file}: {e.Message}");
                 OnTransfer(new TransferEvent(_configuration, new TimeSpan(-1), fileInfo, new FileInfo(destFile)));
+            }
+            finally
+            {
+                if (isLargeFile)
+                {
+                    _largeFileSemaphore.Release();
+                }
             }
         }
 
@@ -177,49 +199,7 @@ namespace BackupEngine.Backup
             Console.WriteLine($"[DIFF] Pas de modification pour : {sourceFile}");
             return false; 
         }
-
-        /// <summary>
-        /// Determines if a file requires encryption based on its extension.
-        /// </summary>
-        private bool RequiresEncryption(string file)
-        {
-            string extension = Path.GetExtension(file);
-            return _configuration.ExtensionsToSave.Contains(extension);
-        }
-
-        /// <summary>
-        /// Processes the queue of files that need encryption.
-        /// </summary>
-        private void ProcessCryptoQueue()
-        {
-            using (Mutex mutex = new Mutex(false, _mutexName))
-            {
-                while (!_cryptoQueue.IsEmpty)
-                {
-                    if (_cryptoQueue.TryDequeue(out var filePair))
-                    {
-                        string source = filePair.Item1;
-                        string destination = filePair.Item2;
-
-                        if (!mutex.WaitOne(0, false))
-                        {
-                            Console.WriteLine("CryptoSoft est déjà en cours d'exécution");
-                            mutex.WaitOne();
-                        }
-
-                        try
-                        {
-                            TransferStrategy.TransferFile(source, destination);
-                        }
-                        finally
-                        {
-                            mutex.ReleaseMutex();
-                        }
-                    }
-                }
-            }
-        }
-
+        
         private bool PreviousSaveExists()
         {
             CachedConfiguration? cached = _cacheRepository.GetCachedConfiguration(_configuration);
@@ -235,35 +215,6 @@ namespace BackupEngine.Backup
         private void UpdateCache(string uniqueDestinationPath)
         {
             _cacheRepository.AddBackup(_configuration, DateTime.Now, uniqueDestinationPath);
-        }
-
-        /// <summary>
-        /// Waits for business software to close before proceeding with the backup.
-        /// </summary>
-        private void WaitForBusinessSoftwareToClose()
-        {
-            List<string> businessApps = _settingsRepository.GetBusinessSoftwareList();
-            while (IsBusinessSoftwareRunning(businessApps))
-            {
-                Console.WriteLine("Un logiciel métier est en cours d'exécution");
-                Thread.Sleep(3000);
-            }
-        }
-
-        /// <summary>
-        /// Checks if any business software is currently running.
-        /// </summary>
-        private bool IsBusinessSoftwareRunning(List<string> businessApps)
-        {
-            foreach (var process in Process.GetProcesses())
-            {
-                if (businessApps.Contains(process.ProcessName, StringComparer.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine($"Logiciel métier détecté : {process.ProcessName}");
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }

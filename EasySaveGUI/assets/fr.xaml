@@ -15,6 +15,10 @@
     <!-- CreateView -->
     <sys:String x:Key="TitleCreate">Création d'une nouvelle de config de Sauvegarde</sys:String>
     <sys:String x:Key="NameTitleCaseCreate">Nom :</sys:String>
+    <sys:String x:Key="SourcePathTitleCaseCreate">Chemin source :</sys:String>
+    <sys:String x:Key="DestPathTitleCaseCreate">Chemin de destination :</sys:String>
+    <sys:String x:Key="BackupTypeTitleCaseCreate">Type de sauvegarde :</sys:String>
+    <sys:String x:Key="EncryptionTitleCaseCreate">Encrypter :</sys:String>
     <sys:String x:Key="CreateButtonFinal">Créer</sys:String>
     
     <!-- SettingsView -->

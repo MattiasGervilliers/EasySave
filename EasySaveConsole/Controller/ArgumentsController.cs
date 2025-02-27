@@ -5,43 +5,45 @@ namespace EasySaveConsole.Controller
 {
     internal class ArgumentsController : IController
     {
-        private  string[] _args ;
+        private string[] _args;
+
         /// <summary>
         /// Executes the backup process by launching configurations with specified arguments.
         /// </summary>
         public void Execute()
         {
-            if (IsHelpRequested()) // Vérifie si l'argument "-help" est passé
+            if (IsHelpRequested()) // Checks if the "-help" argument is passed
             {
-                DisplayHelp(); // Affiche l'aide
+                DisplayHelp(); // Displays the help
             }
             else
             {
-                LaunchWithArguments(); // Sinon, lance le programme avec les arguments
+                LaunchWithArguments(); // Otherwise, launches the program with the arguments
             }
         }
 
-        // Méthode pour vérifier si l'argument "-help" est passé
+        // Method to check if the "-help" argument is passed
         private bool IsHelpRequested()
         {
             return _args.Contains("-help");
         }
 
-        // Méthode pour afficher la documentation ou l'aide
+        // Method to display the documentation or help
         private void DisplayHelp()
         {
             Console.WriteLine("=== EasySave ===");
             Console.WriteLine("Usage: console.exe <arguments>");
             Console.WriteLine();
             Console.WriteLine("Arguments:");
-            Console.WriteLine("  -help                 Affiche cette documentation.");
-            Console.WriteLine("  <backupIds>           Liste des ID de sauvegarde à lancer. Utilisez des numéros séparés par des points-virgules (par exemple, 1;3) ou des plages (par exemple, 1-3).");
+            Console.WriteLine("  -help                 Displays this documentation.");
+            Console.WriteLine("  <backupIds>           List of backup IDs to launch. Use semicolon-separated numbers (e.g., 1;3) or ranges (e.g., 1-3).");
             Console.WriteLine();
-            Console.WriteLine("Exemple:");
+            Console.WriteLine("Example:");
             Console.WriteLine("  EasySaveConsole.exe 1;3");
             Console.WriteLine("  EasySaveConsole.exe 1-3");
             Console.WriteLine("===========================================");
         }
+
         /// <summary>
         /// Parses backup arguments and launches the corresponding configurations.
         /// </summary>
@@ -53,7 +55,7 @@ namespace EasySaveConsole.Controller
 
             foreach (int i in backupIds)
             {
-                BackupConfiguration? config = BackupModel.FindConfig(i-1);
+                BackupConfiguration? config = BackupModel.FindConfig(i - 1);
                 if (config != null)
                 {
                     configs.Add(config);
@@ -66,7 +68,7 @@ namespace EasySaveConsole.Controller
 
             BackupModel.LaunchConfigs(configs);
         }
-        
+
         /// <summary>
         /// Updates the arguments used for launching backups.
         /// </summary>
@@ -74,6 +76,7 @@ namespace EasySaveConsole.Controller
         {
             this._args = args;
         }
+
         /// <summary>
         /// Parses a string input to extract backup configuration IDs, supporting both single values and ranges.
         /// </summary>

@@ -1,3 +1,47 @@
+# [2.1.0-beta.8](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.7...v2.1.0-beta.8) (2025-02-27)
+
+
+### Bug Fixes
+
+* merge ([49bf68e](https://github.com/MattiasGervilliers/EasySave/commit/49bf68e652eb95c9a21192bce1d833a64543b203))
+* merge ([1b1402d](https://github.com/MattiasGervilliers/EasySave/commit/1b1402da6e392571c1e8b315e60f6db45501ea29))
+
+# [2.1.0-beta.7](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.6...v2.1.0-beta.7) (2025-02-26)
+
+
+### Bug Fixes
+
+* differential save ([3df7a90](https://github.com/MattiasGervilliers/EasySave/commit/3df7a900b4f2823078b481623057b3a2137e2b39))
+
+# [2.1.0-beta.6](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.5...v2.1.0-beta.6) (2025-02-26)
+
+
+### Bug Fixes
+
+* merge ([c97c734](https://github.com/MattiasGervilliers/EasySave/commit/c97c734b75e0202a8d28472bc3ef1ea961513a68))
+* multiple backup progress ([53ccb3e](https://github.com/MattiasGervilliers/EasySave/commit/53ccb3e2cce1470136626dd29ed43bc19cc0fbb3))
+
+
+### Features
+
+* progress bar (WIP) ([4b509f6](https://github.com/MattiasGervilliers/EasySave/commit/4b509f6778e2ba7a3478ca9d52aa3f816a14fa43))
+* Progress bar for full and differential save ([b0bd86e](https://github.com/MattiasGervilliers/EasySave/commit/b0bd86edb800886fd5f8837d209abb6703915020))
+* **progress:** Relaunch backups ([362436d](https://github.com/MattiasGervilliers/EasySave/commit/362436d27bc04c9e9e9b8c22260825be0029d906))
+
+# [2.1.0-beta.5](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.4...v2.1.0-beta.5) (2025-02-26)
+
+
+### Bug Fixes
+
+* add elements to create page + modify ressources dictionnaries ([c3c2030](https://github.com/MattiasGervilliers/EasySave/commit/c3c203071a3fda3e15ffdc89f672fc9a7f195ca7))
+
+# [2.1.0-beta.4](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.3...v2.1.0-beta.4) (2025-02-26)
+
+
+### Bug Fixes
+
+* change crypto soft to remove self contained ([f184a0b](https://github.com/MattiasGervilliers/EasySave/commit/f184a0b3351411fb96256c0ec953e668d5a7068f))
+
 # [2.1.0-beta.3](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.2...v2.1.0-beta.3) (2025-02-26)
 
 

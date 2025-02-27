@@ -3,7 +3,6 @@ using EasySaveGUI.Models;
 using EasySaveGUI.ViewModels.Base;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using System.Windows.Navigation;
 
 namespace EasySaveGUI.ViewModels
 {
@@ -23,6 +22,19 @@ namespace EasySaveGUI.ViewModels
         public RelayCommand NavigateCreateCommand { get; }
         public RelayCommand ToggleSelectionCommand { get; }
 
+        private List<BackupConfiguration> _pausedConfigurations = [];
+
+        private ObservableCollection<KeyValuePair<BackupConfiguration, double>> _progress;
+        public ObservableCollection<KeyValuePair<BackupConfiguration, double>> Progress
+        {
+            get => _progress;
+            set
+            {
+                _progress = value;
+                OnPropertyChanged(nameof(Progress));
+            }
+        }
+
         public HomeViewModel(NavigationService navigationService)
         {
             BackupConfigurations = new ObservableCollection<BackupConfiguration>(_settingsModel.GetConfigurations());
@@ -35,8 +47,45 @@ namespace EasySaveGUI.ViewModels
             LaunchConfigurationsCommand = new RelayCommand(_ => LaunchConfigurations());
             LaunchConfigurationCommand = new RelayCommand(backupConfiguration => LaunchConfiguration(backupConfiguration));
             NavigateCreateCommand = new RelayCommand(_ => navigationService.Navigate(new CreateViewModel()));
+            
+            _backupModel.ProgressUpdated += OnProgressUpdated;
+            _progress = new ObservableCollection<KeyValuePair<BackupConfiguration, double>>();
+            
             DeleteConfigurationCommand = new RelayCommand(obj => DeleteConfiguration((BackupConfiguration)obj));
         }
+
+        private void PauseBackup(BackupConfiguration configuration)
+        {
+            _pausedConfigurations.Add(configuration);
+            _backupModel.PauseBackup(configuration);
+        }
+
+        private void OnProgressUpdated(BackupConfiguration configuration, double progress)
+        {
+            // Find the existing entry
+            var existingEntry = _progress.FirstOrDefault(kvp => kvp.Key == configuration);
+
+            if (!existingEntry.Equals(default(KeyValuePair<BackupConfiguration, double>)))
+            {
+                // Update progress in-place
+                int index = _progress.IndexOf(existingEntry);
+                _progress[index] = new KeyValuePair<BackupConfiguration, double>(configuration, progress);
+
+                OnPropertyChanged(nameof(Progress));
+
+                // If backup is completed, remove from the list to allow re-launch
+                if (progress >= 100)
+                {
+                    _progress.Remove(existingEntry);
+                }
+            }
+            else
+            {
+                // Add new entry
+                _progress.Add(new KeyValuePair<BackupConfiguration, double>(configuration, progress));
+            }
+        }
+
 
         private void ToggleSelection(BackupConfiguration item)
         {
@@ -64,6 +113,18 @@ namespace EasySaveGUI.ViewModels
         {
             if (backupConfiguration is BackupConfiguration configuration)
             {
+                if (Progress.Any(kvp => kvp.Key == configuration))
+                {
+                    if (!_pausedConfigurations.Contains(configuration))
+                    {
+                        PauseBackup(configuration);
+                        return;
+                    }
+
+                    _backupModel.ResumeBackup(configuration);
+                    return;
+                }
+
                 _backupModel.LaunchBackup(configuration);
             }
         }
@@ -76,5 +137,14 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
+        public bool IsLaunched(BackupConfiguration configuration)
+        {
+            return Progress.Any(kvp => kvp.Key == configuration);
+        }
+
+        public bool IsPaused(BackupConfiguration configuration)
+        {
+            return _pausedConfigurations.Contains(configuration);
+        }
     }
 }
