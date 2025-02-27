@@ -15,16 +15,49 @@ namespace EasySaveGUI.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Manages application settings and user preferences within the settings view.
+        /// </summary>
         private readonly SettingsModel _settingsModel;
+
+        /// <summary>
+        /// Stores the selected application language.
+        /// </summary>
         private string _language;
+
+        /// <summary>
+        /// Stores the directory path where log files are stored.
+        /// </summary>
         private string _logPath;
+
+        /// <summary>
+        /// Stores the directory path where backup state files are stored.
+        /// </summary>
         private string _statePath;
+
+        /// <summary>
+        /// Stores the selected log format type.
+        /// </summary>
         private string _logType;
+
+        /// <summary>
+        /// Stores the selected application theme.
+        /// </summary>
         private string _theme;
 
+        /// <summary>
+        /// Message queue used for displaying notifications in the UI.
+        /// </summary>
         public SnackbarMessageQueue MessageQueue { get; } = new SnackbarMessageQueue();
 
+        /// <summary>
+        /// Indicates whether the Snackbar notification is currently active.
+        /// </summary>
         private bool _isSnackbarActive;
+
+        /// <summary>
+        /// Gets or sets whether the Snackbar notification is active.
+        /// </summary>
         public bool IsSnackbarActive
         {
             get => _isSnackbarActive;
@@ -34,8 +67,9 @@ namespace EasySaveGUI.ViewModels
                 OnPropertyChanged(nameof(IsSnackbarActive));
             }
         }
-
-        // Propriétés de données
+        /// <summary>
+        /// Gets or sets the selected language for the application.
+        /// </summary>
         public string Language
         {
             get => _language;
@@ -45,7 +79,9 @@ namespace EasySaveGUI.ViewModels
                 OnPropertyChanged(nameof(Language));
             }
         }
-        
+        /// <summary>
+        /// Gets or sets the selected application theme.
+        /// </summary>
         public string Theme
         {
             get => _theme;
@@ -55,7 +91,9 @@ namespace EasySaveGUI.ViewModels
                 OnPropertyChanged(nameof(Theme));
             }
         }
-
+        /// <summary>
+        /// Gets or sets the directory path for log files.
+        /// </summary>
         public string LogPath
         {
             get => _logPath;
@@ -65,7 +103,9 @@ namespace EasySaveGUI.ViewModels
                 OnPropertyChanged(nameof(LogPath));
             }
         }
-
+        /// <summary>
+        /// Gets or sets the directory path for state files.
+        /// </summary>
         public string StatePath
         {
             get => _statePath;
@@ -75,7 +115,9 @@ namespace EasySaveGUI.ViewModels
                 OnPropertyChanged(nameof(StatePath));
             }
         }
-
+        /// <summary>
+        /// Gets or sets the selected log format type.
+        /// </summary>
         public string LogType
         {
             get => _logType;
@@ -85,13 +127,16 @@ namespace EasySaveGUI.ViewModels
                 OnPropertyChanged(nameof(LogType));
             }
         }
-
-        // Liste des langues disponibles
+        /// <summary>
+        /// List of available languages in the application.
+        /// </summary>
         public List<string> AvailableLanguages { get; } = new List<string>
         {
             "English", "French"
         };
-
+        /// <summary>
+        /// List of available log format types.
+        /// </summary>
         public List<string> AvailableLogTypes { get; } = new List<string> { "Json", "Xml" };
 
         public List<string> AvailableTheme { get; } = new List<string> { "Dark", "Light" }; 
@@ -99,7 +144,9 @@ namespace EasySaveGUI.ViewModels
         public ICommand SaveCommand { get; }
         public ICommand BrowseLogPathCommand { get; }
         public ICommand BrowseStatePathCommand { get; }
-
+        /// <summary>
+        /// Initializes a new instance of the SettingsViewModel class.
+        /// </summary>
         public SettingsViewModel()
         {
             _settingsModel = new SettingsModel();
@@ -111,7 +158,9 @@ namespace EasySaveGUI.ViewModels
             BrowseLogPathCommand = new RelayCommand(_ => BrowseLogPath());
             BrowseStatePathCommand = new RelayCommand(_ => BrowseStatePath());
         }
-
+        /// <summary>
+        /// Opens a dialog to browse and select a log file directory.
+        /// </summary>
         private void BrowseLogPath()
         {
             var dialog = new CommonOpenFileDialog
@@ -124,7 +173,9 @@ namespace EasySaveGUI.ViewModels
                 LogPath = dialog.FileName;  // Met à jour la propriété LogPath avec le chemin choisi
             }
         }
-
+        /// <summary>
+        /// Opens a dialog to browse and select a state file directory.
+        /// </summary>
         private void BrowseStatePath()
         {
             var dialog = new CommonOpenFileDialog
@@ -137,7 +188,9 @@ namespace EasySaveGUI.ViewModels
                 StatePath = dialog.FileName;  // Met à jour la propriété StatePath avec le chemin choisi
             }
         }
-
+        /// <summary>
+        /// Loads application settings from the settings model.
+        /// </summary>
         private void LoadSettings()
         {
             Language = _settingsModel.GetLanguage().ToString();
@@ -146,7 +199,10 @@ namespace EasySaveGUI.ViewModels
             StatePath = _settingsModel.GetStatePath();
             LogType = _settingsModel.GetLogType();  // Charge correctement le type de log
         }
-
+        /// <summary>
+        /// Applies the selected theme to the application.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if the theme name is invalid.</exception>
         public void SetTheme()
         {
             string toChangeTheme = _theme;
@@ -165,7 +221,10 @@ namespace EasySaveGUI.ViewModels
                 throw new InvalidOperationException("name theme problem");
             }
         }
-
+        /// <summary>
+        /// Applies the selected language to the application.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if the language name is invalid.</exception>
         public void SetLanguage()
         {
             string toChangeLanguage = _language;
@@ -184,7 +243,9 @@ namespace EasySaveGUI.ViewModels
                 throw new InvalidOperationException("name language problem");
             }
         }
-
+        /// <summary>
+        /// Saves the current application settings and updates the UI accordingly.
+        /// </summary>
         private void SaveSettings()
         {
             _settingsModel.UpdateLanguage(Language);

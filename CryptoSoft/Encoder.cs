@@ -9,8 +9,14 @@ namespace CryptoSoft
 {
     internal class Encoder
     {
+        /// <summary>
+        /// Secure encryption key used for file encryption and decryption.
+        /// </summary>
         private static SecureString _key = GenerateKey();
-
+        /// <summary>
+        /// Generates a secure encryption key composed of random characters.
+        /// </summary>
+        /// <returns>A SecureString containing a randomly generated key.</returns>
         private static SecureString GenerateKey()
         {
             SecureString secureKey = new SecureString();
@@ -22,7 +28,10 @@ namespace CryptoSoft
             secureKey.MakeReadOnly();
             return secureKey;
         }
-
+        /// <summary>
+        /// Converts the SecureString encryption key into a byte array.
+        /// </summary>
+        /// <returns>A byte array representing the encryption key.</returns>
         private static byte[] GetKeyBytes()
         {
             IntPtr keyPtr = Marshal.SecureStringToGlobalAllocUnicode(_key);
@@ -36,7 +45,11 @@ namespace CryptoSoft
                 Marshal.ZeroFreeGlobalAllocUnicode(keyPtr);
             }
         }
-
+        /// <summary>
+        /// Encrypts a file using a XOR-based encryption algorithm.
+        /// </summary>
+        /// <param name="source">The path to the source file to be encrypted.</param>
+        /// <param name="destination">The path where the encrypted file will be saved.</param>
         public static void Encrypt(string source, string destination)
         {
             byte[] keyBytes = GetKeyBytes();
@@ -69,7 +82,11 @@ namespace CryptoSoft
                 Console.WriteLine($"Erreur lors du chiffrement : {e.Message}");
             }
         }
-
+        /// <summary>
+        /// Decrypts a previously encrypted file.
+        /// </summary>
+        /// <param name="source">The path to the encrypted source file.</param>
+        /// <param name="destination">The path where the decrypted file will be saved.</param>
         public static void Decrypt(string source, string destination)
         {
             if (!File.Exists(source))

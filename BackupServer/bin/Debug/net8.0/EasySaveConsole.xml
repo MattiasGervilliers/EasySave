@@ -24,6 +24,11 @@
             Parses a string input to extract backup configuration IDs, supporting both single values and ranges.
             </summary>
         </member>
+        <member name="M:EasySaveConsole.Controller.IController.Execute">
+            <summary>
+            Function to execute
+            </summary>
+        </member>
         <member name="M:EasySaveConsole.Controller.LanguageController.UpdateLanguage(BackupEngine.Settings.Language)">
             <summary>
             Update the controller language
@@ -96,6 +101,113 @@
             Checks if the backup configuration exists and returns it if found.
             </summary>
         </member>
+        <member name="F:EasySaveConsole.Model.BackupModel._jobManager">
+            <summary>
+            Manages backup jobs and configurations by interacting with JobManager and SettingsRepository.
+            </summary>
+        </member>
+        <member name="F:EasySaveConsole.Model.BackupModel._settingsRepository">
+            <summary>
+            Manages application settings, including backup configurations.
+            </summary>
+        </member>
+        <member name="F:EasySaveConsole.Model.BackupModel._jobs">
+            <summary>
+            Dictionary storing active backup jobs associated with their configurations.
+            </summary>
+        </member>
+        <member name="E:EasySaveConsole.Model.BackupModel.ProgressUpdated">
+            <summary>
+            Event triggered to update the progress of backup operations.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Model.BackupModel.#cctor">
+            <summary>
+            Static constructor initializing JobManager and SettingsRepository.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.Model.BackupModel.AddConfig(BackupEngine.BackupConfiguration)">
+            <summary>
+            Adds a new backup configuration to the repository.
+            </summary>
+            <param name="backupConfiguration">The backup configuration to be added.</param>
+        </member>
+        <member name="M:EasySaveConsole.Model.BackupModel.DeleteConfig(BackupEngine.BackupConfiguration)">
+            <summary>
+            Deletes a backup configuration from the repository.
+            </summary>
+            <param name="backupConfiguration">The backup configuration to be removed.</param>
+        </member>
+        <member name="M:EasySaveConsole.Model.BackupModel.LaunchConfig(BackupEngine.BackupConfiguration)">
+            <summary>
+            Launches a backup operation for the specified configuration.
+            </summary>
+            <param name="backupConfiguration">The backup configuration to execute.</param>
+        </member>
+        <member name="M:EasySaveConsole.Model.BackupModel.LaunchConfigs(System.Collections.Generic.List{BackupEngine.BackupConfiguration})">
+            <summary>
+            Launches backup operations for multiple configurations.
+            </summary>
+            <param name="configurations">The list of backup configurations to execute.</param>
+        </member>
+        <member name="M:EasySaveConsole.Model.BackupModel.GetConfigs">
+            <summary>
+            Retrieves all stored backup configurations.
+            </summary>
+            <returns>A list of backup configurations.</returns>
+        </member>
+        <member name="M:EasySaveConsole.Model.BackupModel.FindConfig(System.String)">
+            <summary>
+            Finds a backup configuration by its name.
+            </summary>
+            <param name="name">The name of the backup configuration.</param>
+            <returns>The backup configuration if found, otherwise null.</returns>
+        </member>
+        <member name="M:EasySaveConsole.Model.BackupModel.FindConfig(System.Int32)">
+            <summary>
+            Finds a backup configuration by its index ID.
+            </summary>
+            <param name="id">The index ID of the backup configuration.</param>
+            <returns>The backup configuration if found, otherwise null.</returns>
+        </member>
+        <member name="M:EasySaveConsole.Model.BackupModel.GetLanguage">
+            <summary>
+            Retrieves the current language setting of the application.
+            </summary>
+            <returns>The current language setting.</returns>
+        </member>
+        <member name="M:EasySaveConsole.Model.BackupModel.UpdateLanguage(BackupEngine.Settings.Language)">
+            <summary>
+            Updates the language setting of the application.
+            </summary>
+            <param name="language">The new language to apply.</param>
+        </member>
+        <member name="F:EasySaveConsole.View.View._language">
+            <summary>
+            The current language setting used in the view.
+            </summary>
+        </member>
+        <member name="F:EasySaveConsole.View.View._saveController">
+            <summary>
+            Controller responsible for managing save operations.
+            </summary>
+        </member>
+        <member name="F:EasySaveConsole.View.View._languageController">
+            <summary>
+            Controller responsible for handling language settings and translations.
+            </summary>
+        </member>
+        <member name="F:EasySaveConsole.View.View._argumentsController">
+            <summary>
+            Controller responsible for processing command-line arguments.
+            </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.#ctor(System.String[])">
+            <summary>
+            Initializes a new instance of the View class with command-line arguments.
+            </summary>
+            <param name="args">The command-line arguments passed to the application.</param>
+        </member>
         <member name="M:EasySaveConsole.View.View.DisplayNameError">
             <summary>
             Displays an error message when an invalid name is entered.
@@ -115,6 +227,13 @@
             <summary>
             Displays the details of a backup configuration.
             </summary>
+        </member>
+        <member name="M:EasySaveConsole.View.View.DisplayExtensions(System.Collections.Generic.HashSet{System.String})">
+            <summary>
+            Display extension message
+            </summary>
+            <param name="extensions"></param>
+            <returns></returns>
         </member>
         <member name="M:EasySaveConsole.View.View.DisplayDeleteSuccess">
             <summary>
@@ -181,6 +300,11 @@
             Displays the menu for creating a backup configuration.
             </summary>
         </member>
+        <member name="M:EasySaveConsole.View.View.DisplayCreateMenu">
+            <summary>
+            Display te create menu
+            </summary>
+        </member>
         <member name="M:EasySaveConsole.View.View.AskSourceFolder">
             <summary>
             Asks the user to enter the source folder for backup.
@@ -191,11 +315,7 @@
             Asks the user to enter the destination folder for backup.
             </summary>
         </member>
-        <member name="M:EasySaveConsole.View.View.AskEncryptionKey(System.String)">
-            <summary>
-            Asks the user whether they want to encrypt the backup.
-            </summary>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:EasySaveConsole.View.View.AskExtensions(System.String)" -->
         <member name="M:EasySaveConsole.View.View.AskBackupType">
             <summary>
             Asks the user to choose a backup type (full or incremental).

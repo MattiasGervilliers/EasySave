@@ -4,5 +4,36 @@
         <name>CryptoSoft</name>
     </assembly>
     <members>
+        <member name="F:CryptoSoft.Encoder._key">
+            <summary>
+            Secure encryption key used for file encryption and decryption.
+            </summary>
+        </member>
+        <member name="M:CryptoSoft.Encoder.GenerateKey">
+            <summary>
+            Generates a secure encryption key composed of random characters.
+            </summary>
+            <returns>A SecureString containing a randomly generated key.</returns>
+        </member>
+        <member name="M:CryptoSoft.Encoder.GetKeyBytes">
+            <summary>
+            Converts the SecureString encryption key into a byte array.
+            </summary>
+            <returns>A byte array representing the encryption key.</returns>
+        </member>
+        <member name="M:CryptoSoft.Encoder.Encrypt(System.String,System.String)">
+            <summary>
+            Encrypts a file using a XOR-based encryption algorithm.
+            </summary>
+            <param name="source">The path to the source file to be encrypted.</param>
+            <param name="destination">The path where the encrypted file will be saved.</param>
+        </member>
+        <member name="M:CryptoSoft.Encoder.Decrypt(System.String,System.String)">
+            <summary>
+            Decrypts a previously encrypted file.
+            </summary>
+            <param name="source">The path to the encrypted source file.</param>
+            <param name="destination">The path where the decrypted file will be saved.</param>
+        </member>
     </members>
 </doc>

@@ -10,16 +10,34 @@ namespace BackupServer
 {
     public class Server
     {
+        /// <summary>
+        /// TCP server responsible for handling remote commands and client communication.
+        /// </summary>
         private TcpListener _server;
+
+        /// <summary>
+        /// Indicates whether the server is currently running.
+        /// </summary>
         private bool _isRunning;
+
+        /// <summary>
+        /// Delegate invoked when a command is received from a client.
+        /// </summary>
         private Action<string> _onCommandReceived;
 
+        /// <summary>
+        /// Initializes a new instance of the Server class.
+        /// </summary>
+        /// <param name="port">The port number on which the server will listen.</param>
+        /// <param name="onCommandReceived">The action to be executed when a command is received.</param>
         public Server(int port, Action<string> onCommandReceived)
         {
             _server = new TcpListener(IPAddress.Any, port);
             _onCommandReceived = onCommandReceived;
         }
-
+        /// <summary>
+        /// Starts the server and begins listening for incoming client connections.
+        /// </summary>
         public void Start()
         {
             _isRunning = true;
@@ -42,7 +60,10 @@ namespace BackupServer
                 }
             });
         }
-
+        /// <summary>
+        /// Handles communication with a connected client.
+        /// </summary>
+        /// <param name="client">The TCP client that has connected to the server.</param>
         private void HandleClient(TcpClient client)
         {
             using (NetworkStream stream = client.GetStream())
@@ -67,7 +88,10 @@ namespace BackupServer
                 }
             }
         }
-
+        /// <summary>
+        /// Sends an update message to the remote client.
+        /// </summary>
+        /// <param name="message">The message to send.</param>
         public void SendUpdate(string message)
         {
             try
@@ -84,7 +108,9 @@ namespace BackupServer
                 Console.WriteLine("Impossible d'envoyer l'update au client.");
             }
         }
-
+        /// <summary>
+        /// Stops the server and disconnects all clients.
+        /// </summary>
         public void Stop()
         {
             _isRunning = false;

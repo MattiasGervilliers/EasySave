@@ -14,11 +14,30 @@ namespace EasySaveConsole.View
 {
     internal class View
     {
+        /// <summary>
+        /// The current language setting used in the view.
+        /// </summary>
         private Language _language;
-        SaveController _saveController ;
+
+        /// <summary>
+        /// Controller responsible for managing save operations.
+        /// </summary>
+        SaveController _saveController;
+
+        /// <summary>
+        /// Controller responsible for handling language settings and translations.
+        /// </summary>
         LanguageController _languageController = new LanguageController();
+
+        /// <summary>
+        /// Controller responsible for processing command-line arguments.
+        /// </summary>
         ArgumentsController _argumentsController = new ArgumentsController();
-        private bool _encrypted;
+
+        /// <summary>
+        /// Initializes a new instance of the View class with command-line arguments.
+        /// </summary>
+        /// <param name="args">The command-line arguments passed to the application.</param>
         public View(string[] args)
         {
             
@@ -229,6 +248,11 @@ namespace EasySaveConsole.View
                   $"--- Destination folder: {configuration.DestinationPath.GetAbsolutePath()} " +
                   $"--- Backup {configuration.BackupType}" + $"--- Extensions : {extensions}");
         }
+        /// <summary>
+        /// Display extension message
+        /// </summary>
+        /// <param name="extensions"></param>
+        /// <returns></returns>
         private string? DisplayExtensions(HashSet<string> extensions)
         {
             if (extensions == null)
@@ -383,7 +407,9 @@ namespace EasySaveConsole.View
                 ? "Le nom de configuration est vide ou existe déjà"
                 : "The name of the configuration is blank or already exist");
         }
-
+        /// <summary>
+        /// Display te create menu
+        /// </summary>
         public void DisplayCreateMenu()
         {
             Console.WriteLine(_language == Language.French
@@ -411,47 +437,12 @@ namespace EasySaveConsole.View
                 ? "Veuillez entrer le dossier cible où vous souhaitez sauvegarder : "
                 : "Please enter the target folder where you want to save: ");
         }
+        
         /// <summary>
-        /// Asks the user whether they want to encrypt the backup.
+        /// Ask to encrypt & the extensions
         /// </summary>
-
-        internal string AskEncryptionKey(string sourcePath)
-        {
-            this._encrypted = false;
-            Console.WriteLine(_language == Language.French
-                ? "Voulez-vous chiffrer vos données ? (oui/non) : "
-                : "Do you want to encrypt your data? (yes/no) : ");
-
-            string choice;
-            do
-            {
-                choice = Console.ReadLine().Trim().ToLower();
-            } while (choice != "oui" && choice != "non" && choice != "yes" && choice != "no");
-
-            string encryptionKey = "";
-
-            if (choice == "oui" || choice == "yes")
-            {
-                Console.WriteLine(_language == Language.French
-                    ? "Veuillez entrer la clé de chiffrement de vos sauvegardes : "
-                    : "Please enter the encryption key for your backups : ");
-
-                while (!Regex.IsMatch(encryptionKey = Console.ReadLine(), "^[a-zA-Z]*$"))
-                {
-                    Console.WriteLine(_language == Language.French
-                        ? "Erreur : Veuillez entrer uniquement des lettres (A-Z, a-z)."
-                        : "Error: Please enter only letters (A-Z, a-z).");
-                    Console.Write("Votre choix / Your choice: ");
-                }
-                this._encrypted = true;
-            }
-
-            Console.WriteLine(_language == Language.French
-                ? "Configuration terminée."
-                : "Configuration complete.");
-            return encryptionKey;
-        }
-
+        /// <param name="sourcePath"></param>
+        /// <returns></returns>
         public HashSet<string>? AskExtensions(string sourcePath)
         {
             Console.WriteLine(_language == Language.French

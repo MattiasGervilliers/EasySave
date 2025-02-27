@@ -8,6 +8,9 @@ namespace EasySaveConsole.Controller
 {
     internal interface IController
     {
+        /// <summary>
+        /// Function to execute
+        /// </summary>
         public void Execute();
     }
 }
