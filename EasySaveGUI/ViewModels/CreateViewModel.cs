@@ -40,10 +40,7 @@ namespace EasySaveGUI.ViewModels
             {
                 _sourcePath = value;
                 OnPropertyChanged(nameof(SourcePath));
-                if (SourcePath != "")
-                {
-                    AvailableExtensions(_sourcePath);
-                }
+                AvailableExtensions(_sourcePath);
             }
         }
 
@@ -94,6 +91,7 @@ namespace EasySaveGUI.ViewModels
         public ICommand CreateCommand { get; }
         public ICommand BrowseSourcePathCommand { get; }
         public ICommand BrowseDestPathCommand { get; }
+        public ICommand AvailableExtensionsCommand { get; }
 
         public SnackbarMessageQueue MessageQueue { get; } = new SnackbarMessageQueue();
         private bool _isSnackbarActive;
@@ -113,6 +111,7 @@ namespace EasySaveGUI.ViewModels
 
             BrowseSourcePathCommand = new RelayCommand(_ => BrowseSourcePath());
             BrowseDestPathCommand = new RelayCommand(_ => BrowseDestPath());
+            AvailableExtensionsCommand = new RelayCommand(_ => AvailableExtensions(SourcePath));
 
             CreateCommand = new RelayCommand(_ => CreateConfiguration());
             _backupConfiguration = backupConfiguration ?? new BackupConfiguration();
@@ -157,14 +156,17 @@ namespace EasySaveGUI.ViewModels
 
         public void AvailableExtensions(string sourcePathAvailable)
         {
-            ListItems = new ObservableCollection<ListItem>();
-
-            ScanExtension scanner = new ScanExtension(sourcePathAvailable);
-            HashSet<string> availableExtensions = scanner.GetUniqueExtensions();
-
-            foreach (var extension in availableExtensions)
+            if (sourcePathAvailable != "")
             {
-                ListItems.Add(new ListItem { Name = extension, IsSelected = false });
+                ListItems = new ObservableCollection<ListItem>();
+
+                ScanExtension scanner = new ScanExtension(sourcePathAvailable);
+                HashSet<string> availableExtensions = scanner.GetUniqueExtensions();
+
+                foreach (var extension in availableExtensions)
+                {
+                    ListItems.Add(new ListItem { Name = extension, IsSelected = false });
+                }
             }
         }
 
@@ -175,7 +177,7 @@ namespace EasySaveGUI.ViewModels
             newConfiguration.SourcePath = new CustomPath(SourcePath);
             newConfiguration.DestinationPath = new CustomPath(DestinationPath);
             newConfiguration.BackupType = BackupType;
-            newConfiguration.ExtensionsToSave = new HashSet<string>();
+            newConfiguration.ExtensionsToSave = new HashSet<string>();            
 
             Debug.WriteLine("Save");
             Debug.WriteLine(_backupConfiguration.Name);
