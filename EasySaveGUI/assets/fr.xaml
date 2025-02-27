@@ -12,6 +12,7 @@
     <sys:String x:Key="CreateButtonHome">+ Créer une configuration</sys:String>
     <sys:String x:Key="LaunchButtonHome">Lancer les configurations sélectionnées</sys:String>
     <sys:String x:Key="NoItem">Aucune configuration trouvée.</sys:String>
+    <sys:String x:Key="AlertBackupFinished">La sauvegarde {0} est finie avec succès !</sys:String>
     
     <!-- CreateView -->
     <sys:String x:Key="TitleCreate">Configuration d'une Sauvegarde</sys:String>

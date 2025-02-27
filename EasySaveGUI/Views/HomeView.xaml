@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EasySaveGUI.Views" 
-             xmlns:viewmodels="clr-namespace:EasySaveGUI.ViewModels" 
+             xmlns:viewmodels="clr-namespace:EasySaveGUI.ViewModels"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DataContext="{d:DesignInstance Type=viewmodels:HomeViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -64,6 +65,50 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <!-- Style pour le Border -->
+        <Style x:Key="CustomSnackbarContainerStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Padding" Value="5,5,5,5"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" 
+                          Direction="320" 
+                          ShadowDepth="5" 
+                          Opacity="0.5" 
+                          BlurRadius="10"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TranslateTransform Y="100"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSnackbarActive}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Y"
+                                     From="100" To="0" 
+                                     Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Y"
+                                     From="0" To="100" 
+                                     Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
@@ -76,6 +121,7 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="*" />
             <RowDefinition Height="60" />
+            <RowDefinition Height="0" />
         </Grid.RowDefinitions>
         <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="0">
             <TextBlock FontSize="32" Text="{DynamicResource TitleHome}" Foreground="{DynamicResource Text}" FontWeight="Bold"/>
@@ -170,10 +216,10 @@
                             </Button>
 
                         </StackPanel>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
 
         <Grid Margin="0,15,0,0" Grid.Column="1" Grid.Row="2">
@@ -200,5 +246,21 @@
                         FontSize="16"
                         HorizontalAlignment="Right"/>
         </Grid>
+
+        <Canvas Grid.Column="1" Grid.Row="3">
+            <Border Style="{StaticResource CustomSnackbarContainerStyle}"
+                    VerticalAlignment="Bottom"
+                    Canvas.Right="0"
+                    Canvas.Bottom="0"
+                    HorizontalAlignment="Right">
+                <materialDesign:Snackbar x:Name="SaveSnackbar"
+                                         MessageQueue="{Binding MessageQueue}"
+                                         Background="Transparent"
+                                         Foreground="White"
+                                         FontSize="14"
+                                         HorizontalContentAlignment="Center"
+                                         VerticalContentAlignment="Center" />
+            </Border>
+        </Canvas>
     </Grid>
 </UserControl>

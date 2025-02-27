@@ -1,7 +1,9 @@
 ﻿using BackupEngine;
 using EasySaveGUI.Models;
 using EasySaveGUI.ViewModels.Base;
+using MaterialDesignThemes.Wpf;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace EasySaveGUI.ViewModels
@@ -42,6 +44,18 @@ namespace EasySaveGUI.ViewModels
             {
                 _progress = value;
                 OnPropertyChanged(nameof(Progress));
+            }
+        }
+        public SnackbarMessageQueue MessageQueue { get; } = new SnackbarMessageQueue();
+
+        private bool _isSnackbarActive;
+        public bool IsSnackbarActive
+        {
+            get => _isSnackbarActive;
+            set
+            {
+                _isSnackbarActive = value;
+                OnPropertyChanged(nameof(IsSnackbarActive));
             }
         }
 
@@ -90,6 +104,16 @@ namespace EasySaveGUI.ViewModels
                 if (progress >= 100)
                 {
                     _progress.Remove(existingEntry);
+
+                    // Activer le Snackbar
+                    var message = (string)Application.Current.Resources["AlertBackupFinished"];
+                    // find ${0} and replace it with the configuration name
+                    message = string.Format(message, configuration.Name);
+                    MessageQueue.Enqueue(message);
+                    IsSnackbarActive = true;
+
+                    // Désactiver le Snackbar après un délai
+                    Task.Delay(3000).ContinueWith(_ => IsSnackbarActive = false);
                 }
             }
             else
@@ -149,16 +173,6 @@ namespace EasySaveGUI.ViewModels
                 _settingsModel.DeleteConfiguration(configuration);  // Logic to remove from the model
                 BackupConfigurations.Remove(configuration);  // Logic to remove from the list (if binding is used)
             }
-        }
-
-        public bool IsLaunched(BackupConfiguration configuration)
-        {
-            return Progress.Any(kvp => kvp.Key == configuration);
-        }
-
-        public bool IsPaused(BackupConfiguration configuration)
-        {
-            return _pausedConfigurations.Contains(configuration);
         }
     }
 }
