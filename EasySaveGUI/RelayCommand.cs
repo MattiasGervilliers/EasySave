@@ -6,7 +6,7 @@ namespace EasySaveGUI
     /// Generic command that implements the ICommand interface.
     /// It allows binding actions (methods) to commands in the user interface (for example, buttons).
     /// </summary>
-    public class RelayCommand : ICommand
+    public class RelayCommand(Action<object?> execute, Func<object?, bool>? canExecute = null) : ICommand
     {
         // Action to execute when the command is invoked.
         private readonly Action<object?> _execute = execute;

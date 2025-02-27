@@ -26,21 +26,6 @@ namespace CryptoSoft
             secureKey.MakeReadOnly();
             return secureKey;
         }
-        
-        /// <summary>
-        /// Constructor of the Encoder class. It initializes the class without any specific effect.
-        /// </summary>
-        public Encoder()
-        {
-            SecureString secureKey = new SecureString();
-            Random random = new Random();
-            for (int i = 0; i < 32; i++) 
-            {
-                secureKey.AppendChar((char)random.Next(33, 126)); 
-            }
-            secureKey.MakeReadOnly();
-            return secureKey;
-        }
 
         private static byte[] GetKeyBytes()
         {

@@ -1,11 +1,4 @@
-﻿using BackupEngine.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BackupEngine.Cache
+﻿namespace BackupEngine.Backup
 {
     /// <summary>
     /// Interface that defines the method for transferring a file from a source path to a destination path.

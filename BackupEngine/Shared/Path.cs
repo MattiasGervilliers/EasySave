@@ -6,7 +6,7 @@ namespace BackupEngine.Shared
     /// The CustomPath class encapsulates a file path and provides methods to validate, retrieve information about the path,
     /// and perform path-related operations in a safe and controlled manner.
     /// </summary>
-    [JsonConverter(typeof(CheminConverter))]
+    [JsonConverter(typeof(PathConverter))]
     public class CustomPath
     {
         /// <summary>

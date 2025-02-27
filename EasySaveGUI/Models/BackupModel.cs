@@ -1,5 +1,5 @@
-﻿using BackupEngine;
-using BackupEngine.Job;
+﻿using BackupEngine.Job;
+using BackupEngine;
 
 namespace EasySaveGUI.Models
 {

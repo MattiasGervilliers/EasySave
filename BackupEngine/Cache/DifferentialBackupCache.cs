@@ -55,7 +55,7 @@ namespace BackupEngine.Cache
     /// <summary>
     /// Class representing a specific backup with the date and directory name.
     /// </summary>
-    public class Backup
+    public class Backup (DateTime date, string directoryName)
     {
         [JsonPropertyName("date")]
         public DateTime Date { get; set; }
