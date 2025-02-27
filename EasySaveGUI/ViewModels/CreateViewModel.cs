@@ -177,7 +177,15 @@ namespace EasySaveGUI.ViewModels
             newConfiguration.SourcePath = new CustomPath(SourcePath);
             newConfiguration.DestinationPath = new CustomPath(DestinationPath);
             newConfiguration.BackupType = BackupType;
-            newConfiguration.ExtensionsToSave = new HashSet<string>();            
+            newConfiguration.ExtensionsToSave = new HashSet<string>();
+
+            foreach (var item in ListItems)
+            {
+                if (item.IsSelected)
+                {
+                    newConfiguration.ExtensionsToSave.Add(item.Name);
+                }
+            }
 
             Debug.WriteLine("Save");
             Debug.WriteLine(_backupConfiguration.Name);
