@@ -23,7 +23,7 @@ namespace BackupEngine.Settings
             LogFormat = LogType.Json;
             StatePath = new CustomPath("logs");
             ExtensionPriority = new HashSet<string>() { ".txt", ".pdf" };// Pour l'instant la priorité des extensions est set ici
-            BusinessSoftwareList = new List<string> { "CalculatorApp", "msedge" };//idem pour les logitiels metiers
+            BusinessSoftwareList = new List<string> { "CalculatorApp" };//idem pour les logitiels metiers
             Theme = Theme.Light;
             Random random = new Random();   
         }

@@ -49,7 +49,6 @@ namespace EasySaveConsole.Model
         {
             return SettingsRepository.GetConfigurationById(id);
         }
-
         public static Language? GetLanguage()
         {
             return SettingsRepository.GetLanguage();

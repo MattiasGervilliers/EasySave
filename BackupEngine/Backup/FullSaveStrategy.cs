@@ -2,6 +2,8 @@
 using BackupEngine.State;
 using BackupEngine.Log;
 using System.Diagnostics;
+//using BackupEngine.Remote;
+using BackupEngine.Job;
 
 namespace BackupEngine.Backup
 {
@@ -10,6 +12,7 @@ namespace BackupEngine.Backup
     /// </summary>
     public class FullSaveStrategy : SaveStrategy
     {
+        
         /// <summary>
         /// Initializes a new instance of the FullSaveStrategy class.
         /// </summary>
@@ -21,6 +24,7 @@ namespace BackupEngine.Backup
         {
             if (Configuration.ExtensionsToSave != null)
             {
+                //StartServer();
                 TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, _settingsRepository.GetExtensionPriority());
             }
             else
@@ -55,7 +59,6 @@ namespace BackupEngine.Backup
                 string relativePath = file.Substring(sourcePath.Length + 1);
                 string destFile = Path.Combine(uniqueDestinationPath, relativePath);
                 Directory.CreateDirectory(Path.GetDirectoryName(destFile));
-
                 if (RequiresEncryption(file))
                 {
                     _cryptoQueue.Enqueue((file, destFile));
@@ -64,14 +67,18 @@ namespace BackupEngine.Backup
                 {
                     tasks.Add(Task.Run(() =>
                     {
-                        WaitForBusinessSoftwareToClose(); 
+                        WaitForBusinessSoftwareToClose();
+                        Console.WriteLine("1111111111111"+file+destFile);
                         TransferFile(file, destFile, ref totalSize, ref remainingFiles, ref remainingSize, ref waitHandle);
                     }));
+                    Console.WriteLine("ZZZZZZZZZZZZZZZZZZ" + file);
+
                 }
             }
             
             _cryptoTask = Task.Run(() =>
             {
+                    Console.WriteLine("EEEEEEEEEEEEEEEEEE");
                 WaitForBusinessSoftwareToClose(); 
                 ProcessCryptoQueue();
             });
@@ -94,7 +101,6 @@ namespace BackupEngine.Backup
 
             try
             {
-                // 🔴 Attente ici pour empêcher la copie tant qu'un logiciel métier est ouvert
                 WaitForBusinessSoftwareToClose();
 
                 if (isLargeFile)
@@ -107,6 +113,7 @@ namespace BackupEngine.Backup
                 waitHandle.WaitOne();
 
                 DateTime start = DateTime.Now;
+                Console.WriteLine("000000000000000000000000000transfer de "+file + "->" + destFile);
                 TransferStrategy.TransferFile(file, destFile);
                 DateTime end = DateTime.Now;
                 TimeSpan duration = end - start;
@@ -133,5 +140,45 @@ namespace BackupEngine.Backup
                 }
             }
         }
+                /*
+        public static void StartServer()
+        {
+            _server.Start();
+        }
+        private JobManager JobManager = new JobManager();
+        private static void HandleRemoteCommand(string command)
+        {
+            if (command == "pause")
+            {
+                JobManager.PauseJob();
+                _isPaused = true;
+                Console.WriteLine("[Remote] Pause de la sauvegarde demandée.");
+                lock (_pauseLock)
+                {
+                    _isPaused = true;
+                }
+            }
+            else if (command == "resume")
+            {
+                _isPaused = false;
+
+                Console.WriteLine("[Remote] Reprise de la sauvegarde demandée.");
+                lock (_pauseLock)
+                {
+                    _isPaused = false;
+                    Monitor.PulseAll(_pauseLock); // Réveille les threads en pause
+                }
+            }
+            else if (command == "stop")
+            {
+                Console.WriteLine("[Remote] Arrêt de la sauvegarde demandée.");
+                lock (_pauseLock)
+                {
+                    _isStopped = true;
+                    Monitor.PulseAll(_pauseLock);
+                }
+            }
+        }
+                 * */
     }
 }

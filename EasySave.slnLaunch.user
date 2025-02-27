@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Nouveau profil",
+    "Projects": [
+      {
+        "Path": "EasySaveConsole\\EasySaveConsole.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "RemoteConsole\\RemoteConsole.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
