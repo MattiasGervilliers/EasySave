@@ -2,6 +2,7 @@
 using BackupEngine.State;
 using BackupEngine.Log;
 using System.Diagnostics;
+using BackupEngine.Settings;
 
 namespace BackupEngine.Backup
 {
@@ -35,6 +36,15 @@ namespace BackupEngine.Backup
             }
 
             string[] files = Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories);
+            HashSet<string> extensionPriority = _settingsRepository.GetExtensionPriority();
+
+            List<string> orderedFiles = files
+               .OrderBy(file => extensionPriority.Contains(Path.GetExtension(file))
+                   ? extensionPriority.ToList().IndexOf(Path.GetExtension(file))
+                   : int.MaxValue)
+               .ThenBy(file => file.Split(Path.DirectorySeparatorChar).Length)
+               .ThenBy(file => file)
+               .ToList();
             int totalFiles = files.Length;
             long totalSize = files.Sum(file => new FileInfo(file).Length);
             int remainingFiles = totalFiles;
@@ -49,8 +59,9 @@ namespace BackupEngine.Backup
             List<Task> tasks = new List<Task>();
             WaitForBusinessSoftwareToClose();
             
-            foreach (string file in files)
+            foreach (string file in orderedFiles)
             {
+                Console.WriteLine("File en train de tranfer : " + file);
                 waitHandle.WaitOne();
                 string relativePath = file.Substring(sourcePath.Length + 1);
                 string destFile = Path.Combine(uniqueDestinationPath, relativePath);
@@ -92,10 +103,11 @@ namespace BackupEngine.Backup
         {
             FileInfo fileInfo = new FileInfo(file);
             bool isLargeFile = fileInfo.Length > _koLimit * 1024;
+            Console.WriteLine(file + "0000 " + fileInfo.Length);
 
             try
             {
-                // 🔴 Attente ici pour empêcher la copie tant qu'un logiciel métier est ouvert
+                //  Attente ici pour empêcher la copie tant qu'un logiciel métier est ouvert
                 WaitForBusinessSoftwareToClose();
 
                 if (isLargeFile)
