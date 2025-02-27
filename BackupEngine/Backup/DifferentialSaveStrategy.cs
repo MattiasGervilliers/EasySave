@@ -156,12 +156,13 @@ namespace BackupEngine.Backup
 
                 remainingFiles--;
                 remainingSize -= fileInfo.Length;
-
+                waitHandle.WaitOne();
                 OnStateUpdated(new StateEvent("Differential Backup", "Active", remainingFiles, remainingSize, remainingFiles, remainingSize, file, destFile));
                 OnProgress(new ProgressEvent(totalSize, remainingSize));
                 
                 TransferEvent transferEvent = new TransferEvent(Configuration, duration, fileInfo, new FileInfo(destFile));
                 OnTransfer(transferEvent);
+                waitHandle.WaitOne();
             }
             catch (Exception e)
             {

@@ -14,6 +14,13 @@ namespace BackupEngine
         public BackupType BackupType { get; set; }
         public HashSet<string>? ExtensionsToSave { get; set; }
 
+        public BackupConfiguration()
+        {
+            Name = "";
+            BackupType = BackupType.Full;
+            ExtensionsToSave = new HashSet<string>();
+        }
+
         public void FromJson(string json)
         {
             BackupConfiguration jsonConfiguration = JsonConvert.DeserializeObject<BackupConfiguration>(json);

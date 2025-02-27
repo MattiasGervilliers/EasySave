@@ -11,6 +11,7 @@
     <sys:String x:Key="LittleTitleHome">Liste des configurations de sauvegarde</sys:String>
     <sys:String x:Key="CreateButtonHome">+ Créer une configuration</sys:String>
     <sys:String x:Key="LaunchButtonHome">Lancer les configurations sélectionnées</sys:String>
+    <sys:String x:Key="NoItem">Aucune configuration trouvée.</sys:String>
     
     <!-- CreateView -->
     <sys:String x:Key="TitleCreate">Création d'une nouvelle de config de Sauvegarde</sys:String>
@@ -19,7 +20,8 @@
     <sys:String x:Key="DestPathTitleCaseCreate">Chemin de destination :</sys:String>
     <sys:String x:Key="BackupTypeTitleCaseCreate">Type de sauvegarde :</sys:String>
     <sys:String x:Key="EncryptionTitleCaseCreate">Encrypter :</sys:String>
-    <sys:String x:Key="CreateButtonFinal">Créer</sys:String>
+    <sys:String x:Key="AlertSaveConfiguration">Configuration saved succesfully !</sys:String>
+    <sys:String x:Key="CreateButtonFinal">Enregistrer</sys:String>
     
     <!-- SettingsView -->
     <sys:String x:Key="TitleSettings">Paramètres</sys:String>

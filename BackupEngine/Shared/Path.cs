@@ -2,7 +2,7 @@
 
 namespace BackupEngine.Shared
 {
-    [JsonConverter(typeof(CheminConverter))]
+    [JsonConverter(typeof(PathConverter))]
     public class CustomPath
     {
         private string _path { get; set; }
@@ -39,7 +39,7 @@ namespace BackupEngine.Shared
         }
     }
 
-    public class CheminConverter : JsonConverter<CustomPath>
+    public class PathConverter : JsonConverter<CustomPath>
     {
         public override void WriteJson(JsonWriter writer, CustomPath value, JsonSerializer serializer)
         {

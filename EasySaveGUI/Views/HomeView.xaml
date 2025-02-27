@@ -10,7 +10,6 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <local:ProgressLookupConverter x:Key="ProgressLookupConvert" />
-        <local:RunningStateConverter x:Key="RunningStateConvert" />
 
         <!-- Custom Style for ListBox -->
         <Style x:Key="CustomListBoxStyle" TargetType="ListBox">
@@ -22,6 +21,19 @@
             <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
             <Setter Property="SelectionMode" Value="Extended" />
             <!-- Enable multi-selection -->
+            <Style.Triggers>
+                <Trigger Property="HasItems" Value="False">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <TextBlock Foreground="{DynamicResource Text}" 
+                                           FontSize="12"
+                                           Text="{DynamicResource NoItem}" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <!-- Custom Style for ListBoxItem -->
@@ -52,7 +64,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
     </UserControl.Resources>
 
     <Grid>
@@ -129,23 +140,19 @@
 
                         <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                             <Button Height="30"
+                                    Content="⏯️"
                                 Width="30"
                                 HorizontalAlignment="Right"
                                 Style="{DynamicResource HoverButtonStyle}"
                                 Command="{Binding DataContext.LaunchConfigurationCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                CommandParameter="{Binding}">
-                                <Button.Content>
-                                    <MultiBinding Converter="{StaticResource RunningStateConvert}">
-                                        <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=ListBox}"/>
-                                        <Binding Mode="OneWay" />
-                                    </MultiBinding>
-                                </Button.Content>
-                            </Button>
+                                CommandParameter="{Binding}" />
 
                             <Button 
                                 Style="{DynamicResource HoverButtonStyle}"
                                 Height="30"
                                 Width="30"
+                                Command="{Binding DataContext.EditConfigurationCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                CommandParameter="{Binding}"
                                 HorizontalAlignment="Right">
                                 <Button.Content>
                                     <Image Source="../assets/editer.png" Width="15" Height="15" />
