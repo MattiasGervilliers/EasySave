@@ -1,3 +1,10 @@
+# [2.1.0-beta.10](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.9...v2.1.0-beta.10) (2025-02-27)
+
+
+### Bug Fixes
+
+* position of the cases in Create and Settings views ([d5432b2](https://github.com/MattiasGervilliers/EasySave/commit/d5432b2ed04a1df50d0493e2e134a9be871a692c))
+
 # [2.1.0-beta.9](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.8...v2.1.0-beta.9) (2025-02-27)
 
 
