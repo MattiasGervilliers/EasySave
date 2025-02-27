@@ -66,21 +66,9 @@ namespace EasySaveGUI.Models
             return _settingsRepository.GetTheme();
         }
 
-        public void CreateConfiguration(
-            string name, 
-            string sourcePath, 
-            string destinationPath, 
-            BackupType backupType,
-            string? encryptionKey
-        )
+        public void CreateOrUpdateConfiguration(BackupConfiguration backupConfiguration, BackupConfiguration newBackup)
         {
-            BackupConfiguration configuration = new BackupConfiguration
-            {
-                Name = name,
-                SourcePath = new CustomPath(sourcePath),
-                DestinationPath = new CustomPath(destinationPath),
-                BackupType = backupType,
-            };
+            _settingsRepository.UpdateOrCreateConfiguration(backupConfiguration, newBackup);
         }
 
         public void DeleteConfiguration(BackupConfiguration configuration)

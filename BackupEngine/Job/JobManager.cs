@@ -36,12 +36,14 @@ namespace BackupEngine.Job
         public void PauseJob(Job job)
         {
             // Pause the task
+            Debug.WriteLine("Pausing job");
             _waitHandles[job].Reset();
         }
 
         public void ResumeJob(Job job)
         {
             // Resume the task
+            Debug.WriteLine("Resuming job");
             _waitHandles[job].Set();
         }
 
