@@ -7,6 +7,10 @@ using System.Text;
 
 namespace CryptoSoft
 {
+    /// <summary>
+    /// The Encoder class is responsible for encoding and decoding files using an XOR method with a defined key.
+    /// It allows for encryption and decryption of files through data streams.
+    /// </summary>
     internal class Encoder
     {
         private static SecureString _key = GenerateKey();
@@ -37,6 +41,12 @@ namespace CryptoSoft
             }
         }
 
+        /// <summary>
+        /// Static method to encrypt a file using the XOR method with a given key.
+        /// The source file is read, the data is encrypted, and written to a destination file.
+        /// </summary>
+        /// <param name="source">The path of the source file to encrypt.</param>
+        /// <param name="destination">The path of the destination file where the encrypted data will be written.</param>
         public static void Encrypt(string source, string destination)
         {
             byte[] keyBytes = GetKeyBytes();

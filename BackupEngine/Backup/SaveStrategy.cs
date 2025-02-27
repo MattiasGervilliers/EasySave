@@ -7,8 +7,15 @@ using System.Diagnostics;
 
 namespace BackupEngine.Backup
 {
+    /// <summary>
+    /// Abstract class SaveStrategy that defines the base for backup strategies (full, differential, etc.).
+    /// It includes events to report the state of the backup and file transfers.
+    /// </summary>
     public abstract class SaveStrategy(BackupConfiguration configuration)
     {
+        /// <summary>
+        /// Events to notify transfer and state information during the backup.
+        /// </summary>
         public event EventHandler<TransferEvent> Transfer;
         public event EventHandler<StateEvent> StateUpdated;
         public event EventHandler<ProgressEvent> Progress;
@@ -32,11 +39,17 @@ namespace BackupEngine.Backup
 
         public abstract void Save(string uniqueDestinationPath, EventWaitHandle waitHandle);
 
+        /// <summary>
+        /// Protected method to notify a transfer event.
+        /// </summary>
         protected void OnTransfer(TransferEvent e)
         {
             Transfer?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Protected method to notify a state update event.
+        /// </summary>
         protected void OnStateUpdated(StateEvent state)
         {
             StateUpdated?.Invoke(this, state);

@@ -36,7 +36,7 @@ namespace BackupEngine.Backup
                 File.Copy(source, destination, true);
             }  
         }
-
+        
         /// <summary>
         /// Launches the CryptoSoft executable to encrypt a file.
         /// </summary>
@@ -62,6 +62,7 @@ namespace BackupEngine.Backup
                     string error = process.StandardError.ReadToEnd();
                     process.WaitForExit();
 
+                    // If there are any errors, display them in the console
                     if (!string.IsNullOrEmpty(error))
                     {
                         Console.WriteLine($"Erreur CryptoSoft : {error}");
@@ -70,7 +71,8 @@ namespace BackupEngine.Backup
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Erreur lors du lancement de CryptoSoft : {e.Message}");
+                // In case of an exception, display the error in the console
+                Console.WriteLine($"Error while launching CryptoSoft: {e.Message}");
             }
         }
     }

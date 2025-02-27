@@ -2,36 +2,34 @@
 
 namespace BackupEngine.Log
 {
-    public class FileTransferLog : LogLib.Log  
+    public class FileTransferLog : LogLib.Log
     {
         /// <summary>
-        /// CustomPath source du fichier transféré
-        /// </summary>
+        /// CustomPath of the source file transferred
+        /// </summary> 
         public string? FileSourcePath { get; set; }
 
         /// <summary>
-        /// CustomPath de destination du fichier transféré
+        /// CustomPath of the destination of the transferred file
         /// </summary>
         public string? FileDestinationPath { get; set; }
 
         /// <summary>
-        /// Taille du fichier transféré (en octets)
+        /// Size of the transferred file (in bytes)
         /// </summary>
         public long? FileSize { get; set; }
 
         /// <summary>
-        /// Temps de transfert en millisecondes (-1 si échec)
+        /// Transfer time in milliseconds (-1 if failed)
         /// </summary>
         public int? TransferTime { get; set; }
 
         /// <summary>
-        /// Nom du backup lié au transfert
+        /// Name of the backup related to the transfer
         /// </summary>
         public string? BackupName { get; set; }
 
-        /// <summary>
-        /// Constructeur sans paramètre requis pour la sérialisation XML
-        /// </summary>
+
         public FileTransferLog() : base(LogLevel.INFO, "")
         {
         }
