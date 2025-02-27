@@ -58,9 +58,9 @@ namespace BackupEngine.Cache
     public class Backup (DateTime date, string directoryName)
     {
         [JsonPropertyName("date")]
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = date;
 
         [JsonPropertyName("directoryName")]
-        public string DirectoryName { get; set; }
+        public string DirectoryName { get; set; } = directoryName;
     }
 }
