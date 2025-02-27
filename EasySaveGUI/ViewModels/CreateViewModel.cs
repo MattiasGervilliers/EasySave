@@ -17,11 +17,14 @@ namespace EasySaveGUI.ViewModels
         private readonly SettingsModel _settingsModel;
         private readonly BackupConfiguration _backupConfiguration;
 
+        public ObservableCollection<BackupConfiguration> BackupConfigurations { get; set; }
+
         private string _name;
         private string? _sourcePath;
         private string? _destinationPath;
         private BackupType _backupType;
         private bool _encrypted;
+        private bool _isModified;
 
         public string Name
         {
@@ -109,6 +112,15 @@ namespace EasySaveGUI.ViewModels
         {
             _settingsModel = new SettingsModel();
 
+            if (backupConfiguration != null)
+            {
+                _isModified = true;
+            }
+            else
+            {
+                _isModified = false;
+            }
+
             BrowseSourcePathCommand = new RelayCommand(_ => BrowseSourcePath());
             BrowseDestPathCommand = new RelayCommand(_ => BrowseDestPath());
             AvailableExtensionsCommand = new RelayCommand(_ => AvailableExtensions(SourcePath));
@@ -178,6 +190,19 @@ namespace EasySaveGUI.ViewModels
             newConfiguration.DestinationPath = new CustomPath(DestinationPath);
             newConfiguration.BackupType = BackupType;
             newConfiguration.ExtensionsToSave = new HashSet<string>();
+
+            if (!_isModified)
+            {
+                BackupConfigurations = new ObservableCollection<BackupConfiguration>(_settingsModel.GetConfigurations());
+                foreach (var configuration in BackupConfigurations)
+                {
+                    if (configuration.Name.Equals(Name) || Name == "")
+                    {
+                        MessageBox.Show("Invalid Name or already exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                }
+            }
 
             foreach (var item in ListItems)
             {
