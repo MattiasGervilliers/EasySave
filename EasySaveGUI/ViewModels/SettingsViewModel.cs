@@ -116,7 +116,7 @@ namespace EasySaveGUI.ViewModels
 
         public List<string> AvailableLogTypes { get; } = new List<string> { "Json", "Xml" };
 
-        public List<string> AvailableTheme { get; } = new List<string> { "Dark", "Light" }; 
+        public List<string> AvailableThemes { get; } = new List<string> { "Dark", "Light" }; 
 
         public ICommand SaveCommand { get; }
         public ICommand BrowseLogPathCommand { get; }
@@ -196,13 +196,13 @@ namespace EasySaveGUI.ViewModels
             string toChangeLanguage = _language;
             if (toChangeLanguage == "French")
             {
-                ResourceDictionary Langue = new ResourceDictionary() { Source = new Uri("../assets/fr.xaml", UriKind.Relative) };
-                App.Current.Resources.MergedDictionaries.Add(Langue);
+                ResourceDictionary languageRessource = new ResourceDictionary() { Source = new Uri("../assets/fr.xaml", UriKind.Relative) };
+                App.Current.Resources.MergedDictionaries.Add(languageRessource);
             }
             else if (toChangeLanguage == "English")
             {
-                ResourceDictionary Langue = new ResourceDictionary() { Source = new Uri("../assets/en.xaml", UriKind.Relative) };
-                App.Current.Resources.MergedDictionaries.Add(Langue);
+                ResourceDictionary languageRessource = new ResourceDictionary() { Source = new Uri("../assets/en.xaml", UriKind.Relative) };
+                App.Current.Resources.MergedDictionaries.Add(languageRessource);
             }
             else
             {

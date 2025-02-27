@@ -13,14 +13,14 @@ namespace BackupEngine.Cache
         /// <summary>
         /// List of cached backup configurations.
         /// </summary>
-        public List<CachedConfiguration> _configurations { get; set; }
+        public List<CachedConfiguration> Configurations { get; set; }
 
         /// <summary>
         /// Default constructor initializing the list of configurations.
         /// </summary>
         public DifferentialBackupCache()
         {
-            _configurations = new List<CachedConfiguration>();
+            Configurations = new List<CachedConfiguration>();
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace BackupEngine.Cache
         /// </summary>
         public void FromJson(string json)
         {
-            _configurations = JsonConvert.DeserializeObject<List<CachedConfiguration>>(json) ?? new List<CachedConfiguration>();
+            Configurations = JsonConvert.DeserializeObject<List<CachedConfiguration>>(json) ?? new List<CachedConfiguration>();
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace BackupEngine.Cache
         /// </summary>
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(_configurations);
+            return JsonConvert.SerializeObject(Configurations);
         }
     }
 

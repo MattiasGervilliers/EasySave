@@ -11,7 +11,7 @@ namespace BackupEngine.Cache
         /// <summary>
         /// Path to the cache file where backup information is stored.
         /// </summary>
-        private const string CACHE_PATH = ".differentiel_cache.json";
+        private const string CachePath = ".differentiel_cache.json";
 
         /// <summary>
         /// Instance of DifferentialBackupCache that contains the configurations for differential backups.
@@ -34,11 +34,11 @@ namespace BackupEngine.Cache
         /// <returns>Returns an instance of DifferentialBackupCache containing the cache data.</returns>
         private DifferentialBackupCache Load()
         {
-            if (File.Exists(CACHE_PATH))
+            if (File.Exists(CachePath))
             {
                 DifferentialBackupCache cache = new DifferentialBackupCache();
 
-                using (FileStream fs = File.Open(CACHE_PATH, FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (FileStream fs = File.Open(CachePath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     using (StreamReader sr = new StreamReader(fs))
                     {
@@ -59,7 +59,7 @@ namespace BackupEngine.Cache
         /// </summary>
         private void CreateFile()
         {
-            FileStream fs = File.Create(CACHE_PATH);
+            FileStream fs = File.Create(CachePath);
             fs.Close();
         }
 
@@ -70,7 +70,7 @@ namespace BackupEngine.Cache
         private void Save()
         {
             string json = _cache.ToJson();
-            using (FileStream fs = File.Open(CACHE_PATH, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
+            using (FileStream fs = File.Open(CachePath, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
             using (StreamWriter sw = new StreamWriter(fs))
             {
                 // Indents the JSON for better readability
@@ -85,7 +85,7 @@ namespace BackupEngine.Cache
         /// <returns>Returns an instance of CachedConfiguration corresponding to the given configuration, or null if it does not exist.</returns>
         public CachedConfiguration? GetCachedConfiguration(BackupConfiguration configuration)
         {
-            return _cache._configurations.Find(c => c.Name == configuration.Name);
+            return _cache.Configurations.Find(c => c.Name == configuration.Name);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace BackupEngine.Cache
                     Name = configuration.Name,
                     Backups = new List<Backup>()
                 };
-                _cache._configurations.Add(cachedConfiguration);
+                _cache.Configurations.Add(cachedConfiguration);
             }
             cachedConfiguration.Backups.Add(new Backup(date, directoryName));
             Save();

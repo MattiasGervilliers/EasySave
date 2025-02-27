@@ -28,7 +28,7 @@ namespace BackupEngine.Job
         public Job(BackupConfiguration configuration, CancellationToken Token, EventWaitHandle waitHandle)
         {
             Configuration = configuration;
-            _ct = Token;
+            _ct = token;
             switch (Configuration.BackupType)
             {
                 case BackupType.Full:

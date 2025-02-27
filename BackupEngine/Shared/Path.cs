@@ -44,7 +44,7 @@ namespace BackupEngine.Shared
         /// </summary>
         /// <param name="TestedPath">The path to test.</param>
         /// <returns>Returns true for now, but can be extended to perform path validity checks.</returns>
-        private bool CheckPathValidity(string TestedPath)
+        private bool CheckPathValidity(string testedPath)
         {
             // TODO : Check if the path is valid
             return true;
@@ -68,7 +68,7 @@ namespace BackupEngine.Shared
             return GetAbsolutePath();
         }
     }
-
+  
     /// <summary>
     /// JSON conversion class for the CustomPath class.
     /// This class allows serializing and deserializing CustomPath objects using their absolute path as a string.

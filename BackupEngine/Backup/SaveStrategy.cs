@@ -19,7 +19,7 @@ namespace BackupEngine.Backup
         public event EventHandler<TransferEvent> Transfer;
         public event EventHandler<StateEvent> StateUpdated;
         public event EventHandler<ProgressEvent> Progress;
-        protected readonly BackupConfiguration Configuration = configuration;
+        protected readonly BackupConfiguration _configuration = configuration;
         public ITransferStrategy TransferStrategy;
         public SettingsRepository _settingsRepository = new SettingsRepository();
         protected readonly int _koLimit = 1024;

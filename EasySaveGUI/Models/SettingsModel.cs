@@ -67,18 +67,18 @@ namespace EasySaveGUI.Models
         }
 
         public void CreateConfiguration(
-            string Name, 
-            string SourcePath, 
-            string DestinationPath, 
+            string name, 
+            string sourcePath, 
+            string destinationPath, 
             BackupType backupType,
-            string? EncryptionKey
+            string? encryptionKey
         )
         {
             BackupConfiguration configuration = new BackupConfiguration
             {
-                Name = Name,
-                SourcePath = new CustomPath(SourcePath),
-                DestinationPath = new CustomPath(DestinationPath),
+                Name = name,
+                SourcePath = new CustomPath(sourcePath),
+                DestinationPath = new CustomPath(destinationPath),
                 BackupType = backupType,
             };
         }
