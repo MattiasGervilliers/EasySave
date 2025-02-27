@@ -25,7 +25,7 @@ namespace BackupEngine.Job
         /// Constructor of the Job class. Accepts a backup configuration.
         /// Depending on the backup type specified in the configuration, it initializes the FileManager with the appropriate strategy.
         /// </summary>
-        public Job(BackupConfiguration configuration, CancellationToken Token, EventWaitHandle waitHandle)
+        public Job(BackupConfiguration configuration, CancellationToken token, EventWaitHandle waitHandle)
         {
             Configuration = configuration;
             _ct = token;

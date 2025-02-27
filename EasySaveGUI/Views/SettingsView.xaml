@@ -95,7 +95,7 @@
 
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,300,0,0" Text="{DynamicResource ThemeTitleCaseSettings}" Foreground="{DynamicResource Text}"/>
         <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,300,0,0"
-          ItemsSource="{Binding AvailableTheme}"
+          ItemsSource="{Binding AvailableThemes}"
           SelectedItem="{Binding Theme, Mode=TwoWay}" Width="200"/>
 
         <!-- Bouton Save -->

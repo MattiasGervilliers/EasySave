@@ -100,11 +100,11 @@ namespace BackupEngine.Backup
         protected bool RequiresEncryption(string file)
         {
             string extension = Path.GetExtension(file);
-            if (Configuration.ExtensionsToSave == null)
+            if (_configuration.ExtensionsToSave == null)
             {
                 return false;
             }
-            return Configuration.ExtensionsToSave.Contains(extension);
+            return _configuration.ExtensionsToSave.Contains(extension);
         }
 
         /// <summary>
