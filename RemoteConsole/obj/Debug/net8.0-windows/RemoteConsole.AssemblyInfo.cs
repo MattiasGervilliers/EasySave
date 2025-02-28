@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RemoteConsole")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+76c3f74159f3fcb6df3526543c39de608e99d23b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+67c6f28cc03cb91e279f1d3df9986532726f1213")]
 [assembly: System.Reflection.AssemblyProductAttribute("RemoteConsole")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RemoteConsole")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -41,6 +41,8 @@ namespace BackupEngine.Backup
             }
             else
             {
+                Console.WriteLine("Copie de " + source + " -> " + destination);
+
                 File.Copy(source, destination, true);
             }
         }

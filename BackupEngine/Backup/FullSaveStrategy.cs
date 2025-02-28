@@ -1,49 +1,40 @@
 ﻿using BackupEngine.Progress;
 using BackupEngine.State;
 using BackupEngine.Log;
+using System.Collections.Concurrent;
 
 namespace BackupEngine.Backup
 {
-    /// <summary>
-    /// Implements the full backup strategy.
-    /// </summary>
     public class FullSaveStrategy : SaveStrategy
     {
         private readonly CancellationToken _cancellationToken;
+        private readonly SemaphoreSlim _largeFileSemaphore = new SemaphoreSlim(1, 1);
+        private readonly ConcurrentQueue<(string, string)> _cryptoQueue = new ConcurrentQueue<(string, string)>();
+        private Task? _cryptoTask;
 
-        /// <summary>
-        /// Initializes a new instance of the FullSaveStrategy class.
-        /// </summary>
         public FullSaveStrategy(BackupConfiguration configuration, CancellationToken cancellationToken)
             : base(configuration)
         {
             _cancellationToken = cancellationToken;
-        }        
-        /// <summary>
-        /// Executes the full backup process.
-        /// </summary>
+        }
+
         public override void Save(string uniqueDestinationPath, EventWaitHandle waitHandle)
         {
-            // Check before start
             if (_cancellationToken.IsCancellationRequested)
             {
                 Console.WriteLine("Sauvegarde annulée avant démarrage.");
                 return;
             }
-            if (Configuration.ExtensionsToSave != null)
-            {
-                TransferStrategy = new CryptStrategy(Configuration.ExtensionsToSave, _settingsRepository.GetExtensionPriority(),_cancellationToken);
-            }
-            else
-            {
-                TransferStrategy = new CopyStrategy();
-            }
+
+            // Priorisation des extensions
+            HashSet<string> priorityExtensions = _settingsRepository.GetExtensionPriority();
+            TransferStrategy = Configuration.ExtensionsToSave != null
+                ? new CryptStrategy(Configuration.ExtensionsToSave, priorityExtensions, _cancellationToken)
+                : new CopyStrategy();
 
             string sourcePath = Configuration.SourcePath.GetAbsolutePath();
             if (!Directory.Exists(sourcePath))
-            {
-                throw new DirectoryNotFoundException($"The source folder '{sourcePath}' does not exist.");
-            }
+                throw new DirectoryNotFoundException($"Le dossier source '{sourcePath}' n'existe pas.");
 
             string[] files = Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories);
             int totalFiles = files.Length;
@@ -52,73 +43,58 @@ namespace BackupEngine.Backup
             long remainingSize = totalSize;
 
             OnStateUpdated(new StateEvent("Full Backup", "Active", totalFiles, totalSize, remainingFiles, remainingSize, "", ""));
-            OnProgress(new ProgressEvent(
-                totalSize,
-                remainingSize
-            ));
-            
+            OnProgress(new ProgressEvent(totalSize, remainingSize));
+
             List<Task> tasks = new List<Task>();
             WaitForBusinessSoftwareToClose();
-            
+
             foreach (string file in files)
             {
-                // Contrôle régulier du token pour interrompre si demandé
                 if (_cancellationToken.IsCancellationRequested)
                 {
                     Console.WriteLine("Sauvegarde annulée pendant le traitement.");
                     return;
                 }
+
                 waitHandle.WaitOne();
                 string relativePath = file.Substring(sourcePath.Length + 1);
                 string destFile = Path.Combine(uniqueDestinationPath, relativePath);
-                Directory.CreateDirectory(Path.GetDirectoryName(destFile));
+                Directory.CreateDirectory(Path.GetDirectoryName(destFile) ?? throw new InvalidOperationException());
+
                 if (RequiresEncryption(file))
                 {
                     _cryptoQueue.Enqueue((file, destFile));
                 }
                 else
                 {
-                    tasks.Add(Task.Run(() =>
-                    {
-                        WaitForBusinessSoftwareToClose();
-                        if (_cancellationToken.IsCancellationRequested)
-                        {
-                            return;
-                        }
-                        TransferFile(file, destFile, ref totalSize, ref remainingFiles, ref remainingSize, ref waitHandle);
-                    }));
-
+                    tasks.Add(Task.Run(() => TransferFile(file, destFile, ref totalSize, ref remainingFiles, ref remainingSize, waitHandle)));
                 }
             }
-            
-            _cryptoTask = Task.Run(() =>
-            {
-                WaitForBusinessSoftwareToClose(); 
-                ProcessCryptoQueue();
-            });
+
+            _cryptoTask = Task.Run(() => { WaitForBusinessSoftwareToClose(); ProcessCryptoQueue(); });
 
             Task.WhenAll(tasks).Wait();
             _cryptoTask.Wait();
+
             if (_cancellationToken.IsCancellationRequested)
             {
                 Console.WriteLine("Sauvegarde annulée avant achèvement.");
                 return;
             }
+
             OnStateUpdated(new StateEvent("Full Backup", "Completed", totalFiles, totalSize, 0, 0, "", ""));
-            OnProgress(new ProgressEvent(totalSize,0));
-            Console.WriteLine($"Full backup completed in: {uniqueDestinationPath}");
+            OnProgress(new ProgressEvent(totalSize, 0));
+            Console.WriteLine($"Sauvegarde complète terminée dans: {uniqueDestinationPath}");
         }
 
-        /// <summary>
-        /// Transfers a file and updates the backup state.
-        /// </summary>
-        private void TransferFile(string file, string destFile, ref long totalSize, ref int remainingFiles, ref long remainingSize, ref EventWaitHandle waitHandle)
+        private void TransferFile(string file, string destFile, ref long totalSize, ref int remainingFiles, ref long remainingSize, EventWaitHandle waitHandle)
         {
             if (_cancellationToken.IsCancellationRequested)
             {
-                Console.WriteLine("Sauvegarde annulée avant achèvement.");
+                Console.WriteLine("Sauvegarde annulée.");
                 return;
             }
+
             FileInfo fileInfo = new FileInfo(file);
             bool isLargeFile = fileInfo.Length > _koLimit * 1024;
 
@@ -128,11 +104,10 @@ namespace BackupEngine.Backup
 
                 if (isLargeFile)
                 {
-                    Console.WriteLine($"Waiting to transfer large file: {file}");
-                    _largeFileSemaphore.Wait(); // one large file by the time
+                    Console.WriteLine($"Attente pour transférer un grand fichier: {file}");
+                    _largeFileSemaphore.Wait();
                 }
 
-                // Check for pausing
                 waitHandle.WaitOne();
 
                 DateTime start = DateTime.Now;
@@ -144,22 +119,38 @@ namespace BackupEngine.Backup
                 remainingSize -= fileInfo.Length;
 
                 OnStateUpdated(new StateEvent("Full Backup", "Active", remainingFiles, remainingSize, remainingFiles, remainingSize, file, destFile));
-                OnProgress(new ProgressEvent(totalSize,remainingSize));
-                
+                OnProgress(new ProgressEvent(totalSize, remainingSize));
+
                 TransferEvent transferEvent = new TransferEvent(Configuration, duration, fileInfo, new FileInfo(destFile));
                 OnTransfer(transferEvent);
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error copying file {file}: {e.Message}");
+                Console.WriteLine($"Erreur de copie du fichier {file}: {e.Message}");
                 OnTransfer(new TransferEvent(Configuration, new TimeSpan(-1), fileInfo, new FileInfo(destFile)));
             }
             finally
             {
                 if (isLargeFile)
                 {
-                    _largeFileSemaphore.Release(); // Free Semaphore after transfer
+                    _largeFileSemaphore.Release();
                 }
+            }
+        }
+
+        private void ProcessCryptoQueue()
+        {
+            while (_cryptoQueue.TryDequeue(out var filePair))
+            {
+                if (_cancellationToken.IsCancellationRequested)
+                {
+                    Console.WriteLine("Cryptage annulé.");
+                    return;
+                }
+
+                string source = filePair.Item1;
+                string destination = filePair.Item2;
+                TransferStrategy.TransferFile(source, destination);
             }
         }
     }

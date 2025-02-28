@@ -17,6 +17,7 @@ namespace BackupEngine.Backup
         }
         public void TransferFile(string file, string destFile)
         {
+            Console.WriteLine("Copie de " + file + " -> " + destFile);
 
             // Copy file using filestream to avoid file locking
             using (FileStream sourceStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
