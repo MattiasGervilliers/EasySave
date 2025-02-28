@@ -1,22 +1,24 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Diagnostics;
 
 namespace BackupEngine.Job
 {
     public class JobManager
     {
-        private List<Thread> JobsThreads { get; set; }
-
-        public JobManager()
-        {
-            JobsThreads = new List<Thread>();
-        }
+        private Dictionary<Job, Thread> _jobs { get; } = new();
+        private Dictionary<Job, CancellationTokenSource> _cancellationTokens = new();
+        private Dictionary<Job, EventWaitHandle> _waitHandles = new();
 
         public Job LaunchBackup(BackupConfiguration configuration)
         {
-            Job job = new Job(configuration);
+            CancellationTokenSource cts = new CancellationTokenSource();
+            EventWaitHandle waitHandle = new ManualResetEvent(initialState: true);
+            Job job = new Job(configuration, cts.Token, waitHandle);
             Thread thread = new Thread(() => job.Run());
-            JobsThreads.Add(thread);
+            
+            _jobs.Add(job, thread);
+            _cancellationTokens.Add(job, cts);
+            _waitHandles.Add(job, waitHandle);
+
             thread.Start();
             return job;
         }
@@ -31,9 +33,29 @@ namespace BackupEngine.Job
             return jobs;
         }
 
-        void StopJob(Job job)
+        public void PauseJob(Job job)
         {
-            
+            // Pause the task
+            Debug.WriteLine("Pausing job");
+            _waitHandles[job].Reset();
+        }
+
+        public void ResumeJob(Job job)
+        {
+            // Resume the task
+            Debug.WriteLine("Resuming job");
+            _waitHandles[job].Set();
+        }
+
+        public void CancelJob(Job job)
+        {
+            if (_jobs.ContainsKey(job) && _cancellationTokens.ContainsKey(job))
+            {
+                _cancellationTokens[job].Cancel(); // Request cancellation
+                _jobs.Remove(job);
+                _cancellationTokens.Remove(job);
+                _waitHandles.Remove(job);
+            }
         }
     }
 }

@@ -1,0 +1,18 @@
+﻿<Application x:Class="EasySaveGUI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:viewModel="clr-namespace:EasySaveGUI.ViewModels" 
+             xmlns:view="clr-namespace:EasySaveGUI.Views"
+             StartupUri="Views/MainWindow.xaml">
+    <Application.Resources>
+        <DataTemplate DataType="{x:Type viewModel:HomeViewModel}">
+            <view:HomeView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
+            <view:SettingsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:CreateViewModel}">
+            <view:CreateView />
+        </DataTemplate>
+    </Application.Resources>
+</Application>

@@ -1,4 +1,5 @@
 .vs/
+.idea/
 EasySaveConsole/bin/
 EasySaveConsole/obj/
 EasySaveConsole/.vs/
@@ -6,5 +7,14 @@ BackupEngine/bin/
 BackupEngine/obj/
 BackupEngine/.vs/
 LogLib/bin/
-LogLib/obj
+LogLib/obj/
 LogLib/.vs/
+EasySaveGUI/bin/
+EasySaveGUI/obj/
+EasySaveGUI/.vs/
+LanguageLib/bin/
+LanguageLib/obj/
+LanguageLib/.vs/
+CryptoSoft/bin/
+CryptoSoft/obj/
+CryptoSoft/.vs/

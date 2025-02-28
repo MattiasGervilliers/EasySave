@@ -4,50 +4,51 @@ using System.Text.Json.Serialization;
 namespace LogLib
 {
     /// <summary>
-    /// Classe de base pour représenter un journal de log
+    /// Base class to represent a log entry
     /// </summary>
     public class Log
     {
         /// <summary>
-        /// Niveau de sévérité du log (ex: INFO, ERROR, DEBUG, etc.)
+        /// Severity level of the log (e.g., INFO, ERROR, DEBUG, etc.)
         /// </summary>
         public LogLevel Level { get; set; }
 
         /// <summary>
-        /// Message descriptif du log
+        /// Descriptive message of the log
         /// </summary>
         public string Message { get; set; }
 
         /// <summary>
-        /// Date et heure de création du log
+        /// Date and time when the log was created
         /// </summary>
         public DateTime Timestamp { get; set; }
 
         /// <summary>
-        /// Constructeur de la classe Log
+        /// Constructor for the Log class
         /// </summary>
         /// <param name="level"></param>
         /// <param name="message"></param>
         public Log(LogLevel level, string message)
         {
-            Level = level; // Définit le niveau du log
-            Message = message; // Définit le message du log
-            Timestamp = DateTime.Now; // Capture l'instant où le log est créé
+            Level = level; // Sets the log level
+            Message = message; // Sets the log message
+            Timestamp = DateTime.Now; // Captures the time when the log is created
         }
     }
 
     /// <summary>
-    /// Enumération définissant les différents niveaux de logs
+    /// Enumeration defining the different log levels
     /// </summary>
     public enum LogLevel
     {
-        TRACE,  // Détails très fins pour le debugging avancé
-        DEBUG,  // Infos pour le développement
-        INFO,   // Informations générales sur l'exécution
-        WARN,   // Avertissements sur des anomalies possibles
-        ERROR,  // Erreur qui n'interrompt pas l'application
-        FATAL   // Erreur critique nécessitant une intervention immédiate
+        TRACE,  // Very detailed information for advanced debugging
+        DEBUG,  // Information for development
+        INFO,   // General information about the execution
+        WARN,   // Warnings about potential anomalies
+        ERROR,  // Error that doesn't interrupt the application
+        FATAL   // Critical error requiring immediate intervention
     }
+
     public enum LogType
     {
         Json,

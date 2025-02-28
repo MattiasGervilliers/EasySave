@@ -1,107 +1,138 @@
-﻿using System;
-using System.IO;
+﻿using BackupEngine.Progress;
 using BackupEngine.State;
-using System.Linq;
 using BackupEngine.Log;
+using System.Diagnostics;
 
 namespace BackupEngine.Backup
 {
+    /// <summary>
+    /// Implements the full backup strategy.
+    /// </summary>
     public class FullSaveStrategy : SaveStrategy
     {
+        /// <summary>
+        /// Initializes a new instance of the FullSaveStrategy class.
+        /// </summary>
         public FullSaveStrategy(BackupConfiguration configuration) : base(configuration) { }
-
-        public override void Save(string uniqueDestinationPath)
+        /// <summary>
+        /// Executes the full backup process.
+        /// </summary>
+        public override void Save(string uniqueDestinationPath, EventWaitHandle waitHandle)
         {
-            string sourcePath = Configuration.SourcePath.GetAbsolutePath();
-
-            if (!Directory.Exists(sourcePath))
+            if (_configuration.ExtensionsToSave != null)
             {
-                throw new DirectoryNotFoundException($"Le dossier source '{sourcePath}' n'existe pas.");
+                TransferStrategy = new CryptStrategy(_configuration.ExtensionsToSave, _settingsRepository.GetExtensionPriority());
+            }
+            else
+            {
+                TransferStrategy = new CopyStrategy();
             }
 
-            // Obtenir les fichiers à sauvegarder
+            string sourcePath = _configuration.SourcePath.GetAbsolutePath();
+            if (!Directory.Exists(sourcePath))
+            {
+                throw new DirectoryNotFoundException($"The source folder '{sourcePath}' does not exist.");
+            }
+
             string[] files = Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories);
             int totalFiles = files.Length;
             long totalSize = files.Sum(file => new FileInfo(file).Length);
             int remainingFiles = totalFiles;
             long remainingSize = totalSize;
 
-            // Mettre à jour l'état au début de la sauvegarde
-            OnStateUpdated(new StateEvent(
-                "Full Backup",
-                "Active",
-                totalFiles,
+            OnStateUpdated(new StateEvent("Full Backup", "Active", totalFiles, totalSize, remainingFiles, remainingSize, "", ""));
+            OnProgress(new ProgressEvent(
                 totalSize,
-                remainingFiles,
-                remainingSize,
-                "",
-                ""
+                remainingSize
             ));
-
-            // Parcourir chaque fichier et copier
+            
+            List<Task> tasks = new List<Task>();
+            WaitForBusinessSoftwareToClose();
+            
             foreach (string file in files)
             {
+                waitHandle.WaitOne();
                 string relativePath = file.Substring(sourcePath.Length + 1);
                 string destFile = Path.Combine(uniqueDestinationPath, relativePath);
                 Directory.CreateDirectory(Path.GetDirectoryName(destFile));
 
-                try
+                if (RequiresEncryption(file))
                 {
-                    DateTime start = DateTime.Now;
-
-                    // Copy file using filestream to avoid file locking
-                    using (FileStream sourceStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                    {
-                        using (FileStream destStream = new FileStream(destFile, FileMode.Create, FileAccess.Write, FileShare.None))
-                        {
-                            sourceStream.CopyTo(destStream);
-                        }
-                    }
-
-                    DateTime end = DateTime.Now;
-                    TimeSpan duration = end - start;
-
-                    // Mise à jour de l'état avec le fichier en cours
-                    remainingFiles--;
-                    remainingSize -= new FileInfo(file).Length;
-
-                    // On envoie l'événement d'état
-                    OnStateUpdated(new StateEvent(
-                        "Full Backup",
-                        "Active",
-                        totalFiles,
-                        totalSize,
-                        remainingFiles,
-                        remainingSize,
-                        file,
-                        destFile
-                    ));
-
-                    // Créer l'événement de transfert (logique existante)
-                    TransferEvent transferEvent = new TransferEvent(Configuration, duration, new FileInfo(file), new FileInfo(destFile));
-                    OnTransfer(transferEvent);
+                    _cryptoQueue.Enqueue((file, destFile));
                 }
-                catch (Exception e)
+                else
                 {
-                    // En cas d'erreur lors de la copie
-                    Console.WriteLine($"Erreur lors de la copie du fichier {file} : {e.Message}");
-                    OnTransfer(new TransferEvent(Configuration, new TimeSpan(-1), new FileInfo(file), new FileInfo(destFile)));
+                    tasks.Add(Task.Run(() =>
+                    {
+                        WaitForBusinessSoftwareToClose();
+                        waitHandle.WaitOne();
+                        TransferFile(file, destFile, ref totalSize, ref remainingFiles, ref remainingSize, ref waitHandle);
+                    }));
                 }
             }
+            
+            _cryptoTask = Task.Run(() =>
+            {
+                WaitForBusinessSoftwareToClose(); 
+                ProcessCryptoQueue();
+            });
 
-            // Mise à jour de l'état à la fin de la sauvegarde
-            OnStateUpdated(new StateEvent(
-                "Full Backup",
-                "Completed",
-                totalFiles,
-                totalSize,
-                0,
-                0,
-                "",
-                ""
-            ));
+            Task.WhenAll(tasks).Wait();
+            _cryptoTask.Wait();
 
-            Console.WriteLine($"Sauvegarde complète effectuée dans : {uniqueDestinationPath}");
+            OnStateUpdated(new StateEvent("Full Backup", "Completed", totalFiles, totalSize, 0, 0, "", ""));
+            OnProgress(new ProgressEvent(totalSize,0));
+            Console.WriteLine($"Full backup completed in: {uniqueDestinationPath}");
+        }
+
+        /// <summary>
+        /// Transfers a file and updates the backup state.
+        /// </summary>
+        private void TransferFile(string file, string destFile, ref long totalSize, ref int remainingFiles, ref long remainingSize, ref EventWaitHandle waitHandle)
+        {
+            FileInfo fileInfo = new FileInfo(file);
+            bool isLargeFile = fileInfo.Length > _koLimit * 1024;
+
+            try
+            {
+                // 🔴 Attente ici pour empêcher la copie tant qu'un logiciel métier est ouvert
+                WaitForBusinessSoftwareToClose();
+
+                if (isLargeFile)
+                {
+                    Console.WriteLine($"Waiting to transfer large file: {file}");
+                    _largeFileSemaphore.Wait(); // Assure un seul fichier volumineux à la fois
+                }
+
+                // Check for pausing
+                waitHandle.WaitOne();
+
+                DateTime start = DateTime.Now;
+                TransferStrategy.TransferFile(file, destFile);
+                DateTime end = DateTime.Now;
+                TimeSpan duration = end - start;
+
+                remainingFiles--;
+                remainingSize -= fileInfo.Length;
+                waitHandle.WaitOne();
+                OnStateUpdated(new StateEvent("Full Backup", "Active", remainingFiles, remainingSize, remainingFiles, remainingSize, file, destFile));
+                OnProgress(new ProgressEvent(totalSize,remainingSize));
+                TransferEvent transferEvent = new TransferEvent(_configuration, duration, fileInfo, new FileInfo(destFile));
+                OnTransfer(transferEvent);
+                waitHandle.WaitOne();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error copying file {file}: {e.Message}");
+                OnTransfer(new TransferEvent(_configuration, new TimeSpan(-1), fileInfo, new FileInfo(destFile)));
+            }
+            finally
+            {
+                if (isLargeFile)
+                {
+                    _largeFileSemaphore.Release(); // Libère le sémaphore après transfert
+                }
+            }
         }
     }
 }
