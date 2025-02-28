@@ -219,7 +219,7 @@ namespace EasySaveGUI.ViewModels
                 {
                     if (configuration.Name.Equals(Name) || Name == "")
                     {
-                        MessageBox.Show("Name of the backup config already exist 1 .", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Invalid name for the backup config.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                 }
@@ -233,7 +233,7 @@ namespace EasySaveGUI.ViewModels
                     {
                         if (configuration.Name.Equals(Name))
                         {
-                            MessageBox.Show("Name of the backup config already exists 2.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show("Invalid name for the backup config.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
                     }
