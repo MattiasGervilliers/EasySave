@@ -1,7 +1,6 @@
 ﻿using BackupEngine.Progress;
 using BackupEngine.State;
 using BackupEngine.Log;
-using System.Diagnostics;
 
 namespace BackupEngine.Backup
 {
@@ -19,7 +18,7 @@ namespace BackupEngine.Backup
         /// </summary>
         public override void Save(string uniqueDestinationPath, EventWaitHandle waitHandle)
         {
-            if (_configuration.ExtensionsToSave != null)
+            if (_configuration.ExtensionsToSave != null && _configuration.ExtensionsToSave.Count > 0)
             {
                 TransferStrategy = new CryptStrategy(_configuration.ExtensionsToSave, _settingsRepository.GetExtensionPriority());
             }
