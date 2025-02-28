@@ -138,6 +138,26 @@ namespace EasySaveGUI.ViewModels
             else
                 DestinationPath = "";
             BackupType = _backupConfiguration.BackupType;
+                        
+            if (_isModified && _backupConfiguration.ExtensionsToSave != null)
+            {
+                ListItems = new ObservableCollection<ListItem>();
+                ScanExtension scanner = new ScanExtension(SourcePath);
+                HashSet<string> availableExtensions = scanner.GetUniqueExtensions();
+
+                foreach (var extension in availableExtensions)
+                {
+                    ListItems.Add(new ListItem
+                    {
+                        Name = extension,
+                        IsSelected = _backupConfiguration.ExtensionsToSave.Contains(extension)
+                    });
+                }
+            }
+            else
+            {
+                ListItems = new ObservableCollection<ListItem>();
+            }
         }
 
         private void BrowseSourcePath()
@@ -198,7 +218,7 @@ namespace EasySaveGUI.ViewModels
                 {
                     if (configuration.Name.Equals(Name) || Name == "")
                     {
-                        MessageBox.Show("Invalid Name or already exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Name of the backup config already exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                 }
