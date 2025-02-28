@@ -34,6 +34,17 @@ namespace BackupEngine.Backup
             }
 
             string[] files = Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories);
+            HashSet<string> extensionPriority = _settingsRepository.GetExtensionPriority();
+            // Order the files with the extension priority
+            List<string> orderedFiles = files
+                .OrderBy(file => extensionPriority.Contains(Path.GetExtension(file))
+                    ? extensionPriority.ToList().IndexOf(Path.GetExtension(file))
+                    : int.MaxValue)
+                .ThenBy(file => file.Split(Path.DirectorySeparatorChar).Length)
+                .ThenBy(file => file)
+                .ToList();
+
+
             int totalFiles = files.Length;
             long totalSize = files.Sum(file => new FileInfo(file).Length);
             int remainingFiles = totalFiles;
@@ -48,7 +59,7 @@ namespace BackupEngine.Backup
             List<Task> tasks = new List<Task>();
             WaitForBusinessSoftwareToClose();
             
-            foreach (string file in files)
+            foreach (string file in orderedFiles)
             {
                 waitHandle.WaitOne();
                 string relativePath = file.Substring(sourcePath.Length + 1);
