@@ -1,3 +1,10 @@
+# [3.0.0-beta.2](https://github.com/MattiasGervilliers/EasySave/compare/v3.0.0-beta.1...v3.0.0-beta.2) (2025-02-28)
+
+
+### Bug Fixes
+
+* text value of error message name config ([7df1ecc](https://github.com/MattiasGervilliers/EasySave/commit/7df1ecc3b98a912b84d54e955a971ee0de7d0e55))
+
 # [3.0.0-beta.1](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.11...v3.0.0-beta.1) (2025-02-28)
 
 
