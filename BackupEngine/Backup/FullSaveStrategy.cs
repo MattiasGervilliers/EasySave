@@ -61,7 +61,7 @@ namespace BackupEngine.Backup
             
             foreach (string file in orderedFiles)
             {
-                Console.WriteLine("File en train de tranfer : " + file);
+                //Console.WriteLine("File en train de tranfer : " + file);
                 waitHandle.WaitOne();
                 string relativePath = file.Substring(sourcePath.Length + 1);
                 string destFile = Path.Combine(uniqueDestinationPath, relativePath);
@@ -103,7 +103,7 @@ namespace BackupEngine.Backup
         {
             FileInfo fileInfo = new FileInfo(file);
             bool isLargeFile = fileInfo.Length > _koLimit * 1024;
-            Console.WriteLine(file + "0000 " + fileInfo.Length);
+            //Console.WriteLine(file + "0000 " + fileInfo.Length);
 
             try
             {

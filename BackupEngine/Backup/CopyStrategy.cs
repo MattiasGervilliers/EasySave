@@ -35,6 +35,7 @@ namespace BackupEngine.Backup
             /// Opens a read stream for the source file in FileAccess.Read and FileShare.ReadWrite mode
             /// to allow reading access to the source file without locking it.
             /// </summary>
+            Console.WriteLine(file + " -> " + destFile);
             using (FileStream sourceStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 /// <summary>
