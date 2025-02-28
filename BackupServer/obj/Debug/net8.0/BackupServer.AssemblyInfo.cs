@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BackupServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+67c6f28cc03cb91e279f1d3df9986532726f1213")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+58de7851ad6a261dbec4a74c49e3544d3c7c01cb")]
 [assembly: System.Reflection.AssemblyProductAttribute("BackupServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BackupServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

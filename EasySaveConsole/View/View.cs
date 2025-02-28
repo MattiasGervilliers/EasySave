@@ -540,8 +540,8 @@ namespace EasySaveConsole.View
         public BackupType AskBackupType()
         {
             Console.WriteLine(_language == Language.French
-                ? "Choisissez un type de sauvegarde :\n1 - Complète\n2 - Incrémentale"
-                : "Choose a backup type:\n1 - Full\n2 - Incremental");
+                ? "Choisissez un type de sauvegarde :\n1 - Complète\n2 - Différentielle"
+                : "Choose a backup type:\n1 - Full\n2 - Differential");
             Console.Write("Votre choix (1 ou 2) / Your choice (1 or 2): ");
             while (true)
             {
