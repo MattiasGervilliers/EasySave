@@ -54,7 +54,7 @@ namespace BackupEngine.Backup
                     CreateNoWindow = true
                 };
 
-                //Console.WriteLine($"Lancement de CryptoSoft avec : {psi.Arguments}");
+                Console.WriteLine($"Lancement de CryptoSoft avec : {psi.Arguments}");
                 using (Process process = new Process { StartInfo = psi })
                 {
                     process.Start();

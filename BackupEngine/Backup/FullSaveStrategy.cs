@@ -103,7 +103,6 @@ namespace BackupEngine.Backup
         {
             FileInfo fileInfo = new FileInfo(file);
             bool isLargeFile = fileInfo.Length > _koLimit * 1024;
-            //Console.WriteLine(file + "0000 " + fileInfo.Length);
 
             try
             {
