@@ -55,7 +55,7 @@ namespace BackupEngine.Backup
 
         private void DifferentialSave(string uniqueDestinationPath, string previousSavePath, EventWaitHandle waitHandle)
         {
-            if (_configuration.ExtensionsToSave != null)
+            if (_configuration.ExtensionsToSave != null && _configuration.ExtensionsToSave.Count > 0)
             {
                 TransferStrategy = new CryptStrategy(_configuration.ExtensionsToSave, _settingsRepository.GetExtensionPriority());
             }
