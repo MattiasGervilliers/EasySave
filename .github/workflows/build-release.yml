@@ -88,7 +88,10 @@ jobs:
       - name: Ajout des fichiers à la release
         uses: svenstaro/upload-release-action@v2
         with:
-          file: package/*
+          file: |
+             EasySaveConsole/publish/
+             EasySaveGUI/publish/
+             CryptoSoft/publish/
           tag: ${{ env.RELEASE_TAG }} 
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           overwrite: true
