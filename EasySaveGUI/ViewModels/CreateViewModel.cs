@@ -153,6 +153,7 @@ namespace EasySaveGUI.ViewModels
                         IsSelected = _backupConfiguration.ExtensionsToSave.Contains(extension)
                     });
                 }
+                _encrypted = ListItems.Any(item => item.IsSelected);
             }
             else
             {
@@ -218,8 +219,23 @@ namespace EasySaveGUI.ViewModels
                 {
                     if (configuration.Name.Equals(Name) || Name == "")
                     {
-                        MessageBox.Show("Name of the backup config already exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Name of the backup config already exist 1 .", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
+                    }
+                }
+            }
+            else
+            {
+                if (_backupConfiguration.Name != Name)
+                {
+                    BackupConfigurations = new ObservableCollection<BackupConfiguration>(_settingsModel.GetConfigurations());
+                    foreach (var configuration in BackupConfigurations)
+                    {
+                        if (configuration.Name.Equals(Name))
+                        {
+                            MessageBox.Show("Name of the backup config already exists 2.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
                     }
                 }
             }
