@@ -39,14 +39,14 @@ jobs:
       - name: Publier EasySaveGUI (UWP) avec le profil de publication
         run: dotnet publish EasySaveGUI/EasySaveGUI.csproj /p:PublishProfile=FolderProfile.pubxml
 
+      - name: Zip en 1 seul fichier les 3 applications
+        run: Compress-Archive -Path EasySaveConsole/publish/, EasySaveGUI/publish/, CryptoSoft/publish/ -DestinationPath EasySave-Apps_portable.zip
+
       - name: Télécharger l'artefact
         uses: actions/upload-artifact@v4
         with:
           name: EasySave-Apps
-          path: |
-            EasySaveConsole/publish/
-            EasySaveGUI/publish/
-            CryptoSoft/publish/
+          path: EasySave-Apps_portable.zip
 
   release:
     needs: build
@@ -88,7 +88,7 @@ jobs:
       - name: Ajout des fichiers à la release
         uses: svenstaro/upload-release-action@v2
         with:
-          file: package/*
+          file: package/EasySave-Apps_portable.zip
           tag: ${{ env.RELEASE_TAG }} 
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           overwrite: true
