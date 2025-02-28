@@ -1,3 +1,20 @@
+# [2.1.0-beta.11](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.10...v2.1.0-beta.11) (2025-02-28)
+
+
+### Bug Fixes
+
+* :tada: link with newConfiguration.ExtensionsToSave ([1a25459](https://github.com/MattiasGervilliers/EasySave/commit/1a254590a72748866169e7e0f1a7fde121e6a9ed))
+* during a modification possibility to replace the name of the config with one that already exists ([b143a53](https://github.com/MattiasGervilliers/EasySave/commit/b143a539efed951ccce7271d8d0fb0031da81823))
+* modify the AvailableExtension ([d94c3d4](https://github.com/MattiasGervilliers/EasySave/commit/d94c3d42c0cdac6625e3f7b4a91239975365dd8a))
+* position of the settings' cases ([0cadc0d](https://github.com/MattiasGervilliers/EasySave/commit/0cadc0dd94fdc913f45b3b31c0fb0d4c8f3ce1c0))
+
+
+### Features
+
+* add a checkbox and a listbox to display extensions in fonction of sourcePath ([9bdebe1](https://github.com/MattiasGervilliers/EasySave/commit/9bdebe124c9bfd47a7d049faeda174740d762a4d))
+* add the checkmark for already selected extensions during modification + check the validity of the config name ([015e849](https://github.com/MattiasGervilliers/EasySave/commit/015e84977633eb7fc1a57fee62aa0ea3f27ecf65))
+* show a popup if name config already taken ([6725a28](https://github.com/MattiasGervilliers/EasySave/commit/6725a28b4093269fd0bcb23c88b75d8f3ea2a20c))
+
 # [2.1.0-beta.10](https://github.com/MattiasGervilliers/EasySave/compare/v2.1.0-beta.9...v2.1.0-beta.10) (2025-02-27)
 
 
