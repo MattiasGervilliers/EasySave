@@ -7,6 +7,8 @@ using System.Diagnostics;
 using BackupEngine.Shared;
 using MaterialDesignThemes.Wpf;
 using System.Windows;
+using System.Collections.ObjectModel;
+using BackupEngine.Backup;
 
 namespace EasySaveGUI.ViewModels
 {
@@ -15,10 +17,14 @@ namespace EasySaveGUI.ViewModels
         private readonly SettingsModel _settingsModel;
         private readonly BackupConfiguration _backupConfiguration;
 
+        public ObservableCollection<BackupConfiguration> BackupConfigurations { get; set; }
+
         private string _name;
         private string? _sourcePath;
         private string? _destinationPath;
         private BackupType _backupType;
+        private bool _encrypted;
+        private bool _isModified;
 
         public string Name
         {
@@ -37,6 +43,7 @@ namespace EasySaveGUI.ViewModels
             {
                 _sourcePath = value;
                 OnPropertyChanged(nameof(SourcePath));
+                AvailableExtensions(_sourcePath);
             }
         }
 
@@ -60,6 +67,24 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
+        public bool Encrypted
+        {
+            get => _encrypted;
+            set
+            {
+                _encrypted = value;
+                OnPropertyChanged(nameof(Encrypted));
+            }
+        }
+
+        public class ListItem
+        {
+            public bool IsSelected { get; set; }
+            public string Name { get; set; }
+        }
+        public ObservableCollection<ListItem> ListItems { get; set; }
+
+
         // Liste des types de backup disponibles
         public List<string> AvailableBackupTypes { get; } = new List<string>
         {
@@ -69,6 +94,7 @@ namespace EasySaveGUI.ViewModels
         public ICommand CreateCommand { get; }
         public ICommand BrowseSourcePathCommand { get; }
         public ICommand BrowseDestPathCommand { get; }
+        public ICommand AvailableExtensionsCommand { get; }
 
         public SnackbarMessageQueue MessageQueue { get; } = new SnackbarMessageQueue();
         private bool _isSnackbarActive;
@@ -86,10 +112,18 @@ namespace EasySaveGUI.ViewModels
         {
             _settingsModel = new SettingsModel();
 
+            if (backupConfiguration != null)
+            {
+                _isModified = true;
+            }
+            else
+            {
+                _isModified = false;
+            }
+
             BrowseSourcePathCommand = new RelayCommand(_ => BrowseSourcePath());
             BrowseDestPathCommand = new RelayCommand(_ => BrowseDestPath());
-
-            BackupType = BackupType.Differential;
+            AvailableExtensionsCommand = new RelayCommand(_ => AvailableExtensions(SourcePath));
 
             CreateCommand = new RelayCommand(_ => CreateConfiguration());
             _backupConfiguration = backupConfiguration ?? new BackupConfiguration();
@@ -104,6 +138,27 @@ namespace EasySaveGUI.ViewModels
             else
                 DestinationPath = "";
             BackupType = _backupConfiguration.BackupType;
+                        
+            if (_isModified && _backupConfiguration.ExtensionsToSave != null)
+            {
+                ListItems = new ObservableCollection<ListItem>();
+                ScanExtension scanner = new ScanExtension(SourcePath);
+                HashSet<string> availableExtensions = scanner.GetUniqueExtensions();
+
+                foreach (var extension in availableExtensions)
+                {
+                    ListItems.Add(new ListItem
+                    {
+                        Name = extension,
+                        IsSelected = _backupConfiguration.ExtensionsToSave.Contains(extension)
+                    });
+                }
+                _encrypted = ListItems.Any(item => item.IsSelected);
+            }
+            else
+            {
+                ListItems = new ObservableCollection<ListItem>();
+            }
         }
 
         private void BrowseSourcePath()
@@ -132,6 +187,22 @@ namespace EasySaveGUI.ViewModels
             }
         }
 
+        public void AvailableExtensions(string sourcePathAvailable)
+        {
+            if (sourcePathAvailable != "")
+            {
+                ListItems = new ObservableCollection<ListItem>();
+
+                ScanExtension scanner = new ScanExtension(sourcePathAvailable);
+                HashSet<string> availableExtensions = scanner.GetUniqueExtensions();
+
+                foreach (var extension in availableExtensions)
+                {
+                    ListItems.Add(new ListItem { Name = extension, IsSelected = false });
+                }
+            }
+        }
+
         void CreateConfiguration()
         {
             BackupConfiguration newConfiguration = new BackupConfiguration();
@@ -140,6 +211,42 @@ namespace EasySaveGUI.ViewModels
             newConfiguration.DestinationPath = new CustomPath(DestinationPath);
             newConfiguration.BackupType = BackupType;
             newConfiguration.ExtensionsToSave = new HashSet<string>();
+
+            if (!_isModified)
+            {
+                BackupConfigurations = new ObservableCollection<BackupConfiguration>(_settingsModel.GetConfigurations());
+                foreach (var configuration in BackupConfigurations)
+                {
+                    if (configuration.Name.Equals(Name) || Name == "")
+                    {
+                        MessageBox.Show("Name of the backup config already exist 1 .", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                if (_backupConfiguration.Name != Name)
+                {
+                    BackupConfigurations = new ObservableCollection<BackupConfiguration>(_settingsModel.GetConfigurations());
+                    foreach (var configuration in BackupConfigurations)
+                    {
+                        if (configuration.Name.Equals(Name))
+                        {
+                            MessageBox.Show("Name of the backup config already exists 2.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            foreach (var item in ListItems)
+            {
+                if (item.IsSelected)
+                {
+                    newConfiguration.ExtensionsToSave.Add(item.Name);
+                }
+            }
 
             Debug.WriteLine("Save");
             Debug.WriteLine(_backupConfiguration.Name);
